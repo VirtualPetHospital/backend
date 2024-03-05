@@ -1,3 +1,4 @@
+# 冒号后须跟一个空格
 server:
   port: 9091
 mybatis:
@@ -11,3 +12,6 @@ spring:
     password: 123456
     url: jdbc:mysql://47.103.131.161:3306/vph?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
     driver-class-name: com.mysql.cj.jdbc.Driver
+
+swagger:
+  enable: true

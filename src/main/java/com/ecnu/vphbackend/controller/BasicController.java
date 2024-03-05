@@ -14,9 +14,12 @@
  * limitations under the License.
  */
 
-package com.ecnu.vphbackend.demos.web;
+package com.ecnu.vphbackend.controller;
 
+import com.ecnu.vphbackend.demos.web.User;
 import com.ecnu.vphbackend.mapper.TestMapper;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -24,12 +27,14 @@ import org.springframework.web.bind.annotation.*;
 /**
  * @author <a href="mailto:chenxilzx1@gmail.com">theonefx</a>
  */
+@Api(tags="测试")
 @Controller
 public class BasicController {
     @Autowired
     private TestMapper testMapper;
 
     // http://127.0.0.1:8080/hello?name=lisi
+    @ApiOperation(value = "获取用户信息")
     @RequestMapping("/hello")
     @ResponseBody
     public String hello(@RequestParam(name = "name", defaultValue = "unknown user") String name) {
