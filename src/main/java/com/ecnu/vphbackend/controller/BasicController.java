@@ -27,7 +27,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-@Api(tags="测试")
+@Api(tags = "测试")
 @Controller
 public class BasicController {
     @Autowired
@@ -73,20 +73,22 @@ public class BasicController {
 
     @GetMapping("/test_mysql")
     @ResponseBody
-    public Integer getCount(){
+    public Integer getCount() {
         return testMapper.getCount();
     }
 
     @ResponseBody
     @GetMapping("/test_result")
-    public Result<String> testResult(){
+    public Result<String> testResult() {
         return Result.success("成功");
     }
+
     @ResponseBody
     @GetMapping("/test_common_exception")
-    public Result<String> testCommonException(){
+    public Result<String> testCommonException() {
         throw new CommonException(CommonErrorCode.USER_NOT_LOGGED_IN);
     }
+
     @ResponseBody
     @GetMapping("/test_non_common_exception")
     public Result<String> testException() throws Exception {

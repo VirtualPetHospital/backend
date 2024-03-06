@@ -18,21 +18,15 @@ public class Result<T> implements Serializable {
     private T data;
 
     /**
-     * 成功，返回数据，一般用这个就行
-     * @param data
-     * @return
-     * @param <T>
+     * @param data 返回数据
      */
     public static <T> Result<T> success(T data) {
         return success("操作成功", data);
     }
 
     /**
-     * 成功，返回信息和数据
-     * @param mess
-     * @param data
-     * @return
-     * @param <T>
+     * @param mess 返回信息
+     * @param data 返回数据
      */
     public static <T> Result<T> success(String mess, T data) {
         Result<T> m = new Result<>();
@@ -45,10 +39,8 @@ public class Result<T> implements Serializable {
     /**
      * 出现异常时的返回
      * 不用手动调，抛异常时异常处理器会自动处理
-     * @param commonErrorCode
-     * @param data
-     * @return
-     * @param <T>
+     * @param commonErrorCode 错误码
+     * @param data 返回数据
      */
     public static <T> Result<T> result(CommonErrorCode commonErrorCode, T data) {
         Result<T> m = new Result<>();
