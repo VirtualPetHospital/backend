@@ -16,6 +16,9 @@
 
 package com.ecnu.vphbackend.controller;
 
+import com.ecnu.vphbackend.common.CommonErrorCode;
+import com.ecnu.vphbackend.common.CommonException;
+import com.ecnu.vphbackend.common.Result;
 import com.ecnu.vphbackend.demos.web.User;
 import com.ecnu.vphbackend.mapper.TestMapper;
 import io.swagger.annotations.Api;
@@ -24,9 +27,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-/**
- * @author <a href="mailto:chenxilzx1@gmail.com">theonefx</a>
- */
 @Api(tags="测试")
 @Controller
 public class BasicController {
@@ -75,5 +75,21 @@ public class BasicController {
     @ResponseBody
     public Integer getCount(){
         return testMapper.getCount();
+    }
+
+    @ResponseBody
+    @GetMapping("/test_result")
+    public Result<String> testResult(){
+        return Result.success("成功");
+    }
+    @ResponseBody
+    @GetMapping("/test_common_exception")
+    public Result<String> testCommonException(){
+        throw new CommonException(CommonErrorCode.USER_NOT_LOGGED_IN);
+    }
+    @ResponseBody
+    @GetMapping("/test_non_common_exception")
+    public Result<String> testException() throws Exception {
+        throw new Exception("test");
     }
 }
