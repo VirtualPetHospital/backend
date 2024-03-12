@@ -13,10 +13,18 @@ public enum CommonErrorCode {
 
     /**
      * 相似的异常应该以相同的数字开头，例如：
-     * 以1开头的和用户权限相关
+     * 以1开头的和用户操作相关
      */
-    USER_NOT_LOGGED_IN(1001, "用户未登录", "用户未登录"),
     SYSTEM_ERROR(-1, "系统异常，请查看日志", "系统异常，请稍后再试"),
+
+    USER_NOT_LOGGED_IN(1001, "用户未登录", "用户未登录"),
+    UNAUTHORIZED_ACCESS(1002, "用户试图进行越权操作", "无权访问"),
+    NOT_CURRENT_USER(1003, "用户试图修改其他用户的信息", "仅可对当前用户进行操作"),
+    USER_NOT_EXIST(1004, "用户不存在", "用户不存在"),
+    WRONG_PASSWORD_OR_NICKNAME(1005, "用户名或密码错误", "用户名或密码错误"),
+    NICKNAME_ALREADY_EXIST(1006, "用户名已存在", "用户名已存在"),
+    EMAIL_ALREADY_EXIST(1007, "邮箱已注册", "邮箱已注册"),
+    WRONG_CAPTCHA(1008, "验证码错误", "验证码错误"),
     ;
 
     /**
