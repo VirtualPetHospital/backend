@@ -1,8 +1,9 @@
 package cn.vph.cases.controller;
 
-import cn.vph.cases.common.CommonErrorCode;
-import cn.vph.cases.common.CommonException;
-import cn.vph.cases.common.Result;
+import cn.vph.common.CommonErrorCode;
+import cn.vph.common.CommonException;
+import cn.vph.common.Result;
+
 import cn.vph.cases.service.CaseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;

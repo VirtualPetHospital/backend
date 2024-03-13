@@ -1,0 +1,16 @@
+server:
+  port: 8088
+  servlet:
+    context-path: /api
+spring:
+  application:
+    name: common
+  cloud:
+    nacos:
+      server-addr: localhost:8848
+logging:
+  level:
+    cn.vph: debug
+  pattern:
+    dateformat: MM-dd HH:mm:ss:SSS
+
