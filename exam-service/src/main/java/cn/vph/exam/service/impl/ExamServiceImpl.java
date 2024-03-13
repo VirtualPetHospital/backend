@@ -29,7 +29,7 @@ public class ExamServiceImpl extends ServiceImpl<ExamMapper, Exam> implements Ex
     public IPage<Exam> listAllExams(Exam exam, QueryPage queryPage){
         IPage<Exam> page = new Page<>(queryPage.getPage(), queryPage.getLimit());
         LambdaQueryWrapper<Exam> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.orderByDesc(Exam::getId);
+        queryWrapper.orderByDesc(Exam::getExamId);
         return examMapper.selectPage(page, queryWrapper);
 
     }
@@ -37,7 +37,7 @@ public class ExamServiceImpl extends ServiceImpl<ExamMapper, Exam> implements Ex
     @Override
     public List<Exam> listAllExams(Exam exam){
         LambdaQueryWrapper<Exam> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.orderByDesc(Exam::getId);
+        queryWrapper.orderByDesc(Exam::getExamId);
         return examMapper.selectList(queryWrapper);
     }
 }
