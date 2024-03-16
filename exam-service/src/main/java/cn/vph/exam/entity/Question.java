@@ -1,6 +1,8 @@
 package cn.vph.exam.entity;
 
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
@@ -10,7 +12,7 @@ import java.io.Serializable;
 
 /**
  * @author Caroline
- * @description todo
+ * @description 题目实体类
  * @create 2024/3/13 15:09
  */
 
@@ -18,9 +20,8 @@ import java.io.Serializable;
 @TableName("question")
 public class Question implements Serializable {
 
-    @TableId(value = "question_id")
+    @TableId(value = "question_id", type = IdType.AUTO)
     private Integer questionId;
-
 
     /**
      * 题目表述，参见m_text
@@ -40,5 +41,6 @@ public class Question implements Serializable {
 
     private String D;
 
-    private String category;
+    @TableField(value = "category_id")
+    private Integer categoryId;
 }
