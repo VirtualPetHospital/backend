@@ -23,4 +23,5 @@ public class CaseApplication {
     public RestTemplate restTemplate() {
         return new RestTemplate();
     }
+
 }
