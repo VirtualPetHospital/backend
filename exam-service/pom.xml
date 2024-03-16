@@ -30,6 +30,11 @@
             <groupId>org.mybatis.spring.boot</groupId>
             <artifactId>mybatis-spring-boot-starter</artifactId>
         </dependency>
+        <!-- Mybatis Plus -->
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-boot-starter</artifactId>
+        </dependency>
 
         <!-- nacos 客户端 -->
         <dependency>
@@ -58,6 +63,13 @@
             <groupId>org.aspectj</groupId>
             <artifactId>aspectjweaver</artifactId>
         </dependency>
+
+        <!-- our common module 依赖-->
+        <dependency>
+            <groupId>cn.vph</groupId>
+            <artifactId>common</artifactId>
+            <version>1.0-SNAPSHOT</version> <!-- 注意修改版本 再clean 再install -->
+        </dependency>
     </dependencies>
 
     <build>
@@ -65,6 +77,7 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>2.3.1.RELEASE</version>
             </plugin>
         </plugins>
     </build>
