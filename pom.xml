@@ -34,6 +34,7 @@
         <mybatis-plus.version>3.3.2</mybatis-plus.version>
         <springfox.version>2.9.2</springfox.version>
         <aspectj.version>1.9.2</aspectj.version>
+        <jackjson.version>2.11.3</jackjson.version>
     </properties>
     <dependencyManagement>
         <dependencies>
@@ -88,6 +89,12 @@
                 <groupId>org.aspectj</groupId>
                 <artifactId>aspectjweaver</artifactId>
                 <version>${aspectj.version}</version>
+            </dependency>
+            <!--            jackson-->
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-databind</artifactId>
+                <version>${jackjson.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

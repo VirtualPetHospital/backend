@@ -13,6 +13,8 @@ spring:
   cloud:
     nacos:
       server-addr: localhost:8848
+  jackson:
+    property-naming-strategy: CAMEL_CASE_TO_LOWER_CASE_WITH_UNDERSCORES
 mybatis:
   type-aliases-package: cn.vph.exam.entity
   configuration:
