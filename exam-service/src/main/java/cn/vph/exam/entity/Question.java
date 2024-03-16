@@ -12,7 +12,7 @@ import java.io.Serializable;
 
 /**
  * @author Caroline
- * @description todo
+ * @description 题目实体类
  * @create 2024/3/13 15:09
  */
 
