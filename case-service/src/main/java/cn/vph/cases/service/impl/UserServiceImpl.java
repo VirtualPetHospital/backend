@@ -6,7 +6,7 @@ import cn.vph.cases.mapper.UserMapper;
 import cn.vph.cases.service.UserService;
 import cn.vph.cases.util.SessionUtil;
 import cn.vph.common.CommonErrorCode;
-import cn.vph.common.CommonException;
+import cn.vph.common.util.AssertUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -35,12 +35,8 @@ public class UserServiceImpl implements UserService {
         LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(User::getNickname, nickname);
         User user = userMapper.selectOne(wrapper);
-        if (user == null){
-            throw new CommonException(CommonErrorCode.USER_NOT_EXIST);
-        }
-        if (!user.getPassword().equals(convert(password))){
-            throw new CommonException(CommonErrorCode.WRONG_PASSWORD_OR_NICKNAME);
-        }
+        AssertUtil.isNotNull(user, CommonErrorCode.USER_NOT_EXIST);
+        AssertUtil.isEqual(user.getType(), convert(password), CommonErrorCode.WRONG_PASSWORD_OR_NICKNAME);
         sessionUtil.setSession(user);
         return user;
     }
