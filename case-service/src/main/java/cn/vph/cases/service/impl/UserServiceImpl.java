@@ -41,4 +41,25 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
+    @Override
+    public User me() {
+        Integer userId = sessionUtil.getUserId();
+        return userMapper.selectById(userId);
+    }
+
+    @Override
+    public User register(User user) {
+        return null;
+    }
+
+    @Override
+    public Object delete(Integer userId) {
+        LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(User::getUserId, userId);
+        User user = userMapper.selectOne(wrapper);
+        AssertUtil.isNotNull(user, CommonErrorCode.USER_NOT_EXIST);
+        userMapper.deleteById(userId);
+        return null;
+    }
+
 }

@@ -5,7 +5,6 @@ import cn.vph.cases.entity.User;
 import cn.vph.cases.mapper.UserMapper;
 import cn.vph.common.CommonConstant;
 import cn.vph.common.SessionData;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -41,11 +40,11 @@ public class SessionUtil extends cn.vph.common.util.BaseSessionUtil {
         try {
             sessionData = (SessionData) redisUtil.get(key);
         } catch (Exception e) {
-            return getSessionDataFromDb(key);
+            return null;
 
         }
         if (sessionData != null) return sessionData;
-        return getSessionDataFromDb(key);
+        return null;
     }
 
     /**
@@ -56,7 +55,7 @@ public class SessionUtil extends cn.vph.common.util.BaseSessionUtil {
     }
 
     /**
-     * 设置sessionId
+     * 设置session
      */
     public void setSession(User user) {
         SessionData sessionData = new SessionData(user.getUserId(), user.getType(), user.getLevel());
@@ -65,21 +64,5 @@ public class SessionUtil extends cn.vph.common.util.BaseSessionUtil {
         response.setHeader(CommonConstant.SESSION, key);
     }
 
-    /**
-     * 从数据库中读出User信息
-     */
-    private SessionData getSessionDataFromDb(String key) {
-        LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(User::getNickname, key);
-        User user = userMapper.selectOne(queryWrapper);
-        if (user != null) {
-            SessionData sessionData = new SessionData(user.getUserId(), user.getType(), user.getLevel());
-            redisUtil.set(key, sessionData);
-            return sessionData;
-        } else {
-            redisUtil.set(key, null, 3600);
-            return null;
-        }
-    }
 }
 

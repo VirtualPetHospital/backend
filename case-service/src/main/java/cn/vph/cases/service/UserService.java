@@ -10,4 +10,10 @@ import cn.vph.cases.entity.User;
  **/
 public interface UserService {
     User login(String nickname, String password);
+
+    User me();
+
+    User register(User user);
+
+    Object delete(Integer userId);
 }
