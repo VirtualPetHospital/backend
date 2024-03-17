@@ -6,7 +6,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 
 /**
  * @author Caroline
- * @description todo
+ * @description
  * @create 2024/3/13 13:41
  */
 @SpringBootApplication
