@@ -1,5 +1,4 @@
-package cn.vph.common.config;
-
+package cn.vph.cases.config;
 
 import com.alibaba.fastjson.support.spring.GenericFastJsonRedisSerializer;
 import org.springframework.context.annotation.Bean;
@@ -10,8 +9,11 @@ import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 /**
- * 重写RedisTemplate的序列化方式
- */
+ * @program: vph-backend
+ * @description:
+ * @author: astarforbae
+ * @create: 2024-03-17 18:43
+ **/
 @Configuration
 public class RedisConfig {
     @Bean

@@ -19,7 +19,7 @@ import java.util.Map;
  **/
 @Slf4j
 @RestControllerAdvice
-public class GlobalExceptionHandler {
+public class BaseGlobalExceptionHandler {
 
     @ExceptionHandler(value = Exception.class)
     public Result defaultErrorHandler(HttpServletRequest request, Exception e) {

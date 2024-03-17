@@ -1,5 +1,6 @@
-package cn.vph.cases.common;
+package cn.vph.exam.common;
 
+import cn.vph.common.BaseGlobalExceptionHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -11,5 +12,5 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
  **/
 @Slf4j
 @RestControllerAdvice
-public class GlobalExceptionHandlerChild extends cn.vph.common.GlobalExceptionHandler{
+public class GlobalExceptionHandler extends BaseGlobalExceptionHandler {
 }

@@ -70,6 +70,11 @@
             <artifactId>common</artifactId>
             <version>1.0-SNAPSHOT</version> <!-- 注意修改版本 再clean 再install -->
         </dependency>
+        <!--        redis-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
+        </dependency>
     </dependencies>
 
     <build>

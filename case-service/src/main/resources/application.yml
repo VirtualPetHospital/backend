@@ -4,7 +4,7 @@ server:
     context-path: /api
 spring:
   datasource:
-    url: jdbc:mysql://47.103.131.161:3306/vph_case?useSSL=false&allowPublicKeyRetrieval=true
+    url: jdbc:mysql://47.103.131.161:3306/vph_medcase?useSSL=false&allowPublicKeyRetrieval=true
     username: root
     password: MySQLPaSsWord89h
     driver-class-name: com.mysql.jdbc.Driver
