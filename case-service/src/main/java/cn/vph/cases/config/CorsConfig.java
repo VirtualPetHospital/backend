@@ -1,5 +1,6 @@
-package cn.vph.exam.config;
+package cn.vph.cases.config;
 
+import cn.vph.common.config.BaseCorsConfig;
 import org.springframework.context.annotation.Configuration;
 
 /**
@@ -9,5 +10,5 @@ import org.springframework.context.annotation.Configuration;
  * @create: 2024-03-16 14:03
  **/
 @Configuration
-public class CorsConfigChild extends cn.vph.common.config.CorsConfig{
+public class CorsConfig extends BaseCorsConfig {
 }

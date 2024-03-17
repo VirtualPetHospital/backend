@@ -8,4 +8,8 @@ package cn.vph.common;
  **/
 public class CommonConstant {
     public final static String SESSION = "session";
+    public final static String[] AT_LEAST_STUDENT = {"student", "teacher", "administrator"};
+    public final static String[] AT_LEAST_TEACHER = {"teacher", "administrator"};
+    public final static String[] AT_LEAST_ADMINISTRATOR = {"administrator"};
+
 }

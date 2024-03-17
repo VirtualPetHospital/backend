@@ -16,7 +16,7 @@ import java.util.List;
  * @create: 2024-03-08 13:54
  **/
 @Configuration
-public class CorsConfig {
+public class BaseCorsConfig {
     private CorsConfiguration buildConfig() {
         CorsConfiguration corsConfiguration = new CorsConfiguration();
         List<String> allowedOriginPatterns = new ArrayList<>();

@@ -34,6 +34,7 @@ public class AssertUtil {
     public static void isEqual(Object obj1, Object obj2, CommonErrorCode resultCode) {
         isTrue(Objects.equals(obj1, obj2), resultCode);
     }
+
     public static void notEquals(Object obj1, Object obj2, CommonErrorCode resultCode) {
         isTrue(!Objects.equals(obj1, obj2), resultCode);
     }
@@ -93,4 +94,28 @@ public class AssertUtil {
         }
     }
 
+    public static void in(Object base, Object[] collection, CommonErrorCode resultCode) {
+        isNotNull(collection, resultCode);
+        boolean hasEqual = false;
+
+        for (Object obj2 : collection) {
+            if (base.equals(obj2)) {
+                hasEqual = true;
+                break;
+            }
+        }
+
+        isTrue(hasEqual, resultCode);
+    }
+
+    public static void notIn(Object base, Object[] collection, CommonErrorCode resultCode) {
+        if (null != collection) {
+
+            for (Object obj2 : collection) {
+//                isTrue(base != obj2, resultCode);
+                isTrue(!base.equals(obj2), resultCode);
+            }
+
+        }
+    }
 }

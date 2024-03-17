@@ -36,7 +36,7 @@ public class UserServiceImpl implements UserService {
         wrapper.eq(User::getNickname, nickname);
         User user = userMapper.selectOne(wrapper);
         AssertUtil.isNotNull(user, CommonErrorCode.USER_NOT_EXIST);
-        AssertUtil.isEqual(user.getType(), convert(password), CommonErrorCode.WRONG_PASSWORD_OR_NICKNAME);
+        AssertUtil.isEqual(user.getPassword(), convert(password), CommonErrorCode.WRONG_PASSWORD_OR_NICKNAME);
         sessionUtil.setSession(user);
         return user;
     }
