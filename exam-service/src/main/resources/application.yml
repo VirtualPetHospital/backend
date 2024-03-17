@@ -15,6 +15,11 @@ spring:
       server-addr: localhost:8848
   jackson:
     property-naming-strategy: CAMEL_CASE_TO_LOWER_CASE_WITH_UNDERSCORES
+  redis:
+    host: 47.103.131.161
+    port: 6379
+    timeout: 1000
+    password: Re1d1sPssw0rd
 mybatis:
   type-aliases-package: cn.vph.exam.entity
   configuration:

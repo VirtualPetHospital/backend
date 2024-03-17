@@ -12,6 +12,11 @@ spring:
     name: case-service
   jackson:
     property-naming-strategy: CAMEL_CASE_TO_LOWER_CASE_WITH_UNDERSCORES
+  redis:
+    host: 47.103.131.161
+    port: 6379
+    timeout: 1000
+    password: Re1d1sPssw0rd
 
   cloud:
     nacos: # nacos 配置

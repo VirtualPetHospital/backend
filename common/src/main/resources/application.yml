@@ -8,6 +8,11 @@ spring:
   cloud:
     nacos:
       server-addr: localhost:8848
+  redis:
+    host: 47.103.131.161
+    port: 6379
+    timeout: 1000
+    password: Re1d1sPssw0rd
 logging:
   level:
     cn.vph: debug
