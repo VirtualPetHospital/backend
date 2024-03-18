@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
-@RequestMapping(value = "/exams")
+@RequestMapping(value = "exams")
 @Api(value = "ExamController", tags = {"试卷服务接口"})
 public class ExamController {
 

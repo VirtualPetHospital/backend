@@ -64,4 +64,8 @@ public class Result<T> implements Serializable {
     public static <T> Result<T> result(CommonErrorCode commonErrorCode) {
         return result(commonErrorCode, null);
     }
+
+    /*public static T getData() {
+        return data;
+    }*/
 }

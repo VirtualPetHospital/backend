@@ -22,7 +22,7 @@ import java.util.Map;
 public class BaseGlobalExceptionHandler {
 
     @ExceptionHandler(value = Exception.class)
-    public Result defaultErrorHandler(HttpServletRequest request, Exception e) {
+    public Result<?> defaultErrorHandler(HttpServletRequest request, Exception e) {
 
         Map<String, String> res = new HashMap<>();
         Enumeration<?> temp = request.getParameterNames();
@@ -53,8 +53,6 @@ public class BaseGlobalExceptionHandler {
             log.error("commonException: " + ce.getCommonErrorCode().getErrorReason() + "\n" + sw);
             return Result.result(ce.getCommonErrorCode());
         }
-
         return Result.result(CommonErrorCode.SYSTEM_ERROR);
     }
-
 }

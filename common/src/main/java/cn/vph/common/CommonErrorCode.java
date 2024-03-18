@@ -24,6 +24,23 @@ public enum CommonErrorCode {
     NICKNAME_ALREADY_EXIST(1006, "用户名已存在", "用户名已存在"),
     EMAIL_ALREADY_EXIST(1007, "邮箱已注册", "邮箱已注册"),
     WRONG_CAPTCHA(1008, "验证码错误", "验证码错误"),
+
+
+    RELATIONSHIP_STILL_EXIST(2001, "删除失败，被其他表引用", "删除失败，被其他表引用"),
+    /**
+     * 不存在: 2002
+     * 不合法参数: 2003
+     */
+    /**
+     * 题目相关
+     */
+    QUESTION_NOT_EXIST(2002, "题目不存在", "题目不存在"),
+    QUESTION_ANSWER_NOT_VALID(2003, "answer字段不合法，题目答案只能是A/B/C/D", "answer字段不合法，题目答案只能是A/B/C/D"),
+    /**
+     * 试卷相关
+     */
+    PAPER_NOT_EXIST(2002, "试卷不存在", "试卷不存在"),
+    QUESTION_NUM_INVALID(2003, "题目数量不合法", "题目数量不合法"),
     ;
 
     /**
