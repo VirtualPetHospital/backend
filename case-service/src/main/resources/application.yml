@@ -12,11 +12,27 @@ spring:
     name: case-service
   jackson:
     property-naming-strategy: CAMEL_CASE_TO_LOWER_CASE_WITH_UNDERSCORES
+  # Redis
   redis:
     host: 47.103.131.161
     port: 6379
     timeout: 1000
     password: Re1d1sPssw0rd
+  # mail
+  mail:
+    host: smtp.163.com
+    protocol: smtp
+    default-encoding: UTF-8
+    username: vphbackend@163.com
+    password: VAMXHRVFKIQVSKHD
+    test-connection: true
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
 
   cloud:
     nacos: # nacos 配置

@@ -51,13 +51,12 @@ public class Result<T> implements Serializable {
      * 不用手动调，抛异常时异常处理器会自动处理
      *
      * @param commonErrorCode 错误码
-     * @param data            返回数据
      */
-    public static <T> Result<T> result(CommonErrorCode commonErrorCode, T data) {
+    public static <T> Result<T> result(CommonErrorCode commonErrorCode, String msg) {
         Result<T> m = new Result<>();
         m.setCode(commonErrorCode.getErrorCode());
-        m.setData(data);
-        m.setMsg(commonErrorCode.getErrorSuggestion());
+        m.setData(null);
+        m.setMsg(commonErrorCode.getErrorSuggestion() + ((msg == null) ? "" : msg));
         return m;
     }
 
@@ -65,7 +64,4 @@ public class Result<T> implements Serializable {
         return result(commonErrorCode, null);
     }
 
-    /*public static T getData() {
-        return data;
-    }*/
 }
