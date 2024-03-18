@@ -56,7 +56,7 @@ public class Result<T> implements Serializable {
         Result<T> m = new Result<>();
         m.setCode(commonErrorCode.getErrorCode());
         m.setData(null);
-        m.setMsg(commonErrorCode.getErrorSuggestion() + "：" + msg);
+        m.setMsg(commonErrorCode.getErrorSuggestion() + ((msg == null) ? "" : msg));
         return m;
     }
 
