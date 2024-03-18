@@ -61,7 +61,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User register(RegisterRequest registerRequest) {
+        // 从redis中获取验证码
         String captcha = captchaUtil.getCaptcha(registerRequest.getEmail());
+        // 判断验证码是否正确
         AssertUtil.isEqual(captcha, registerRequest.getCaptcha(), CommonErrorCode.WRONG_CAPTCHA);
         User user = new User(registerRequest);
         user.setPassword(convert(user.getPassword()));
@@ -71,10 +73,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Object delete(Integer userId) {
+        // 先查是否存在
         LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(User::getUserId, userId);
         User user = userMapper.selectOne(wrapper);
         AssertUtil.isNotNull(user, CommonErrorCode.USER_NOT_EXIST);
+        // 删除用户
         userMapper.deleteById(userId);
         return null;
     }
@@ -86,6 +90,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Object sendCaptcha(String email) {
+        // 发送验证码
         SimpleMailMessage simpleEmailMessage = new SimpleMailMessage();
         simpleEmailMessage.setFrom(from);
         simpleEmailMessage.setTo(email);

@@ -35,9 +35,6 @@ public class UserController {
 
     /**
      * 注册接口
-     *
-     * @param registerRequest
-     * @return
      */
     @PostMapping
     public Result<User> register(@RequestBody RegisterRequest registerRequest) {
