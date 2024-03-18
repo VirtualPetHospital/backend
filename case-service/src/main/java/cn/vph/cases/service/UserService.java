@@ -2,6 +2,7 @@ package cn.vph.cases.service;
 
 import cn.vph.cases.controller.request.RegisterRequest;
 import cn.vph.cases.entity.User;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 
 /**
  * @program: vph-backend
@@ -27,4 +28,6 @@ public interface UserService {
     Boolean checkNickname(String nickname);
 
     Boolean checkEmail(String email);
+
+    IPage<?> list();
 }

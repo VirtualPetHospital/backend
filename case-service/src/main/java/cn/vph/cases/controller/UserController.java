@@ -6,6 +6,7 @@ import cn.vph.cases.service.UserService;
 import cn.vph.common.Result;
 import cn.vph.common.annotation.Administrator;
 import cn.vph.common.annotation.Student;
+import cn.vph.common.controller.BaseController;
 import com.alibaba.fastjson.JSONObject;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +24,7 @@ import javax.validation.constraints.NotNull;
 @RestController
 @RequestMapping("users")
 @Api(value = "UserController", tags = {"用户服务接口"})
-public class UserController {
+public class UserController extends BaseController {
     @Autowired
     private UserService userService;
 
@@ -96,10 +97,11 @@ public class UserController {
     /**
      * 查询用户列表
      */
+    @Administrator
     @GetMapping
-    public Result<Object> list() {
+    public Result list() {
         //TODO 查询用户列表
-        return Result.success(null);
+        return Result.success(super.getData(userService.list()));
     }
     /**
      * 查询用户查看过的病例

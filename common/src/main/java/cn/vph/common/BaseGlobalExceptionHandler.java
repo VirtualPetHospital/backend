@@ -62,7 +62,6 @@ public class BaseGlobalExceptionHandler {
 
     /**
      * 公共异常
-     *
      * @param e
      * @return
      */

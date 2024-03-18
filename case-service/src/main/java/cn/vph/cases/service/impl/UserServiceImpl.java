@@ -10,6 +10,8 @@ import cn.vph.cases.util.SessionUtil;
 import cn.vph.common.CommonErrorCode;
 import cn.vph.common.util.AssertUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
@@ -133,6 +135,14 @@ public class UserServiceImpl implements UserService {
         wrapper.eq(User::getEmail, email);
         User user = userMapper.selectOne(wrapper);
         return user == null;
+    }
+
+    @Override
+    public IPage<?> list() {
+        LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
+        IPage<User> page = new Page<>(1, 10);
+        IPage<User> selectPage = userMapper.selectPage(page, wrapper);
+        return selectPage;
     }
 
 }
