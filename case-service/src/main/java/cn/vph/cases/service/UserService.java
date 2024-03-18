@@ -1,5 +1,6 @@
 package cn.vph.cases.service;
 
+import cn.vph.cases.controller.request.RegisterRequest;
 import cn.vph.cases.entity.User;
 
 /**
@@ -13,7 +14,11 @@ public interface UserService {
 
     User me();
 
-    User register(User user);
+    User register(RegisterRequest registerRequests);
 
     Object delete(Integer userId);
+
+    User update(User user);
+
+    Object sendCaptcha(String email);
 }

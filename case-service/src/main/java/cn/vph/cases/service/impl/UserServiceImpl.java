@@ -1,14 +1,19 @@
 package cn.vph.cases.service.impl;
 
 import cn.hutool.crypto.SecureUtil;
+import cn.vph.cases.controller.request.RegisterRequest;
 import cn.vph.cases.entity.User;
 import cn.vph.cases.mapper.UserMapper;
 import cn.vph.cases.service.UserService;
+import cn.vph.cases.util.CaptchaUtil;
 import cn.vph.cases.util.SessionUtil;
 import cn.vph.common.CommonErrorCode;
 import cn.vph.common.util.AssertUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 /**
@@ -23,6 +28,13 @@ public class UserServiceImpl implements UserService {
     private UserMapper userMapper;
     @Autowired
     private SessionUtil sessionUtil;
+    @Autowired
+    private CaptchaUtil captchaUtil;
+    @Autowired
+    private JavaMailSender mailSender;
+
+    @Value("${spring.mail.username}")
+    private String from;
 
     /**
      * 转md5
@@ -48,8 +60,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User register(User user) {
-        return null;
+    public User register(RegisterRequest registerRequest) {
+        String captcha = captchaUtil.getCaptcha(registerRequest.getEmail());
+        AssertUtil.isEqual(captcha, registerRequest.getCaptcha(), CommonErrorCode.WRONG_CAPTCHA);
+        User user = new User(registerRequest);
+        user.setPassword(convert(user.getPassword()));
+        userMapper.insert(user);
+        return user;
     }
 
     @Override
@@ -59,6 +76,23 @@ public class UserServiceImpl implements UserService {
         User user = userMapper.selectOne(wrapper);
         AssertUtil.isNotNull(user, CommonErrorCode.USER_NOT_EXIST);
         userMapper.deleteById(userId);
+        return null;
+    }
+
+    @Override
+    public User update(User user) {
+        return null;
+    }
+
+    @Override
+    public Object sendCaptcha(String email) {
+        SimpleMailMessage simpleEmailMessage = new SimpleMailMessage();
+        simpleEmailMessage.setFrom(from);
+        simpleEmailMessage.setTo(email);
+        simpleEmailMessage.setSubject("虚拟宠物医院系统注册验证码");
+        String captcha = captchaUtil.setCaptcha(email);
+        simpleEmailMessage.setText("您的验证码是："+captcha);
+        mailSender.send(simpleEmailMessage);
         return null;
     }
 

@@ -2,7 +2,6 @@ package cn.vph.cases.util;
 
 
 import cn.vph.cases.entity.User;
-import cn.vph.cases.mapper.UserMapper;
 import cn.vph.common.CommonConstant;
 import cn.vph.common.SessionData;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,8 +28,6 @@ public class SessionUtil extends cn.vph.common.util.BaseSessionUtil {
 
     @Autowired
     private RedisUtil redisUtil;
-    @Autowired
-    private UserMapper userMapper;
 
     public SessionData getSessionData() {
         String key = request.getHeader(CommonConstant.SESSION);
