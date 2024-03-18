@@ -25,6 +25,7 @@ import java.util.stream.Collectors;
  * @description 试卷接口实现
  * @create 2024/3/17 17:12
  */
+
 @Service
 public class PaperServiceImpl extends ServiceImpl<PaperMapper, Paper> implements PaperService {
 
@@ -57,7 +58,7 @@ public class PaperServiceImpl extends ServiceImpl<PaperMapper, Paper> implements
     @Transactional
     public void add(Paper paper){
         questionNumIsValid(paper);
-
+        nameIsValid(paper.getName());
         paperMapper.insert(paper);
 
         // 更新关系表
@@ -69,6 +70,7 @@ public class PaperServiceImpl extends ServiceImpl<PaperMapper, Paper> implements
     public void update(Paper paper){
         exists(paper.getPaperId());
         questionNumIsValid(paper);
+        nameIsValid(paper.getName());
 
         paperMapper.updateById(paper);
 
@@ -119,6 +121,13 @@ public class PaperServiceImpl extends ServiceImpl<PaperMapper, Paper> implements
     private void exists(Integer paperId){
         Paper paper = paperMapper.selectById(paperId);
         AssertUtil.isNotNull(paper, CommonErrorCode.PAPER_NOT_EXIST);
+    }
+
+    private void nameIsValid(String name){
+        LambdaQueryWrapper<Paper> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(Paper::getName, name);
+
+        AssertUtil.isFalse(paperMapper.selectCount(queryWrapper) > 0, CommonErrorCode.PAPER_NAME_ALREADY_EXIST);
     }
 
     private void questionNumIsValid(Paper paper){

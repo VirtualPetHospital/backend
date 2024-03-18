@@ -48,7 +48,7 @@ public enum CommonErrorCode {
      */
     PAPER_NOT_EXIST(2002, "试卷不存在", "试卷不存在"),
     QUESTION_NUM_INVALID(2003, "题目数量不合法", "题目数量不合法"),
-
+    PAPER_NAME_ALREADY_EXIST(2003, "试卷名称已存在", "试卷名称已存在"),
     /**
      * 病例相关
      */
