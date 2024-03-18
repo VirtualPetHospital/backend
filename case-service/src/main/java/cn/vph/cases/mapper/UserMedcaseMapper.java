@@ -1,7 +1,7 @@
 package cn.vph.cases.mapper;
 
 import cn.vph.cases.entity.UserMedcase;
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.github.yulichang.base.MPJBaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
@@ -11,5 +11,5 @@ import org.apache.ibatis.annotations.Mapper;
  * @create: 2024-03-18 20:59
  **/
 @Mapper
-public interface UserMedcaseMapper extends BaseMapper<UserMedcase> {
+public interface UserMedcaseMapper extends MPJBaseMapper<UserMedcase> {
 }

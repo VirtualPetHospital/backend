@@ -19,14 +19,12 @@ import cn.vph.common.util.AssertUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.github.yulichang.wrapper.MPJLambdaWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @program: vph-backend
@@ -225,8 +223,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public IPage<?> medcases(Integer pageNum, Integer pageSize, String medcaseInfoKeyword, String medcaseNameKeyword, String disease, Integer sortByViewTime) {
-        LambdaQueryWrapper<Medcase> wrapper = new LambdaQueryWrapper<>();
-        LambdaQueryWrapper<UserMedcase> userMedcaseWrapper = new LambdaQueryWrapper<>();
+        MPJLambdaWrapper<Medcase> wrapper = new MPJLambdaWrapper<>();
         // 病例描述模糊查询
         if (medcaseInfoKeyword != null && !medcaseInfoKeyword.isEmpty()) {
             wrapper.like(Medcase::getInfoDescription, medcaseInfoKeyword);
@@ -243,28 +240,23 @@ public class UserServiceImpl implements UserService {
             AssertUtil.isNotNull(disease1, CommonErrorCode.DISEASE_NOT_EXIST);
             wrapper.like(Medcase::getDiseaseId, disease1.getDiseaseId());
         }
+        wrapper.selectAll(Medcase.class)
+                .leftJoin(UserMedcase.class, UserMedcase::getMedcaseId, Medcase::getMedcaseId)
+                .eq(UserMedcase::getUserId, sessionUtil.getUserId());
         // 排序
         if (sortByViewTime != null) {
             switch (sortByViewTime) {
                 case CommonConstant.SORT_ASC:
-                    userMedcaseWrapper.orderByAsc(UserMedcase::getViewTime);
+                    wrapper.orderByAsc(UserMedcase::getViewTime);
                     break;
                 case CommonConstant.SORT_DESC:
-                    userMedcaseWrapper.orderByDesc(UserMedcase::getViewTime);
+                    wrapper.orderByDesc(UserMedcase::getViewTime);
                     break;
                 default:
                     break;
             }
         }
-        userMedcaseWrapper.eq(UserMedcase::getUserId, sessionUtil.getUserId());
-        userMedcaseWrapper.select(UserMedcase::getMedcaseId);
 
-        List<UserMedcase> userMedcases = userMedcaseMapper.selectList(userMedcaseWrapper);
-        List<Integer> medcaseIds = new ArrayList<>();
-        for (UserMedcase userMedcase : userMedcases) {
-            medcaseIds.add(userMedcase.getMedcaseId());
-        }
-        wrapper.in(Medcase::getMedcaseId, medcaseIds);
         return medcaseMapper.selectPage(new Page<>(pageNum, pageSize), wrapper);
     }
 
