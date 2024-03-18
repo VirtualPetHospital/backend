@@ -23,4 +23,8 @@ public interface UserService {
     Object sendCaptcha(String email);
 
     Object logout();
+
+    Boolean checkNickname(String nickname);
+
+    Boolean checkEmail(String email);
 }

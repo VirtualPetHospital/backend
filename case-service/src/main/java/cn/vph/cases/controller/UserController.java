@@ -55,9 +55,9 @@ public class UserController {
     /**
      * 更新用户信息
      */
+    @Student
     @PutMapping
     public Result<User> update(@RequestBody User user) {
-        //TODO 更新用户信息
         return Result.success(userService.update(user));
     }
 
@@ -81,16 +81,14 @@ public class UserController {
      */
     @GetMapping("nickname")
     public Result<Boolean> checkNickname(@RequestParam String nickname) {
-        //TODO 检查用户名是否可用
-        return Result.success(true);
+        return Result.success(userService.checkNickname(nickname));
     }
     /**
      * 检查邮箱是否可用
      */
     @GetMapping("email")
     public Result<Boolean> checkEmail(@RequestParam String email) {
-        //TODO 检查邮箱是否可用
-        return Result.success(true);
+        return Result.success(userService.checkEmail(email));
     }
     /**
      * 查询用户列表

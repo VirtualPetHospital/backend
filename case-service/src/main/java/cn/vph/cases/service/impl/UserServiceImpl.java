@@ -85,7 +85,19 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User update(User user) {
-        return null;
+        // 先查是否存在
+        LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(User::getNickname, user.getNickname());
+        User user1 = userMapper.selectOne(wrapper);
+        AssertUtil.isNotNull(user1, CommonErrorCode.USER_NOT_EXIST);
+        // 是否是当前用户
+        AssertUtil.isEqual(sessionUtil.getUserId(), user1.getUserId(), CommonErrorCode.NOT_CURRENT_USER);
+        // 不能改Type
+        AssertUtil.isEqual(user1.getType(), user.getType(), CommonErrorCode.ILLEGAL_USER_INFO);
+        // 更新用户
+        user.setUserId(sessionUtil.getUserId());
+        userMapper.updateById(user);
+        return user;
     }
 
     @Override
@@ -105,6 +117,22 @@ public class UserServiceImpl implements UserService {
     public Object logout() {
         sessionUtil.invalidate();
         return null;
+    }
+
+    @Override
+    public Boolean checkNickname(String nickname) {
+        LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(User::getNickname, nickname);
+        User user = userMapper.selectOne(wrapper);
+        return user == null;
+    }
+
+    @Override
+    public Boolean checkEmail(String email) {
+        LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(User::getEmail, email);
+        User user = userMapper.selectOne(wrapper);
+        return user == null;
     }
 
 }
