@@ -9,7 +9,10 @@ import cn.vph.common.annotation.Student;
 import com.alibaba.fastjson.JSONObject;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.constraints.NotNull;
 
 /**
  * @program: vph-backend
@@ -57,7 +60,7 @@ public class UserController {
      */
     @Student
     @PutMapping
-    public Result<User> update(@RequestBody User user) {
+    public Result<User> update(@Validated @RequestBody User user) {
         return Result.success(userService.update(user));
     }
 
@@ -80,7 +83,7 @@ public class UserController {
      * 检查用户名是否可用
      */
     @GetMapping("nickname")
-    public Result<Boolean> checkNickname(@RequestParam String nickname) {
+    public Result<Boolean> checkNickname(@NotNull @RequestParam String nickname) {
         return Result.success(userService.checkNickname(nickname));
     }
     /**
@@ -121,6 +124,7 @@ public class UserController {
      */
     @PostMapping("captcha")
     public Result<Object> captcha(@RequestBody JSONObject jsonObject) {
+        // TODO 字段检查
         String email = jsonObject.getString("email");
         return Result.success(userService.sendCaptcha(email));
     }

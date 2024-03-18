@@ -16,6 +16,7 @@ public enum CommonErrorCode {
      * 以1开头的和用户权限相关
      */
     SYSTEM_ERROR(-1, "系统异常，请查看日志", "系统异常，请稍后再试"),
+    INVALID_PARAM(-1, "请求参数未通过校验，具体请查看日志", "请求参数异常"),
     USER_NOT_LOGGED_IN(1001, "用户未登录", "用户未登录"),
     UNAUTHORIZED_ACCESS(1002, "用户试图进行越权操作", "无权限！"),
     NOT_CURRENT_USER(1003, "用户试图修改其他用户的信息", "仅可对当前用户进行操作"),
