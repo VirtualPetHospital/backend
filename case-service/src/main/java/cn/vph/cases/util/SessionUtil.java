@@ -35,7 +35,7 @@ public class SessionUtil extends cn.vph.common.util.BaseSessionUtil {
 
         SessionData sessionData = null;
         try {
-            sessionData = (SessionData) redisUtil.get(key);
+            sessionData = (cn.vph.common.SessionData) redisUtil.get(key);
         } catch (Exception e) {
             return null;
 

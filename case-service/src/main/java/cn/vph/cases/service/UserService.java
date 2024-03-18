@@ -2,6 +2,7 @@ package cn.vph.cases.service;
 
 import cn.vph.cases.controller.request.RegisterRequest;
 import cn.vph.cases.entity.User;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 
 /**
  * @program: vph-backend
@@ -23,4 +24,12 @@ public interface UserService {
     Object sendCaptcha(String email);
 
     Object logout();
+
+    Boolean checkNickname(String nickname);
+
+    Boolean checkEmail(String email);
+
+    IPage<?> list(Integer pageNum, Integer pageSize, String type, String nicknameKeyword, Integer sortByNickname);
+
+    IPage<?> medcases(Integer pageNum, Integer pageSize, String medcaseInfoKeyword, String medcaseNameKeyword, String disease, Integer sortByViewTime);
 }

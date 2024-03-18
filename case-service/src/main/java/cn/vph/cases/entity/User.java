@@ -9,6 +9,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.Email;
 import java.io.Serializable;
 import java.util.List;
 
@@ -35,6 +36,7 @@ public class User implements Serializable {
     @TableField("avatar_url")
     private String avatarUrl;
 
+    @Email
     private String email;
 
     private Integer level;

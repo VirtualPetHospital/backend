@@ -12,4 +12,7 @@ public class CommonConstant {
     public final static String[] AT_LEAST_TEACHER = {"teacher", "administrator"};
     public final static String[] AT_LEAST_ADMINISTRATOR = {"administrator"};
 
+    public final static int SORT_ASC = 1;
+    public final static int SORT_DESC = 2;
+
 }
