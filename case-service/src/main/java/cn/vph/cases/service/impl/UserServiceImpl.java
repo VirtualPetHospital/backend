@@ -101,4 +101,10 @@ public class UserServiceImpl implements UserService {
         return null;
     }
 
+    @Override
+    public Object logout() {
+        sessionUtil.invalidate();
+        return null;
+    }
+
 }

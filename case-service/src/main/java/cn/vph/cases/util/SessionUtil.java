@@ -48,7 +48,8 @@ public class SessionUtil extends cn.vph.common.util.BaseSessionUtil {
      * 用户登出，清除session
      */
     public void invalidate() {
-        request.removeAttribute(CommonConstant.SESSION);
+        String key = request.getHeader(CommonConstant.SESSION);
+        redisUtil.del(key);
     }
 
     /**

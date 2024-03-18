@@ -71,10 +71,10 @@ public class UserController {
     /**
      * 用户登出
      */
+    @Student
     @PostMapping("logout")
     public Result<Object> logout() {
-        //TODO 登出逻辑
-        return Result.success(null);
+        return Result.success(userService.logout());
     }
     /**
      * 检查用户名是否可用

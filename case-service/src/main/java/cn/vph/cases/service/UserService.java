@@ -21,4 +21,6 @@ public interface UserService {
     User update(User user);
 
     Object sendCaptcha(String email);
+
+    Object logout();
 }
