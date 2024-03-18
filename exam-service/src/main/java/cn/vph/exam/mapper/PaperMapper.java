@@ -1,9 +1,9 @@
 package cn.vph.exam.mapper;
 
-import cn.vph.exam.entity.Question;
+import cn.vph.exam.entity.Paper;
 import com.github.yulichang.base.MPJBaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
-public interface QuestionMapper extends MPJBaseMapper<Question> {
+public interface PaperMapper extends MPJBaseMapper<Paper> {
 }

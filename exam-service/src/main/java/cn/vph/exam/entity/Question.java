@@ -33,13 +33,13 @@ public class Question implements Serializable {
      */
     private String answer;
 
-    private String A;
+    private String a;
 
-    private String B;
+    private String b;
 
-    private String C;
+    private String c;
 
-    private String D;
+    private String d;
 
     @TableField(value = "category_id")
     private Integer categoryId;

@@ -25,4 +25,11 @@ public class PaperQuestion implements Serializable {
 
     @TableField(value = "question_id")
     private Integer questionId;
+
+    public PaperQuestion() {
+    }
+    public PaperQuestion(Integer paperId, Integer questionId) {
+        this.paperId = paperId;
+        this.questionId = questionId;
+    }
 }
