@@ -29,5 +29,7 @@ public interface UserService {
 
     Boolean checkEmail(String email);
 
-    IPage<?> list();
+    IPage<?> list(Integer pageNum, Integer pageSize, String type, String nicknameKeyword, Integer sortByNickname);
+
+    IPage<?> medcases(Integer pageNum, Integer pageSize, String medcaseInfoKeyword, String medcaseNameKeyword, String disease, Integer sortByViewTime);
 }

@@ -2,11 +2,18 @@ package cn.vph.cases.service.impl;
 
 import cn.hutool.crypto.SecureUtil;
 import cn.vph.cases.controller.request.RegisterRequest;
+import cn.vph.cases.entity.Disease;
+import cn.vph.cases.entity.Medcase;
 import cn.vph.cases.entity.User;
+import cn.vph.cases.entity.UserMedcase;
+import cn.vph.cases.mapper.DiseaseMapper;
+import cn.vph.cases.mapper.MedcaseMapper;
 import cn.vph.cases.mapper.UserMapper;
+import cn.vph.cases.mapper.UserMedcaseMapper;
 import cn.vph.cases.service.UserService;
 import cn.vph.cases.util.CaptchaUtil;
 import cn.vph.cases.util.SessionUtil;
+import cn.vph.common.CommonConstant;
 import cn.vph.common.CommonErrorCode;
 import cn.vph.common.util.AssertUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -18,6 +25,9 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @program: vph-backend
  * @description:
@@ -28,6 +38,12 @@ import org.springframework.stereotype.Service;
 public class UserServiceImpl implements UserService {
     @Autowired
     private UserMapper userMapper;
+    @Autowired
+    private DiseaseMapper diseaseMapper;
+    @Autowired
+    private MedcaseMapper medcaseMapper;
+    @Autowired
+    private UserMedcaseMapper userMedcaseMapper;
     @Autowired
     private SessionUtil sessionUtil;
     @Autowired
@@ -41,9 +57,10 @@ public class UserServiceImpl implements UserService {
     /**
      * 转md5
      */
-    public static String convert(String password){
-        return SecureUtil.md5(password).substring(6,24);
+    public static String convert(String password) {
+        return SecureUtil.md5(password).substring(6, 24);
     }
+
     @Override
     public User login(String nickname, String password) {
         LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
@@ -110,7 +127,7 @@ public class UserServiceImpl implements UserService {
         simpleEmailMessage.setTo(email);
         simpleEmailMessage.setSubject("虚拟宠物医院系统注册验证码");
         String captcha = captchaUtil.setCaptcha(email);
-        simpleEmailMessage.setText("您的验证码是："+captcha);
+        simpleEmailMessage.setText("您的验证码是：" + captcha);
         mailSender.send(simpleEmailMessage);
         return null;
     }
@@ -138,11 +155,117 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public IPage<?> list() {
+    public IPage<?> list(Integer pageNum, Integer pageSize, String type, String nicknameKeyword, Integer sortByNickname) {
         LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
-        IPage<User> page = new Page<>(1, 10);
-        IPage<User> selectPage = userMapper.selectPage(page, wrapper);
-        return selectPage;
+        if (type != null && !type.isEmpty()) {
+            wrapper.eq(User::getType, type);
+        }
+        if (nicknameKeyword != null) {
+            wrapper.like(User::getNickname, nicknameKeyword);
+        }
+        if (sortByNickname != null) {
+            switch (sortByNickname) {
+                case CommonConstant.SORT_ASC:
+                    wrapper.orderByAsc(User::getNickname);
+                    break;
+                case CommonConstant.SORT_DESC:
+                    wrapper.orderByDesc(User::getNickname);
+                    break;
+                default:
+                    break;
+            }
+        }
+        return userMapper.selectPage(new Page<>(pageNum, pageSize), wrapper);
+    }
+
+//    @Override
+//    public IPage<?> medcases(Integer pageNum, Integer pageSize, String medcaseInfoKeyword, String medcaseNameKeyword, String disease, Integer sortByViewTime) {
+//        LambdaQueryWrapper<Medcase> wrapper = new LambdaQueryWrapper<>();
+//        LambdaQueryWrapper<UserMedcase> userMedcaseWrapper = new LambdaQueryWrapper<>();
+//        // 病例描述模糊查询
+//        if (medcaseInfoKeyword != null && !medcaseInfoKeyword.isEmpty()) {
+//            wrapper.like(Medcase::getInfoDescription, medcaseInfoKeyword);
+//        }
+//        // 病例名模糊查询
+//        if (medcaseNameKeyword != null && !medcaseNameKeyword.isEmpty()) {
+//            wrapper.like(Medcase::getName, medcaseNameKeyword);
+//        }
+//        // 疾病名模糊查询
+//        if (disease != null && !disease.isEmpty()) {
+//            LambdaQueryWrapper<Disease> diseaseWrapper = new LambdaQueryWrapper<>();
+//            diseaseWrapper.eq(Disease::getName, disease);
+//            Disease disease1 = diseaseMapper.selectOne(diseaseWrapper);
+//            AssertUtil.isNotNull(disease1, CommonErrorCode.DISEASE_NOT_EXIST);
+//            wrapper.like(Medcase::getDiseaseId, disease1.getDiseaseId());
+//        }
+//        // 排序
+//        if (sortByViewTime != null) {
+//            switch (sortByViewTime) {
+//                case CommonConstant.SORT_ASC:
+//                    userMedcaseWrapper.orderByAsc(UserMedcase::getViewTime);
+//                    break;
+//                case CommonConstant.SORT_DESC:
+//                    userMedcaseWrapper.orderByDesc(UserMedcase::getViewTime);
+//                    break;
+//                default:
+//                    break;
+//            }
+//        }
+//        userMedcaseWrapper.eq(UserMedcase::getUserId, sessionUtil.getUserId());
+//        userMedcaseWrapper.select(UserMedcase::getMedcaseId);
+//
+//        List<UserMedcase> userMedcases = userMedcaseMapper.selectList(userMedcaseWrapper);
+//        List<Integer> medcaseIds = new ArrayList<>();
+//        for (UserMedcase userMedcase : userMedcases) {
+//            medcaseIds.add(userMedcase.getMedcaseId());
+//        }
+//        wrapper.in(Medcase::getMedcaseId, medcaseIds);
+//        return medcaseMapper.selectPage(new Page<>(pageNum, pageSize), wrapper);
+//    }
+
+    @Override
+    public IPage<?> medcases(Integer pageNum, Integer pageSize, String medcaseInfoKeyword, String medcaseNameKeyword, String disease, Integer sortByViewTime) {
+        LambdaQueryWrapper<Medcase> wrapper = new LambdaQueryWrapper<>();
+        LambdaQueryWrapper<UserMedcase> userMedcaseWrapper = new LambdaQueryWrapper<>();
+        // 病例描述模糊查询
+        if (medcaseInfoKeyword != null && !medcaseInfoKeyword.isEmpty()) {
+            wrapper.like(Medcase::getInfoDescription, medcaseInfoKeyword);
+        }
+        // 病例名模糊查询
+        if (medcaseNameKeyword != null && !medcaseNameKeyword.isEmpty()) {
+            wrapper.like(Medcase::getName, medcaseNameKeyword);
+        }
+        // 疾病名模糊查询
+        if (disease != null && !disease.isEmpty()) {
+            LambdaQueryWrapper<Disease> diseaseWrapper = new LambdaQueryWrapper<>();
+            diseaseWrapper.eq(Disease::getName, disease);
+            Disease disease1 = diseaseMapper.selectOne(diseaseWrapper);
+            AssertUtil.isNotNull(disease1, CommonErrorCode.DISEASE_NOT_EXIST);
+            wrapper.like(Medcase::getDiseaseId, disease1.getDiseaseId());
+        }
+        // 排序
+        if (sortByViewTime != null) {
+            switch (sortByViewTime) {
+                case CommonConstant.SORT_ASC:
+                    userMedcaseWrapper.orderByAsc(UserMedcase::getViewTime);
+                    break;
+                case CommonConstant.SORT_DESC:
+                    userMedcaseWrapper.orderByDesc(UserMedcase::getViewTime);
+                    break;
+                default:
+                    break;
+            }
+        }
+        userMedcaseWrapper.eq(UserMedcase::getUserId, sessionUtil.getUserId());
+        userMedcaseWrapper.select(UserMedcase::getMedcaseId);
+
+        List<UserMedcase> userMedcases = userMedcaseMapper.selectList(userMedcaseWrapper);
+        List<Integer> medcaseIds = new ArrayList<>();
+        for (UserMedcase userMedcase : userMedcases) {
+            medcaseIds.add(userMedcase.getMedcaseId());
+        }
+        wrapper.in(Medcase::getMedcaseId, medcaseIds);
+        return medcaseMapper.selectPage(new Page<>(pageNum, pageSize), wrapper);
     }
 
 }

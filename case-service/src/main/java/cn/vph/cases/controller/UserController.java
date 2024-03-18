@@ -46,7 +46,6 @@ public class UserController extends BaseController {
     }
 
 
-
     /**
      * 删除用户接口
      */
@@ -72,6 +71,7 @@ public class UserController extends BaseController {
     public Result<User> login(@RequestBody User user) {
         return Result.success(userService.login(user.getNickname(), user.getPassword()));
     }
+
     /**
      * 用户登出
      */
@@ -80,6 +80,7 @@ public class UserController extends BaseController {
     public Result<Object> logout() {
         return Result.success(userService.logout());
     }
+
     /**
      * 检查用户名是否可用
      */
@@ -87,6 +88,7 @@ public class UserController extends BaseController {
     public Result<Boolean> checkNickname(@NotNull @RequestParam String nickname) {
         return Result.success(userService.checkNickname(nickname));
     }
+
     /**
      * 检查邮箱是否可用
      */
@@ -94,22 +96,37 @@ public class UserController extends BaseController {
     public Result<Boolean> checkEmail(@RequestParam String email) {
         return Result.success(userService.checkEmail(email));
     }
+
     /**
      * 查询用户列表
      */
     @Administrator
     @GetMapping
-    public Result list() {
-        //TODO 查询用户列表
-        return Result.success(super.getData(userService.list()));
+    public Result list(
+            @RequestParam(value = "page_num", defaultValue = "1") Integer pageNum,
+            @RequestParam(value = "page_size", defaultValue = "10") Integer pageSize,
+            @RequestParam(value = "type", required = false) String type,
+            @RequestParam(value = "nickname_keyword", required = false) String nicknameKeyword,
+            @RequestParam(value = "sort_by_nickname", required = false) Integer sortByNickname
+    ) {
+        return Result.success(super.getData(userService.list(pageNum, pageSize, type, nicknameKeyword, sortByNickname)));
     }
+
     /**
      * 查询用户查看过的病例
      */
+    @Student
     @GetMapping("medcases")
-    public Result<Object> medcases() {
-        //TODO 查询用户查看过的病例
-        return Result.success(null);
+    public Result medcases(
+            @RequestParam(value = "page_num", defaultValue = "1") Integer pageNum,
+            @RequestParam(value = "page_size", defaultValue = "10") Integer pageSize,
+            @RequestParam(value = "medcase_info_keyword", required = false) String medcaseInfoKeyword,
+            @RequestParam(value = "medcase_name_keyword", required = false) String medcaseNameKeyword,
+            @RequestParam(value = "disease", required = false) String disease,
+            @RequestParam(value = "sort_by_view_time", required = false) Integer sortByViewTime
+    ) {
+
+        return Result.success(super.getData(userService.medcases(pageNum, pageSize, medcaseInfoKeyword, medcaseNameKeyword, disease, sortByViewTime)));
     }
 
     /**

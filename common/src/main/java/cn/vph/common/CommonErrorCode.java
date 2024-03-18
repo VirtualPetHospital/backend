@@ -26,7 +26,7 @@ public enum CommonErrorCode {
     EMAIL_ALREADY_EXIST(1007, "邮箱已注册", "邮箱已注册"),
     WRONG_CAPTCHA(1008, "验证码错误", "验证码错误"),
     ILLEGAL_USER_INFO(1009, "请求字段中有非法值或非法修改某个字段", "请求参数异常"),
-    ;
+    DISEASE_NOT_EXIST(11001, "疾病不存在", "疾病不存在");
 
     /**
      * 错误码
