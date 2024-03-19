@@ -9,6 +9,7 @@ import cn.vph.common.annotation.Student;
 import cn.vph.common.controller.BaseController;
 import com.alibaba.fastjson.JSONObject;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -28,80 +29,62 @@ public class UserController extends BaseController {
     @Autowired
     private UserService userService;
 
-    /**
-     * 获取当前用户信息
-     */
     @Student
     @GetMapping("me")
+    @ApiOperation(value = "获取当前用户信息")
     public Result<User> me() {
         return Result.success(userService.me());
     }
 
-    /**
-     * 注册接口
-     */
     @PostMapping
+    @ApiOperation(value = "新增用户")
     public Result<User> register(@RequestBody RegisterRequest registerRequest) {
         return Result.success(userService.register(registerRequest));
     }
 
 
-    /**
-     * 删除用户接口
-     */
     @Administrator
     @DeleteMapping("{userId}")
+    @ApiOperation(value = "删除用户")
     public Result<Object> delete(@PathVariable Integer userId) {
         return Result.success(userService.delete(userId));
     }
 
-    /**
-     * 更新用户信息
-     */
     @Student
     @PutMapping
+    @ApiOperation(value = "更新用户信息")
     public Result<User> update(@Validated @RequestBody User user) {
         return Result.success(userService.update(user));
     }
 
-    /**
-     * 登录接口
-     */
     @PostMapping("login")
+    @ApiOperation(value = "用户登录")
     public Result<User> login(@RequestBody User user) {
         return Result.success(userService.login(user.getNickname(), user.getPassword()));
     }
 
-    /**
-     * 用户登出
-     */
     @Student
     @PostMapping("logout")
+    @ApiOperation(value = "用户登出")
     public Result<Object> logout() {
         return Result.success(userService.logout());
     }
 
-    /**
-     * 检查用户名是否可用
-     */
     @GetMapping("nickname")
+    @ApiOperation(value = "检查用户名是否可用")
     public Result<Boolean> checkNickname(@NotNull @RequestParam String nickname) {
         return Result.success(userService.checkNickname(nickname));
     }
 
-    /**
-     * 检查邮箱是否可用
-     */
     @GetMapping("email")
+    @ApiOperation(value = "检查邮箱是否可用")
     public Result<Boolean> checkEmail(@RequestParam String email) {
         return Result.success(userService.checkEmail(email));
     }
 
-    /**
-     * 查询用户列表
-     */
     @Administrator
-    @GetMapping
+    @GetMapping("list")
+    @ApiOperation(value = "查询用户列表")
     public Result list(
             @RequestParam(value = "page_num", defaultValue = "1") Integer pageNum,
             @RequestParam(value = "page_size", defaultValue = "10") Integer pageSize,
@@ -112,11 +95,9 @@ public class UserController extends BaseController {
         return Result.success(super.getData(userService.list(pageNum, pageSize, type, nicknameKeyword, sortByNickname)));
     }
 
-    /**
-     * 查询用户查看过的病例
-     */
     @Student
     @GetMapping("medcases")
+    @ApiOperation(value = "查询用户查看过的病例")
     public Result medcases(
             @RequestParam(value = "page_num", defaultValue = "1") Integer pageNum,
             @RequestParam(value = "page_size", defaultValue = "10") Integer pageSize,
@@ -129,21 +110,16 @@ public class UserController extends BaseController {
         return Result.success(super.getData(userService.medcases(pageNum, pageSize, medcaseInfoKeyword, medcaseNameKeyword, disease, sortByViewTime)));
     }
 
-    /**
-     * 查询用户参与的考试
-     */
     @GetMapping("exams")
+    @ApiOperation(value = "查询用户参与的考试")
     public Result<Object> exams() {
         //TODO 查询用户参与的考试
         return Result.success(null);
     }
 
-    /**
-     * 请求验证码
-     */
     @PostMapping("captcha")
+    @ApiOperation(value = "请求验证码")
     public Result<Object> captcha(@RequestBody JSONObject jsonObject) {
-        // TODO 字段检查
         String email = jsonObject.getString("email");
         return Result.success(userService.sendCaptcha(email));
     }
