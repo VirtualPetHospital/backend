@@ -34,6 +34,8 @@ public enum CommonErrorCode {
     CANNOT_DELETE_CATEGORY(13001, "该病种下有疾病，无法删除", "该病种下有疾病，无法删除"),
     CATEGORY_NOT_EXIST(13002, "病种不存在", "病种不存在"),
     CATEGORY_ALREADY_EXIST(13003, "病种已存在", "病种已存在"),
+    MEDICINE_NOT_EXIST(14002, "药品不存在", "药品不存在"),
+    MEDICINE_ALREADY_EXIST(13003, "药品已存在", "药品已存在"),
     ;
     /**
      * 错误码
