@@ -36,6 +36,9 @@ public enum CommonErrorCode {
     CATEGORY_ALREADY_EXIST(13003, "病种已存在", "病种已存在"),
     MEDICINE_NOT_EXIST(14002, "药品不存在", "药品不存在"),
     MEDICINE_ALREADY_EXIST(13003, "药品已存在", "药品已存在"),
+    INSPECTION_NOT_EXIST(15001, "检查项目不存在", "检查项目不存在"),
+    INSPECTION_ALREADY_EXIST(15002, "检查项目已存在", "检查项目已存在"),
+
     ;
     /**
      * 错误码
