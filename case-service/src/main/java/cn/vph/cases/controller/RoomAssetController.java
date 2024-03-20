@@ -45,16 +45,6 @@ public class RoomAssetController {
     }
 
 
-//    @Student
-//    @GetMapping("/list")
-//    @ApiOperation(value = "查询科室设施列表")
-//public Result<?> list(
-//            @RequestParam(value = "page_num", defaultValue = "1") Integer pageNum,
-//            @RequestParam(value = "page_size", defaultValue = "10") Integer pageSize,
-//            @RequestParam(value = "name_keyword", required = false) String nameKeyword
-//    ) {
-//        return Result.success(roomAssetService.list(pageNum, pageSize, nameKeyword));
-//    }
     @Student
     @GetMapping("/rooms/{roomId}")
     @ApiOperation(value = "查询指定room下的科室设施")
@@ -71,6 +61,18 @@ public class RoomAssetController {
         roomAsset.setRoomAssetId(roomAssetId);
         return Result.success(roomAssetService.update(roomAsset));
     }
+
+//    @Student
+//    @GetMapping("/list")
+//    @ApiOperation(value = "查询科室设施列表")
+//public Result<?> list(
+//            @RequestParam(value = "page_num", defaultValue = "1") Integer pageNum,
+//            @RequestParam(value = "page_size", defaultValue = "10") Integer pageSize,
+//            @RequestParam(value = "name_keyword", required = false) String nameKeyword
+//    ) {
+//        return Result.success(roomAssetService.list(pageNum, pageSize, nameKeyword));
+//    }
+
 }
 
 

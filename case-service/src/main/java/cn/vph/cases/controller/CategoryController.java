@@ -1,5 +1,6 @@
 package cn.vph.cases.controller;
 
+import cn.vph.common.controller.BaseController;
 import cn.vph.cases.entity.Category;
 import cn.vph.cases.mapper.CategoryMapper;
 import cn.vph.cases.service.CategoryService;

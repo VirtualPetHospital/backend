@@ -1,5 +1,6 @@
 package cn.vph.cases.controller;
 
+import cn.vph.common.controller.BaseController;
 import cn.vph.cases.entity.Medcase;
 import cn.vph.cases.service.MedcaseService;
 import cn.vph.common.Result;
@@ -14,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("medcases")
 @Api(value = "MedcaseController", tags = {"病例服务接口"})
-public class MedcaseController {
+public class MedcaseController extends BaseController {
     @Autowired
     private MedcaseService medcaseService;
 

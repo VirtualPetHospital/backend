@@ -7,7 +7,7 @@ import java.util.Map;
 
 /**
  * @program: vph-backend
- * @description:
+ * @description: 提取Controller层公共方法
  * @author: astarforbae
  * @create: 2024-03-18 15:34
  **/

@@ -1,5 +1,6 @@
 package cn.vph.exam.controller;
 
+import cn.vph.common.controller.BaseController;
 import cn.vph.common.Result;
 import cn.vph.common.annotation.Student;
 import cn.vph.common.annotation.Teacher;
