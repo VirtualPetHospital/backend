@@ -56,18 +56,19 @@ public class PaperServiceImpl extends ServiceImpl<PaperMapper, Paper> implements
 
     @Override
     @Transactional
-    public void add(Paper paper){
+    public Paper add(Paper paper){
         questionNumIsValid(paper);
         nameIsValid(paper.getName());
         paperMapper.insert(paper);
 
         // 更新关系表
         updatePaperQuestion(paper);
+        return paper;
     }
 
     @Override
     @Transactional
-    public void update(Paper paper){
+    public Paper update(Paper paper){
         exists(paper.getPaperId());
         questionNumIsValid(paper);
         nameIsValid(paper.getName());
@@ -76,7 +77,7 @@ public class PaperServiceImpl extends ServiceImpl<PaperMapper, Paper> implements
 
         // 更新关系表
         updatePaperQuestion(paper);
-
+        return paper;
     }
 
     @Override
@@ -89,7 +90,8 @@ public class PaperServiceImpl extends ServiceImpl<PaperMapper, Paper> implements
     }
 
     // 封装试卷的题目列表
-    private void initPaper(Paper paper){
+    @Override
+    public void initPaper(Paper paper){
         List<Integer> questionIds = paperQuestionMapper.selectList(
                 new LambdaQueryWrapper<PaperQuestion>()
                 .eq(PaperQuestion::getPaperId, paper.getPaperId())

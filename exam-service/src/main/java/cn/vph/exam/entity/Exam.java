@@ -10,6 +10,7 @@ import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 /**
@@ -35,7 +36,7 @@ public class Exam implements Serializable {
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     @TableField("start_time")
-    private Date startTime;
+    private LocalDateTime startTime;
 
     /**
      * 结束时间，参见m_time
@@ -43,7 +44,7 @@ public class Exam implements Serializable {
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     @TableField("end_time")
-    private Date endTime;
+    private LocalDateTime endTime;
 
     /**
      * 考试时长，分钟，不为空，不为null，int类型，范围1-300
@@ -57,4 +58,7 @@ public class Exam implements Serializable {
      * 等级，不为空，初始为1，最大为5，int类型
      */
     private Integer level;
+
+    @TableField(exist = false)
+    private Paper paper;
 }

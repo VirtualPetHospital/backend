@@ -3,6 +3,7 @@ package cn.vph.cases.service;
 import cn.vph.cases.controller.request.RegisterRequest;
 import cn.vph.cases.entity.User;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
  * @program: vph-backend
@@ -10,7 +11,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
  * @author: astarforbae
  * @create: 2024-03-17 18:23
  **/
-public interface UserService {
+public interface UserService extends IService<User>{
     User login(String nickname, String password);
 
     User me();
