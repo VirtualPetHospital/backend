@@ -1,6 +1,7 @@
 package cn.vph.cases.service;
 
 import cn.vph.cases.entity.Medicine;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 
 /**
  * @program: vph-backend
@@ -13,7 +14,7 @@ public interface MedicineService {
 
     Object update(Medicine medicine);
 
-    Object list(Integer pageNum, Integer pageSize, String nameKeyword);
+    IPage<?> list(Integer pageNum, Integer pageSize, String nameKeyword);
 
     Object delete(Integer medicineId);
 }

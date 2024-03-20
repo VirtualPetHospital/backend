@@ -1,6 +1,7 @@
 package cn.vph.cases.service;
 
 import cn.vph.cases.entity.Inspection;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 
 /**
  * @program: vph-backend
@@ -13,7 +14,7 @@ public interface InspectionService {
 
     Object update(Inspection inspection);
 
-    Object list(Integer pageNum, Integer pageSize, String nameKeyword);
+    IPage<?> list(Integer pageNum, Integer pageSize, String nameKeyword);
 
     Object get(Integer inspectionId);
 

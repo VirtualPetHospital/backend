@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("operations")
 @Api(value = "OperationController", tags = {"手术服务接口"})
-public class OperationController {
+public class OperationController extends BaseController{
     @Autowired
     private OperationService operationService;
 
@@ -61,7 +61,7 @@ public class OperationController {
             @RequestParam(value = "page_size", defaultValue = "10") Integer pageSize,
             @RequestParam(value = "name_keyword", required = false) String nameKeyword
     ) {
-        return Result.success(operationService.list(pageNum, pageSize, nameKeyword));
+        return Result.success(super.getData(operationService.list(pageNum, pageSize, nameKeyword)));
     }
 
 }

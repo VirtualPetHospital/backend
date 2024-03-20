@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("categories")
 @Api(value = "CategoryController", tags = {"病种服务接口"})
-public class CategoryController {
+public class CategoryController extends BaseController{
 
     @Autowired
     private CategoryService categoryService;

@@ -5,6 +5,7 @@ import cn.vph.cases.mapper.InspectionMapper;
 import cn.vph.cases.service.InspectionService;
 import cn.vph.common.CommonErrorCode;
 import cn.vph.common.util.AssertUtil;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.yulichang.query.MPJLambdaQueryWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,7 +47,7 @@ public class InspectionServiceImpl implements InspectionService {
     }
 
     @Override
-    public Object list(Integer pageNum, Integer pageSize, String nameKeyword) {
+    public IPage<?> list(Integer pageNum, Integer pageSize, String nameKeyword) {
         MPJLambdaQueryWrapper<Inspection> queryWrapper = new MPJLambdaQueryWrapper<>();
         if (nameKeyword != null) {
             queryWrapper.like(Inspection::getName, nameKeyword);

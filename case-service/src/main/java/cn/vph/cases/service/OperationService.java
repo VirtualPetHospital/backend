@@ -1,6 +1,7 @@
 package cn.vph.cases.service;
 
 import cn.vph.cases.entity.Operation;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 
 /**
  * @program: vph-backend
@@ -17,5 +18,5 @@ public interface OperationService {
 
     Operation update(Operation operation);
 
-    Object list(Integer pageNum, Integer pageSize, String nameKeyword);
+    IPage<?> list(Integer pageNum, Integer pageSize, String nameKeyword);
 }

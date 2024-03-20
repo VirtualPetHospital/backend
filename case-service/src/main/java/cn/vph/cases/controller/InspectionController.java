@@ -19,9 +19,10 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("inspections")
 @Api(value = "InspectionController", tags = {"检查项目接口"})
-public class InspectionController {
+public class InspectionController extends BaseController {
     @Autowired
     private InspectionService inspectionService;
+
     @Administrator
     @PostMapping
     @ApiOperation(value = "新增检查项目")
@@ -45,7 +46,7 @@ public class InspectionController {
             @RequestParam(value = "page_size", defaultValue = "10") Integer pageSize,
             @RequestParam(value = "name_keyword", required = false) String nameKeyword
     ) {
-        return Result.success(inspectionService.list(pageNum, pageSize, nameKeyword));
+        return Result.success(super.getData(inspectionService.list(pageNum, pageSize, nameKeyword)));
     }
 
     @Student

@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("medicines")
 @Api(value = "MedicineController", tags = {"药品服务接口"})
-public class MedicineController {
+public class MedicineController extends BaseController {
     @Autowired
     private MedicineService medicineService;
 
@@ -46,7 +46,7 @@ public class MedicineController {
             @RequestParam(value = "page_size", defaultValue = "10") Integer pageSize,
             @RequestParam(value = "name_keyword", required = false) String nameKeyword
     ) {
-        return Result.success(medicineService.list(pageNum, pageSize, nameKeyword));
+        return Result.success(super.getData(medicineService.list(pageNum, pageSize, nameKeyword)));
     }
 
     @Administrator

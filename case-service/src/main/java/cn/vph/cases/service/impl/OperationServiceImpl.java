@@ -5,6 +5,7 @@ import cn.vph.cases.mapper.OperationMapper;
 import cn.vph.cases.service.OperationService;
 import cn.vph.common.CommonErrorCode;
 import cn.vph.common.util.AssertUtil;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.yulichang.query.MPJLambdaQueryWrapper;
 import com.github.yulichang.wrapper.MPJLambdaWrapper;
@@ -68,7 +69,7 @@ public class OperationServiceImpl implements OperationService {
     }
 
     @Override
-    public Object list(Integer pageNum, Integer pageSize, String nameKeyword) {
+    public IPage<?> list(Integer pageNum, Integer pageSize, String nameKeyword) {
         MPJLambdaWrapper<Operation> queryWrapper = new MPJLambdaWrapper<>();
         // 名字模糊查询
         if (nameKeyword != null) {

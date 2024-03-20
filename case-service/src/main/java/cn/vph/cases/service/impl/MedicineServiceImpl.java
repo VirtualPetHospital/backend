@@ -5,6 +5,7 @@ import cn.vph.cases.mapper.MedicineMapper;
 import cn.vph.cases.service.MedicineService;
 import cn.vph.common.CommonErrorCode;
 import cn.vph.common.util.AssertUtil;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.github.yulichang.query.MPJLambdaQueryWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -46,7 +47,7 @@ public class MedicineServiceImpl implements MedicineService {
     }
 
     @Override
-    public Object list(Integer pageNum, Integer pageSize, String nameKeyword) {
+    public IPage<?> list(Integer pageNum, Integer pageSize, String nameKeyword) {
         MPJLambdaQueryWrapper<Medicine> queryWrapper = new MPJLambdaQueryWrapper<>();
         if (nameKeyword != null) {
             queryWrapper.like(Medicine::getName, nameKeyword);
