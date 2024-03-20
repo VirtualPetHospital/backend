@@ -7,7 +7,7 @@ import cn.vph.cases.service.DiseaseService;
 import cn.vph.common.CommonErrorCode;
 import cn.vph.common.CommonException;
 import cn.vph.common.util.AssertUtil;
-import com.github.yulichang.query.MPJLambdaQueryWrapper;
+import com.github.yulichang.wrapper.MPJLambdaWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 /**
@@ -24,7 +24,7 @@ public class DiseaseServiceImpl implements DiseaseService {
     private CategoryMapper categoryMapper;
 
     public Disease selectByName(String name) {
-        MPJLambdaQueryWrapper<Disease> queryWrapper = new MPJLambdaQueryWrapper<>();
+        MPJLambdaWrapper<Disease> queryWrapper = new MPJLambdaWrapper<>();
         queryWrapper.eq(Disease::getName, name);
         return diseaseMapper.selectOne(queryWrapper);
     }
@@ -69,7 +69,7 @@ public class DiseaseServiceImpl implements DiseaseService {
     public Object listByCategory(Integer categoryId) {
         // 判断病种是否存在
         AssertUtil.isNotNull(categoryMapper.selectById(categoryId), CommonErrorCode.CATEGORY_NOT_EXIST);
-        MPJLambdaQueryWrapper<Disease> queryWrapper = new MPJLambdaQueryWrapper<>();
+        MPJLambdaWrapper<Disease> queryWrapper = new MPJLambdaWrapper<>();
         queryWrapper.eq(Disease::getCategoryId, categoryId);
         return diseaseMapper.selectList(queryWrapper);
     }

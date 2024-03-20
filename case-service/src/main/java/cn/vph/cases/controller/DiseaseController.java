@@ -46,7 +46,7 @@ public class DiseaseController {
     }
 
     @Student
-    @GetMapping("{categoryId}")
+    @GetMapping("/list/{categoryId}")
     @ApiOperation(value = "查询指定病种下的疾病")
     public Result<?> list(@PathVariable Integer categoryId) {
         return Result.success(diseaseService.listByCategory(categoryId));

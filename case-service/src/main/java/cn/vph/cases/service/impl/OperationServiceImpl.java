@@ -7,7 +7,6 @@ import cn.vph.common.CommonErrorCode;
 import cn.vph.common.util.AssertUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.github.yulichang.query.MPJLambdaQueryWrapper;
 import com.github.yulichang.wrapper.MPJLambdaWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,7 +24,7 @@ public class OperationServiceImpl implements OperationService {
     @Autowired
     private OperationMapper operationMapper;
     public Operation selectByName(String name) {
-        MPJLambdaQueryWrapper<Operation> queryWrapper = new MPJLambdaQueryWrapper<>();
+        MPJLambdaWrapper<Operation> queryWrapper = new MPJLambdaWrapper<>();
         queryWrapper.eq(Operation::getName, name);
         return operationMapper.selectOne(queryWrapper);
     }

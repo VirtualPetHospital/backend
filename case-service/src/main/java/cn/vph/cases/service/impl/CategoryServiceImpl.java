@@ -6,7 +6,7 @@ import cn.vph.cases.service.CategoryService;
 import cn.vph.common.CommonErrorCode;
 import cn.vph.common.CommonException;
 import cn.vph.common.util.AssertUtil;
-import com.github.yulichang.query.MPJLambdaQueryWrapper;
+import com.github.yulichang.wrapper.MPJLambdaWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,7 +23,7 @@ public class CategoryServiceImpl implements CategoryService {
     private CategoryMapper categoryMapper;
 
     public Category selectByName(String name) {
-        MPJLambdaQueryWrapper<Category> queryWrapper = new MPJLambdaQueryWrapper<>();
+        MPJLambdaWrapper<Category> queryWrapper = new MPJLambdaWrapper<>();
         queryWrapper.eq(Category::getName, name);
         return categoryMapper.selectOne(queryWrapper);
     }
@@ -40,6 +40,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     @Transactional
     public Object delete(Integer categoryId) {
+        // TODO 检查是否有题目
         // 不存在则抛出异常
         AssertUtil.isNotNull(categoryMapper.selectById(categoryId), CommonErrorCode.CATEGORY_NOT_EXIST);
         try {

@@ -7,7 +7,7 @@ import cn.vph.common.CommonErrorCode;
 import cn.vph.common.util.AssertUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.github.yulichang.query.MPJLambdaQueryWrapper;
+import com.github.yulichang.wrapper.MPJLambdaWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +23,7 @@ public class InspectionServiceImpl implements InspectionService {
     private InspectionMapper inspectionMapper;
 
     public Inspection selectByName(String name) {
-        MPJLambdaQueryWrapper<Inspection> queryWrapper = new MPJLambdaQueryWrapper<>();
+        MPJLambdaWrapper<Inspection> queryWrapper = new MPJLambdaWrapper<>();
         queryWrapper.eq(Inspection::getName, name);
         return inspectionMapper.selectOne(queryWrapper);
     }
@@ -48,7 +48,7 @@ public class InspectionServiceImpl implements InspectionService {
 
     @Override
     public IPage<?> list(Integer pageNum, Integer pageSize, String nameKeyword) {
-        MPJLambdaQueryWrapper<Inspection> queryWrapper = new MPJLambdaQueryWrapper<>();
+        MPJLambdaWrapper<Inspection> queryWrapper = new MPJLambdaWrapper<>();
         if (nameKeyword != null) {
             queryWrapper.like(Inspection::getName, nameKeyword);
         }
@@ -65,6 +65,7 @@ public class InspectionServiceImpl implements InspectionService {
 
     @Override
     public Object delete(Integer inspectionId) {
+        // TODO 如果被病例引用则抛出异常
         // 不存在则抛出异常
         AssertUtil.isNotNull(inspectionMapper.selectById(inspectionId), CommonErrorCode.INSPECTION_NOT_EXIST);
         inspectionMapper.deleteById(inspectionId);
