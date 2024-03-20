@@ -39,7 +39,34 @@ public enum CommonErrorCode {
     INSPECTION_NOT_EXIST(15001, "检查项目不存在", "检查项目不存在"),
     INSPECTION_ALREADY_EXIST(15002, "检查项目已存在", "检查项目已存在"),
 
+
+    /**
+     * 以2开头的和业务相关
+     *
+     * 不存在: 2002
+     * 不合法参数: 2003
+     */
+    RELATIONSHIP_STILL_EXIST(2001, "删除失败，被其他表引用", "删除失败，被其他表引用"),
+
+
+
+    /**
+     * 题目相关
+     */
+    QUESTION_NOT_EXIST(2002, "题目不存在", "题目不存在"),
+    QUESTION_ANSWER_NOT_VALID(2003, "answer字段不合法，题目答案只能是A/B/C/D", "answer字段不合法，题目答案只能是A/B/C/D"),
+    /**
+     * 试卷相关
+     */
+    PAPER_NOT_EXIST(2002, "试卷不存在", "试卷不存在"),
+    QUESTION_NUM_INVALID(2003, "题目数量不合法", "题目数量不合法"),
+    PAPER_NAME_ALREADY_EXIST(2003, "试卷名称已存在", "试卷名称已存在"),
+    /**
+     * 病例相关
+     */
     ;
+
+
     /**
      * 错误码
      */
