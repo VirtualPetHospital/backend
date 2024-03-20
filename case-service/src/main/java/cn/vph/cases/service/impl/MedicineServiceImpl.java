@@ -49,7 +49,7 @@ public class MedicineServiceImpl implements MedicineService {
     @Override
     public IPage<?> list(Integer pageNum, Integer pageSize, String nameKeyword) {
         MPJLambdaWrapper<Medicine> queryWrapper = new MPJLambdaWrapper<>();
-        if (nameKeyword != null) {
+        if (nameKeyword != null && !nameKeyword.isEmpty()) {
             queryWrapper.like(Medicine::getName, nameKeyword);
         }
         return medicineMapper.selectPage(new com.baomidou.mybatisplus.extension.plugins.pagination.Page<>(pageNum, pageSize), queryWrapper);

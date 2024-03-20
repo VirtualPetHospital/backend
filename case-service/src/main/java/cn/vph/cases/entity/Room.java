@@ -27,8 +27,6 @@ public class Room implements Serializable {
 
     private String photo;
 
-    private String video;
-
     @TableField(exist = false)
     private List<RoomAsset> roomAssets;
 }
