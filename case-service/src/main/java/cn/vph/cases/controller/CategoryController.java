@@ -60,9 +60,11 @@ public class CategoryController extends BaseController{
     }
 
     @GetMapping("")
-    @ApiOperation(value = "根据关键词查询病种列表")
+    @ApiOperation(
+            value = "根据关键词查询病种列表"
+    )
     public Result<?> getCategoryList(
-            @RequestParam(value = "name_keyword") String keyword
+            @RequestParam(value = "name_keyword", required = false) String keyword
     ){
         LambdaQueryWrapper<Category> queryWrapper = new LambdaQueryWrapper<>();
         if(keyword != null && !keyword.isEmpty()){
@@ -82,10 +84,8 @@ public class CategoryController extends BaseController{
     )
     {
         LambdaQueryWrapper<Category> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.like(keyword != null && !keyword.isEmpty(), Category::getName, keyword);
 
-        if(keyword != null && !keyword.isEmpty()){
-            queryWrapper.like(Category::getName, keyword);
-        }
         return categoryMapper.selectList(queryWrapper).stream().map(Category::getCategoryId).collect(Collectors.toList());
     }
 }

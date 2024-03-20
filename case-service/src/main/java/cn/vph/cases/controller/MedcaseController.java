@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("cases")
+@RequestMapping("medcases")
 @Api(value = "MedcaseController", tags = {"病例服务接口"})
 public class MedcaseController {
     @Autowired

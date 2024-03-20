@@ -19,6 +19,7 @@ import cn.vph.common.util.AssertUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.yulichang.wrapper.MPJLambdaWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -34,7 +35,7 @@ import org.springframework.transaction.annotation.Transactional;
  * @create: 2024-03-17 18:23
  **/
 @Service
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
     @Autowired
     private UserMapper userMapper;
     @Autowired
@@ -202,6 +203,7 @@ public class UserServiceImpl implements UserService {
         wrapper.selectAll(Medcase.class)
                 .leftJoin(UserMedcase.class, UserMedcase::getMedcaseId, Medcase::getMedcaseId)
                 .eq(UserMedcase::getUserId, sessionUtil.getUserId());
+
         // 排序
         if (sortByViewTime != null) {
             switch (sortByViewTime) {

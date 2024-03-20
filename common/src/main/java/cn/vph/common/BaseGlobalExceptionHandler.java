@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 public class BaseGlobalExceptionHandler {
 
 //    @ExceptionHandler(value = Exception.class)
-//    public Result defaultErrorHandler(HttpServletRequest request, Exception e) {
+//    public Result<?> defaultErrorHandler(HttpServletRequest request, Exception e) {
 //
 //        Map<String, String> res = new HashMap<>();
 //        Enumeration<?> temp = request.getParameterNames();
@@ -66,7 +66,7 @@ public class BaseGlobalExceptionHandler {
      * @return
      */
     @ExceptionHandler(value = CommonException.class)
-    public Result commonErrorHandler(CommonException e) {
+    public Result<?> commonErrorHandler(CommonException e) {
         log.error("CommonException: ", e);
         return Result.result(e.getCommonErrorCode());
     }
@@ -75,7 +75,7 @@ public class BaseGlobalExceptionHandler {
      * 参数校验异常
      */
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
-    public Result methodArgumentNotValidExceptionHandler(MethodArgumentNotValidException e) {
+    public Result<?> methodArgumentNotValidExceptionHandler(MethodArgumentNotValidException e) {
         log.error("MethodArgumentNotValidException: ", e);
         List<String> info = e.getBindingResult().getAllErrors()
                 .stream()
@@ -85,7 +85,7 @@ public class BaseGlobalExceptionHandler {
     }
 
     @ExceptionHandler(value = Exception.class)
-    public Result exceptionHandler(Exception e) {
+    public Result<?> exceptionHandler(Exception e) {
         log.error("Exception: ", e);
         return Result.result(CommonErrorCode.SYSTEM_ERROR);
     }

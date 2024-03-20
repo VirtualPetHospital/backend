@@ -35,14 +35,14 @@ public class Result<T> implements Serializable {
     }
 
     /**
-     * @param mess 返回信息
+     * @param msg 返回信息
      * @param data 返回数据
      */
-    public static <T> Result<T> success(String mess, T data) {
+    public static <T> Result<T> success(String msg, T data) {
         Result<T> m = new Result<>();
         m.setCode(0);
         m.setData(data);
-        m.setMsg(mess);
+        m.setMsg(msg);
         return m;
     }
 
