@@ -162,7 +162,7 @@ public class UserServiceImpl implements UserService {
         if (type != null && !type.isEmpty()) {
             wrapper.eq(User::getType, type);
         }
-        if (nicknameKeyword != null) {
+        if (nicknameKeyword != null && !nicknameKeyword.isEmpty()) {
             wrapper.like(User::getNickname, nicknameKeyword);
         }
         if (sortByNickname != null) {

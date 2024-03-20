@@ -71,7 +71,7 @@ public class OperationServiceImpl implements OperationService {
     public IPage<?> list(Integer pageNum, Integer pageSize, String nameKeyword) {
         MPJLambdaWrapper<Operation> queryWrapper = new MPJLambdaWrapper<>();
         // 名字模糊查询
-        if (nameKeyword != null) {
+        if (nameKeyword != null && !nameKeyword.isEmpty()) {
             queryWrapper.like(Operation::getName, nameKeyword);
         }
         return operationMapper.selectPage(new Page<>(pageNum, pageSize), queryWrapper);

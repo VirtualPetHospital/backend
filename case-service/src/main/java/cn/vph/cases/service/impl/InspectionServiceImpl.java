@@ -49,7 +49,7 @@ public class InspectionServiceImpl implements InspectionService {
     @Override
     public IPage<?> list(Integer pageNum, Integer pageSize, String nameKeyword) {
         MPJLambdaWrapper<Inspection> queryWrapper = new MPJLambdaWrapper<>();
-        if (nameKeyword != null) {
+        if (nameKeyword != null && !nameKeyword.isEmpty()) {
             queryWrapper.like(Inspection::getName, nameKeyword);
         }
         return inspectionMapper.selectPage(new Page<>(pageNum, pageSize), queryWrapper);

@@ -26,20 +26,44 @@ public enum CommonErrorCode {
     EMAIL_ALREADY_EXIST(1007, "邮箱已注册", "邮箱已注册"),
     WRONG_CAPTCHA(1008, "验证码错误", "验证码错误"),
     ILLEGAL_USER_INFO(1009, "请求字段中有非法值或非法修改某个字段", "请求参数异常"),
+    /**
+     * 疾病相关
+     */
     DISEASE_NOT_EXIST(11001, "疾病不存在", "疾病不存在"),
     DISEASE_ALREADY_EXIST(11002, "疾病已存在", "疾病已存在"),
     CANNOT_DELETE_DISEASE(11003, "该疾病下有病例，无法删除", "该疾病下有病例，无法删除"),
+    /**
+     * 手术相关
+     */
     OPERATION_NOT_EXIST(12001, "手术不存在", "手术不存在"),
     OPERATION_ALREADY_EXIST(12002, "手术已存在", "手术已存在"),
+    /**
+     * 病种相关
+     */
     CANNOT_DELETE_CATEGORY(13001, "该病种下有疾病，无法删除", "该病种下有疾病，无法删除"),
     CATEGORY_NOT_EXIST(13002, "病种不存在", "病种不存在"),
     CATEGORY_ALREADY_EXIST(13003, "病种已存在", "病种已存在"),
+    /**
+     * 药品相关
+     */
     MEDICINE_NOT_EXIST(14002, "药品不存在", "药品不存在"),
     MEDICINE_ALREADY_EXIST(13003, "药品已存在", "药品已存在"),
+    /**
+     * 检查项目相关
+     */
     INSPECTION_NOT_EXIST(15001, "检查项目不存在", "检查项目不存在"),
     INSPECTION_ALREADY_EXIST(15002, "检查项目已存在", "检查项目已存在"),
-
-
+    /**
+     * 科室相关
+     */
+    ROOM_NOT_EXIST(16001, "科室不存在", "科室不存在"),
+    ROOM_ALREADY_EXIST(16002, "科室已存在", "科室已存在"),
+    /**
+     * 科室设施相关
+     */
+    ROOM_ASSET_NOT_EXIST(17001, "科室设施不存在", "科室设施不存在"),
+    ROOM_ASSET_ALREADY_EXIST(17002, "科室设施已存在", "科室设施已存在"),
+    CANNOT_CHANGE_ROOM_OF_ROOM_ASSET(17003, "科室设施所属科室不可修改", "科室设施所属科室不可修改"),
     /**
      * 以2开头的和业务相关
      *
