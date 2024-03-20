@@ -25,6 +25,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @program: vph-backend
@@ -77,6 +78,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public User register(RegisterRequest registerRequest) {
         // 从redis中获取验证码
         String captcha = captchaUtil.getCaptcha(registerRequest.getEmail());
@@ -89,6 +91,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public Object delete(Integer userId) {
         // 先查是否存在
         LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
@@ -101,6 +104,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public User update(User user) {
         // 先查是否存在
         LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
@@ -175,51 +179,6 @@ public class UserServiceImpl implements UserService {
         }
         return userMapper.selectPage(new Page<>(pageNum, pageSize), wrapper);
     }
-
-//    @Override
-//    public IPage<?> medcases(Integer pageNum, Integer pageSize, String medcaseInfoKeyword, String medcaseNameKeyword, String disease, Integer sortByViewTime) {
-//        LambdaQueryWrapper<Medcase> wrapper = new LambdaQueryWrapper<>();
-//        LambdaQueryWrapper<UserMedcase> userMedcaseWrapper = new LambdaQueryWrapper<>();
-//        // 病例描述模糊查询
-//        if (medcaseInfoKeyword != null && !medcaseInfoKeyword.isEmpty()) {
-//            wrapper.like(Medcase::getInfoDescription, medcaseInfoKeyword);
-//        }
-//        // 病例名模糊查询
-//        if (medcaseNameKeyword != null && !medcaseNameKeyword.isEmpty()) {
-//            wrapper.like(Medcase::getName, medcaseNameKeyword);
-//        }
-//        // 疾病名模糊查询
-//        if (disease != null && !disease.isEmpty()) {
-//            LambdaQueryWrapper<Disease> diseaseWrapper = new LambdaQueryWrapper<>();
-//            diseaseWrapper.eq(Disease::getName, disease);
-//            Disease disease1 = diseaseMapper.selectOne(diseaseWrapper);
-//            AssertUtil.isNotNull(disease1, CommonErrorCode.DISEASE_NOT_EXIST);
-//            wrapper.like(Medcase::getDiseaseId, disease1.getDiseaseId());
-//        }
-//        // 排序
-//        if (sortByViewTime != null) {
-//            switch (sortByViewTime) {
-//                case CommonConstant.SORT_ASC:
-//                    userMedcaseWrapper.orderByAsc(UserMedcase::getViewTime);
-//                    break;
-//                case CommonConstant.SORT_DESC:
-//                    userMedcaseWrapper.orderByDesc(UserMedcase::getViewTime);
-//                    break;
-//                default:
-//                    break;
-//            }
-//        }
-//        userMedcaseWrapper.eq(UserMedcase::getUserId, sessionUtil.getUserId());
-//        userMedcaseWrapper.select(UserMedcase::getMedcaseId);
-//
-//        List<UserMedcase> userMedcases = userMedcaseMapper.selectList(userMedcaseWrapper);
-//        List<Integer> medcaseIds = new ArrayList<>();
-//        for (UserMedcase userMedcase : userMedcases) {
-//            medcaseIds.add(userMedcase.getMedcaseId());
-//        }
-//        wrapper.in(Medcase::getMedcaseId, medcaseIds);
-//        return medcaseMapper.selectPage(new Page<>(pageNum, pageSize), wrapper);
-//    }
 
     @Override
     public IPage<?> medcases(Integer pageNum, Integer pageSize, String medcaseInfoKeyword, String medcaseNameKeyword, String disease, Integer sortByViewTime) {

@@ -25,6 +25,19 @@ public enum CommonErrorCode {
     NICKNAME_ALREADY_EXIST(1006, "用户名已存在", "用户名已存在"),
     EMAIL_ALREADY_EXIST(1007, "邮箱已注册", "邮箱已注册"),
     WRONG_CAPTCHA(1008, "验证码错误", "验证码错误"),
+    ILLEGAL_USER_INFO(1009, "请求字段中有非法值或非法修改某个字段", "请求参数异常"),
+    DISEASE_NOT_EXIST(11001, "疾病不存在", "疾病不存在"),
+    DISEASE_ALREADY_EXIST(11002, "疾病已存在", "疾病已存在"),
+    CANNOT_DELETE_DISEASE(11003, "该疾病下有病例，无法删除", "该疾病下有病例，无法删除"),
+    OPERATION_NOT_EXIST(12001, "手术不存在", "手术不存在"),
+    OPERATION_ALREADY_EXIST(12002, "手术已存在", "手术已存在"),
+    CANNOT_DELETE_CATEGORY(13001, "该病种下有疾病，无法删除", "该病种下有疾病，无法删除"),
+    CATEGORY_NOT_EXIST(13002, "病种不存在", "病种不存在"),
+    CATEGORY_ALREADY_EXIST(13003, "病种已存在", "病种已存在"),
+    MEDICINE_NOT_EXIST(14002, "药品不存在", "药品不存在"),
+    MEDICINE_ALREADY_EXIST(13003, "药品已存在", "药品已存在"),
+    INSPECTION_NOT_EXIST(15001, "检查项目不存在", "检查项目不存在"),
+    INSPECTION_ALREADY_EXIST(15002, "检查项目已存在", "检查项目已存在"),
 
 
     /**
@@ -35,7 +48,6 @@ public enum CommonErrorCode {
      */
     RELATIONSHIP_STILL_EXIST(2001, "删除失败，被其他表引用", "删除失败，被其他表引用"),
 
-    ILLEGAL_USER_INFO(2003, "请求字段中有非法值或非法修改某个字段", "请求参数异常"),
 
 
     /**
@@ -52,7 +64,6 @@ public enum CommonErrorCode {
     /**
      * 病例相关
      */
-    DISEASE_NOT_EXIST(2002, "疾病不存在", "疾病不存在"),
     ;
 
 
