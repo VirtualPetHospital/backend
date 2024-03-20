@@ -12,9 +12,11 @@ public interface PaperService extends IService<Paper> {
 
     Paper getPaperById(Integer paperId);
 
-    void add(Paper paper);
+    Paper add(Paper paper);
 
-    void update(Paper paper);
+    Paper update(Paper paper);
 
     void delete(Integer paperId);
+
+    void initPaper(Paper paper);
 }

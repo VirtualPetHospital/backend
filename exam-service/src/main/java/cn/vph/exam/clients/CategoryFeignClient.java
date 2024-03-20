@@ -14,7 +14,7 @@ import java.util.List;
  */
 
 @FeignClient(name = "case-service")
-public interface CategoryClient {
+public interface CategoryFeignClient {
 
     @GetMapping("/api/categories/keyword-ids")
     List<Integer> getCategoryIds(@RequestParam(value = "category_keyword") String keyword);

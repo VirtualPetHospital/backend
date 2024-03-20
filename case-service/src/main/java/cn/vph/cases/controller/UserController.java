@@ -102,7 +102,7 @@ public class UserController extends BaseController {
      */
     @Administrator
     @GetMapping
-    public Result list(
+    public Result<?> list(
             @RequestParam(value = "page_num", defaultValue = "1") Integer pageNum,
             @RequestParam(value = "page_size", defaultValue = "10") Integer pageSize,
             @RequestParam(value = "type", required = false) String type,
@@ -117,7 +117,7 @@ public class UserController extends BaseController {
      */
     @Student
     @GetMapping("medcases")
-    public Result medcases(
+    public Result<?> medcases(
             @RequestParam(value = "page_num", defaultValue = "1") Integer pageNum,
             @RequestParam(value = "page_size", defaultValue = "10") Integer pageSize,
             @RequestParam(value = "medcase_info_keyword", required = false) String medcaseInfoKeyword,

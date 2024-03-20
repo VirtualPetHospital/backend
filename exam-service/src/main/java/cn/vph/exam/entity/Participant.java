@@ -29,7 +29,23 @@ public class Participant implements Serializable {
     private Integer userId;
 
     /**
+     * true : participated
+     * false : not participated
+     *
      * `participated` int NOT NULL DEFAULT 0,
      */
-    private Integer participated;
+    private Boolean participated;
+
+    public Participant() {
+    }
+    public Participant(Integer examId, Integer userId) {
+        this.examId = examId;
+        this.userId = userId;
+        this.participated = false;
+    }
+    public Participant(Integer examId, Integer userId, Boolean participated) {
+        this.examId = examId;
+        this.userId = userId;
+        this.participated = participated;
+    }
 }

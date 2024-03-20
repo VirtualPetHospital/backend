@@ -16,9 +16,9 @@ public interface QuestionService extends IService<Question> {
 
     Question getQuestionById(Integer questionId);
 
-    void add(Question question);
+    Question add(Question question);
 
-    void update(Question question);
+    Question update(Question question);
 
     void delete(Integer questionId);
 

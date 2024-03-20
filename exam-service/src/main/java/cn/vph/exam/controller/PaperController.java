@@ -1,6 +1,8 @@
 package cn.vph.exam.controller;
 
 import cn.vph.common.Result;
+import cn.vph.common.annotation.Student;
+import cn.vph.common.annotation.Teacher;
 import cn.vph.exam.entity.Paper;
 import cn.vph.exam.mapper.PaperMapper;
 import cn.vph.exam.service.PaperService;
@@ -17,7 +19,6 @@ import org.springframework.web.bind.annotation.*;
  * @description 试卷接口
  * @create 2024/3/17 21:06
  */
-// TODO 权限控制
 @RestController
 @RequestMapping(value = "papers")
 @Api(value = "PaperController", tags = {"试卷接口"})
@@ -30,6 +31,7 @@ public class PaperController extends BaseController {
     private PaperMapper paperMapper;
 
 
+    @Student
     @GetMapping("/{paper_id}")
     @ApiOperation(value = "查询单个试卷")
     public Result<?> getPaperById(@PathVariable("paper_id") Integer paperId){
@@ -39,7 +41,7 @@ public class PaperController extends BaseController {
         return Result.success(paperService.getPaperById(paperId));
     }
 
-
+    @Student
     @GetMapping("")
     @ApiOperation(value = "查询试卷列表")
     public Result<?> getPaperList(
@@ -55,21 +57,22 @@ public class PaperController extends BaseController {
     }
 
 
+    @Teacher
     @PostMapping("")
     @ApiOperation(value = "新增试卷")
     public Result<?> addPaper(@RequestBody Paper paper){
-        paperService.add(paper);
-        return Result.success(paper);
+        return Result.success(paperService.add(paper));
     }
 
+    @Teacher
     @PutMapping("/{paper_id}")
     @ApiOperation(value = "更新试卷")
     public Result<?> updatePaper(@PathVariable("paper_id") Integer paperId, @RequestBody Paper paper){
         paper.setPaperId(paperId);
-        paperService.update(paper);
-        return Result.success(paper);
+        return Result.success(paperService.update(paper));
     }
 
+    @Teacher
     @DeleteMapping("/{paper_id}")
     @ApiOperation(value = "删除试卷")
     public Result<?> deletePaper(@PathVariable("paper_id") Integer paperId){

@@ -46,17 +46,19 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
 
     @Override
     @Transactional
-    public void add(Question question){
+    public Question add(Question question){
         answerIsValid(question.getAnswer());
         questionMapper.insert(question);
+        return question;
     }
 
     @Override
     @Transactional
-    public void update(Question question){
+    public Question update(Question question){
         exists(question.getQuestionId());
         answerIsValid(question.getAnswer());
         questionMapper.updateById(question);
+        return question;
     }
 
     @Override

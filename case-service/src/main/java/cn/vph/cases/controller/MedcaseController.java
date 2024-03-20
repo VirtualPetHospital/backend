@@ -1,6 +1,6 @@
 package cn.vph.cases.controller;
 
-import cn.vph.cases.service.CaseService;
+import cn.vph.cases.service.MedcaseService;
 import cn.vph.common.CommonErrorCode;
 import cn.vph.common.CommonException;
 import cn.vph.common.Result;
@@ -10,9 +10,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("cases")
-public class CaseController {
+public class MedcaseController {
     @Autowired
-    private CaseService caseService;
+    private MedcaseService medcaseService;
 
     /**
      * 测试Controller是否可用
