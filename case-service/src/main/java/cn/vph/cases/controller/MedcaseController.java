@@ -4,13 +4,16 @@ import cn.vph.cases.service.MedcaseService;
 import cn.vph.common.CommonErrorCode;
 import cn.vph.common.CommonException;
 import cn.vph.common.Result;
+import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("cases")
+@Api(value = "MedcaseController", tags = {"病例接口"})
 public class MedcaseController {
+
     @Autowired
     private MedcaseService medcaseService;
 
