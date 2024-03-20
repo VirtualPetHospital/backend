@@ -12,8 +12,6 @@ import java.util.List;
  */
 public interface QuestionService extends IService<Question> {
 
-    List<Question> listAllQuestions(Question question);
-
     Question getQuestionById(Integer questionId);
 
     Question add(Question question);

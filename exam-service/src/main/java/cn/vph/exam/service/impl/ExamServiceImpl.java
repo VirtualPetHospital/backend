@@ -92,6 +92,7 @@ public class ExamServiceImpl extends ServiceImpl<ExamMapper, Exam> implements Ex
     @Override
     @Transactional
     public Exam add(Exam exam){
+        nameIsUnique(exam);
         examTimeIsValid(exam);
         examMapper.insert(exam);
         return exam;
@@ -100,6 +101,7 @@ public class ExamServiceImpl extends ServiceImpl<ExamMapper, Exam> implements Ex
     @Override
     @Transactional
     public Exam update(Exam exam){
+        nameIsUnique(exam);
         exists(exam.getExamId());
         examTimeIsValid(exam);
         examMapper.updateById(exam);
@@ -136,6 +138,24 @@ public class ExamServiceImpl extends ServiceImpl<ExamMapper, Exam> implements Ex
         participantMapper.delete(new LambdaQueryWrapper<>(participant));
     }
 
+
+    private void exists(Integer examId){
+        Exam exam = examMapper.selectById(examId);
+        AssertUtil.isNotNull(exam, CommonErrorCode.EXAM_NOT_EXIST);
+    }
+
+    // 检查exam.name重名
+    private void nameIsUnique(Exam exam){
+        LambdaQueryWrapper<Exam> checkWrapper = new LambdaQueryWrapper<>();
+        checkWrapper.eq(Exam::getName, exam.getName());
+        AssertUtil.isTrue(examMapper.selectCount(checkWrapper) == 0, CommonErrorCode.EXAM_NAME_ALREADY_EXIST);
+    }
+
+    private void examTimeIsValid(Exam exam){
+        AssertUtil.isTrue(exam.getStartTime().isBefore(exam.getEndTime()), CommonErrorCode.EXAM_TIME_INVALID);
+        AssertUtil.isTrue(ChronoUnit.MINUTES.between(exam.getStartTime(), exam.getEndTime()) == exam.getDuration(), CommonErrorCode.EXAM_TIME_INVALID);
+    }
+
     /**
      * ----------------------------------------------------
      * discard the method below
@@ -154,18 +174,5 @@ public class ExamServiceImpl extends ServiceImpl<ExamMapper, Exam> implements Ex
         LambdaQueryWrapper<Exam> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.orderByDesc(Exam::getExamId);
         return examMapper.selectList(queryWrapper);
-    }
-
-
-    private void exists(Integer examId){
-        Exam exam = examMapper.selectById(examId);
-        AssertUtil.isNotNull(exam, CommonErrorCode.EXAM_NOT_EXIST);
-    }
-
-    // TODO 是否检查exam.name重名
-
-    private void examTimeIsValid(Exam exam){
-        AssertUtil.isTrue(exam.getStartTime().isBefore(exam.getEndTime()), CommonErrorCode.EXAM_TIME_INVALID);
-        AssertUtil.isTrue(ChronoUnit.MINUTES.between(exam.getStartTime(), exam.getEndTime()) == exam.getDuration(), CommonErrorCode.EXAM_TIME_INVALID);
     }
 }
