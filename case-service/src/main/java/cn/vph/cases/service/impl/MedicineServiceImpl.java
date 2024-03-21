@@ -6,6 +6,7 @@ import cn.vph.cases.service.MedicineService;
 import cn.vph.common.CommonErrorCode;
 import cn.vph.common.util.AssertUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.yulichang.wrapper.MPJLambdaWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,7 +18,7 @@ import org.springframework.stereotype.Service;
  * @create: 2024-03-19 22:56
  **/
 @Service
-public class MedicineServiceImpl implements MedicineService {
+public class MedicineServiceImpl extends ServiceImpl<MedicineMapper, Medicine> implements MedicineService {
     @Autowired
     private MedicineMapper medicineMapper;
 

@@ -5,7 +5,6 @@ import cn.vph.common.CommonErrorCode;
 import cn.vph.common.util.AssertUtil;
 import cn.vph.common.util.QueryPage;
 import cn.vph.exam.entity.Exam;
-import cn.vph.exam.entity.Paper;
 import cn.vph.exam.entity.Participant;
 import cn.vph.exam.mapper.ExamMapper;
 import cn.vph.exam.mapper.ParticipantMapper;
@@ -22,7 +21,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.temporal.ChronoUnit;
-import java.util.Arrays;
 import java.util.List;
 
 /**
