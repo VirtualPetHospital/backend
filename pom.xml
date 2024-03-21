@@ -10,6 +10,7 @@
     <modules>
         <module>case-service</module>
         <module>exam-service</module>
+        <module>file-service</module>
         <module>common</module>
     </modules>
 
