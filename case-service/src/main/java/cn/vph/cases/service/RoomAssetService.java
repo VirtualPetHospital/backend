@@ -1,6 +1,7 @@
 package cn.vph.cases.service;
 
 import cn.vph.cases.entity.RoomAsset;
+import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
  * @program: vph-backend
@@ -8,7 +9,7 @@ import cn.vph.cases.entity.RoomAsset;
  * @author: astarforbae
  * @create: 2024-03-20 11:56
  **/
-public interface RoomAssetService {
+public interface RoomAssetService extends IService<RoomAsset> {
     Object add(RoomAsset roomAsset);
 
     Object delete(Integer roomAssetId);

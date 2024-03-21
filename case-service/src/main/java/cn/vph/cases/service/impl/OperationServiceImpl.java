@@ -7,6 +7,7 @@ import cn.vph.common.CommonErrorCode;
 import cn.vph.common.util.AssertUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.yulichang.wrapper.MPJLambdaWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,9 +21,12 @@ import org.springframework.transaction.annotation.Transactional;
  **/
 
 @Service
-public class OperationServiceImpl implements OperationService {
+public class OperationServiceImpl extends ServiceImpl<OperationMapper, Operation> implements OperationService {
+
     @Autowired
     private OperationMapper operationMapper;
+
+    
     public Operation selectByName(String name) {
         MPJLambdaWrapper<Operation> queryWrapper = new MPJLambdaWrapper<>();
         queryWrapper.eq(Operation::getName, name);

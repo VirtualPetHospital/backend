@@ -20,12 +20,14 @@ public class MedcaseInspection implements Serializable {
     @TableId(type = IdType.AUTO)
     private Integer id;
 
-    private String value;
+    private Double value;
 
     @TableField(value = "medcase_id")
     private Integer medcaseId;
 
     @TableField(value = "inspection_id")
     private Integer inspectionId;
+
+    // TODO 要不要在这儿封装inspection类？
 
 }

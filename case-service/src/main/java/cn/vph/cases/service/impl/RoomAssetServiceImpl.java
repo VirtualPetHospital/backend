@@ -7,6 +7,7 @@ import cn.vph.cases.mapper.RoomMapper;
 import cn.vph.cases.service.RoomAssetService;
 import cn.vph.common.CommonErrorCode;
 import cn.vph.common.util.AssertUtil;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.yulichang.wrapper.MPJLambdaWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,7 +19,7 @@ import org.springframework.stereotype.Service;
  * @create: 2024-03-20 11:57
  **/
 @Service
-public class RoomAssetServiceImpl implements RoomAssetService {
+public class RoomAssetServiceImpl extends ServiceImpl<RoomAssetMapper, RoomAsset> implements RoomAssetService {
     @Autowired
     private RoomAssetMapper roomAssetMapper;
     @Autowired

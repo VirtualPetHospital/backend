@@ -73,7 +73,6 @@ public enum CommonErrorCode {
     RELATIONSHIP_STILL_EXIST(2001, "删除失败，被其他表引用", "删除失败，被其他表引用"),
 
 
-
     /**
      * 题目相关
      */
@@ -103,6 +102,7 @@ public enum CommonErrorCode {
     /**
      * 病例相关
      */
+    MEDCASE_NOT_EXIST(2002, "病例不存在", "病例不存在"),
     ;
 
 

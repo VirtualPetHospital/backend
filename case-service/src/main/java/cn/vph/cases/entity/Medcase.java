@@ -47,6 +47,12 @@ public class Medcase implements Serializable {
     private Integer operationId;
 
     @TableField(exist = false)
+    private Disease disease;
+
+    @TableField(exist = false)
+    private Operation operation;
+
+    @TableField(exist = false)
     private List<MedcaseInspection> inspections;
 
     @TableField(exist = false)
