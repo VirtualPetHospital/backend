@@ -1,5 +1,6 @@
 package cn.vph.exam.util;
 
+import cn.vph.common.util.BaseSessionUtil;
 import org.springframework.stereotype.Component;
 
 /**
@@ -10,6 +11,6 @@ import org.springframework.stereotype.Component;
  **/
 
 @Component
-public class SessionUtil extends cn.vph.common.util.BaseSessionUtil {
+public class SessionUtil extends BaseSessionUtil {
 }
 
