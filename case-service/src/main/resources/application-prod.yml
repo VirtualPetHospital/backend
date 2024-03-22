@@ -1,27 +1,44 @@
 server:
-  port: 8083
+  port: 8084
   servlet:
     context-path: /api
 spring:
   datasource:
-    url: jdbc:mysql://47.103.131.161:3306/vph_exam?useSSL=false&allowPublicKeyRetrieval=true
+    url: jdbc:mysql://mysql:3306/vph_medcase?useSSL=false&allowPublicKeyRetrieval=true
     username: root
     password: MySQLPaSsWord89h
     driver-class-name: com.mysql.jdbc.Driver
   application:
-    name: exam-service
-  cloud:
-    nacos:
-      server-addr: localhost:8848
+    name: case-service
   jackson:
     property-naming-strategy: CAMEL_CASE_TO_LOWER_CASE_WITH_UNDERSCORES
+  # Redis
   redis:
-    host: 47.103.131.161
+    host: redis
     port: 6379
     timeout: 1000
     password: Re1d1sPssw0rd
+  # mail
+  mail:
+    host: smtp.163.com
+    protocol: smtp
+    default-encoding: UTF-8
+    username: vphbackend@163.com
+    password: VAMXHRVFKIQVSKHD
+    test-connection: true
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+
+  cloud:
+    nacos: # nacos 配置
+      server-addr: nacos:8848
 mybatis:
-  type-aliases-package: cn.vph.exam.entity
+  type-aliases-package: cn.vph.case.entity
   configuration:
     map-underscore-to-camel-case: true
 logging:
@@ -29,13 +46,16 @@ logging:
     cn.vph: debug
   pattern:
     dateformat: MM-dd HH:mm:ss:SSS
+
 feign:
   httpclient:
     enabled: true # 支持HttpClient的开关
     max-connections: 200 # 最大连接数 可用JMeter做压测 从而选择更加合适的值
     max-connections-per-route: 50 # 单路径最大连接数
+
 swagger:
-  enable: true
+    enable: true
+#      defaultZone: http://127.0.0.1:10086/eureka
 
 vph:
   aspect:
