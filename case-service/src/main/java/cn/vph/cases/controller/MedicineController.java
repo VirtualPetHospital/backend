@@ -40,7 +40,7 @@ public class MedicineController extends BaseController {
     }
 
     @Student
-    @GetMapping("list")
+    @GetMapping("")
     @ApiOperation(value = "查询药品列表")
     public Result<?> list(
             @RequestParam(value = "page_num", defaultValue = "1") Integer pageNum,

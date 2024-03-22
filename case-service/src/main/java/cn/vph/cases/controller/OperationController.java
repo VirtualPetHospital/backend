@@ -56,7 +56,7 @@ public class OperationController extends BaseController{
     }
 
     @Student
-    @GetMapping("list")
+    @GetMapping("")
     @ApiOperation(value = "查询手术列表")
     public Result<?> list(
             @RequestParam(value = "page_num", defaultValue = "1") Integer pageNum,
