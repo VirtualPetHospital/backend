@@ -11,11 +11,15 @@ spring:
         - id: case-service # 路由ID
           uri: lb://case-service # 路由转发地址
           predicates: # 断言配置
-            - Path=/categories/**,/diseases/**,  /medcases ,  inspections/**,medicines/**,operations/**,/room-assets/**,/rooms/**,/rooms/**,users/**
+            - Path=/categories/**, /diseases/**, /medcases/**, /medcases , /inspections/**, /medicines/**, /operations/**,/room-assets/**, /rooms/**, /users/**
         - id: exam-service
           uri: lb://exam-service
           predicates:
             - Path=/exams, /exams/**, /papers, /papers/**, /answer-sheets/**,/questions/**
+        - id: file-service
+          uri: lb://file-service
+          predicates:
+            - Path=/files/**, /files
       default-filters:
         - PrefixPath=/api
   jackson:
