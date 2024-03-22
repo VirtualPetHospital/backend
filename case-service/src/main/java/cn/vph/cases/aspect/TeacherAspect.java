@@ -4,7 +4,7 @@ import cn.vph.cases.util.SessionUtil;
 import cn.vph.common.CommonConstant;
 import cn.vph.common.CommonErrorCode;
 import cn.vph.common.SessionData;
-import cn.vph.common.util.AssertUtil;
+import cn.vph.common.utils.AssertUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;

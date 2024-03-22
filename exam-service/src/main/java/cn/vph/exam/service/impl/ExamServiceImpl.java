@@ -2,8 +2,7 @@ package cn.vph.exam.service.impl;
 
 import cn.vph.common.CommonConstant;
 import cn.vph.common.CommonErrorCode;
-import cn.vph.common.util.AssertUtil;
-import cn.vph.common.util.QueryPage;
+import cn.vph.common.utils.AssertUtil;
 import cn.vph.exam.entity.Exam;
 import cn.vph.exam.entity.Participant;
 import cn.vph.exam.mapper.ExamMapper;
@@ -21,7 +20,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.temporal.ChronoUnit;
-import java.util.List;
 
 /**
  * @author Caroline
@@ -154,23 +152,4 @@ public class ExamServiceImpl extends ServiceImpl<ExamMapper, Exam> implements Ex
         AssertUtil.isTrue(ChronoUnit.MINUTES.between(exam.getStartTime(), exam.getEndTime()) == exam.getDuration(), CommonErrorCode.EXAM_TIME_INVALID);
     }
 
-    /**
-     * ----------------------------------------------------
-     * discard the method below
-     * ----------------------------------------------------
-     */
-    @Override
-    public IPage<Exam> listAllExams(Exam exam, QueryPage queryPage){
-        IPage<Exam> page = new Page<>(queryPage.getPage(), queryPage.getLimit());
-        LambdaQueryWrapper<Exam> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.orderByDesc(Exam::getExamId);
-        return examMapper.selectPage(page, queryWrapper);
-    }
-
-    @Override
-    public List<Exam> listAllExams(Exam exam){
-        LambdaQueryWrapper<Exam> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.orderByDesc(Exam::getExamId);
-        return examMapper.selectList(queryWrapper);
-    }
 }

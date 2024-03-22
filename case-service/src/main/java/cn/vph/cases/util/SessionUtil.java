@@ -19,7 +19,7 @@ import java.util.UUID;
  **/
 
 @Component
-public class SessionUtil extends cn.vph.common.util.BaseSessionUtil {
+public class SessionUtil extends cn.vph.common.utils.BaseSessionUtil {
     @Autowired
     private HttpServletRequest request;
 

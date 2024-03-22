@@ -6,7 +6,7 @@ import cn.vph.cases.mapper.RoomAssetMapper;
 import cn.vph.cases.mapper.RoomMapper;
 import cn.vph.cases.service.RoomService;
 import cn.vph.common.CommonErrorCode;
-import cn.vph.common.util.AssertUtil;
+import cn.vph.common.utils.AssertUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;

@@ -1,7 +1,8 @@
 package cn.vph.exam.util;
 
-import org.springframework.stereotype.Component;
 
+import org.springframework.stereotype.Component;
+import cn.vph.common.utils.BaseSessionUtil;
 /**
  * @program: vph-backend
  * @description:
@@ -10,6 +11,6 @@ import org.springframework.stereotype.Component;
  **/
 
 @Component
-public class SessionUtil extends cn.vph.common.util.BaseSessionUtil {
+public class SessionUtil extends BaseSessionUtil {
 }
 

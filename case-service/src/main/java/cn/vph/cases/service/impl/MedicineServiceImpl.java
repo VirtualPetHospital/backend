@@ -4,7 +4,7 @@ import cn.vph.cases.entity.Medicine;
 import cn.vph.cases.mapper.MedicineMapper;
 import cn.vph.cases.service.MedicineService;
 import cn.vph.common.CommonErrorCode;
-import cn.vph.common.util.AssertUtil;
+import cn.vph.common.utils.AssertUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.yulichang.wrapper.MPJLambdaWrapper;
