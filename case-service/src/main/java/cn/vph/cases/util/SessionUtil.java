@@ -21,6 +21,7 @@ import java.util.UUID;
 
 @Component
 public class SessionUtil extends BaseSessionUtil {
+
     @Autowired
     private HttpServletRequest request;
 
