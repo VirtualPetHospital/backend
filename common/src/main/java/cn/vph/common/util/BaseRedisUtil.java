@@ -1,4 +1,4 @@
-package cn.vph.common.utils;
+package cn.vph.common.util;
 
 
 import org.springframework.beans.factory.annotation.Autowired;

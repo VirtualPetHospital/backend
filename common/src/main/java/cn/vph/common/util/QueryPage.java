@@ -1,4 +1,4 @@
-package cn.vph.common.utils;
+package cn.vph.common.util;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

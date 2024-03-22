@@ -2,7 +2,7 @@ package cn.vph.exam.service.impl;
 
 import cn.vph.common.CommonConstant;
 import cn.vph.common.CommonErrorCode;
-import cn.vph.common.utils.AssertUtil;
+import cn.vph.common.util.AssertUtil;
 import cn.vph.exam.entity.Exam;
 import cn.vph.exam.entity.Participant;
 import cn.vph.exam.mapper.ExamMapper;

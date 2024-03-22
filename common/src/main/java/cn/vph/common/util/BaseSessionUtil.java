@@ -1,4 +1,4 @@
-package cn.vph.common.utils;
+package cn.vph.common.util;
 
 import cn.vph.common.CommonConstant;
 import cn.vph.common.SessionData;

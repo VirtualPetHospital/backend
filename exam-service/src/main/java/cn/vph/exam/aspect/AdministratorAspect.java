@@ -3,7 +3,7 @@ package cn.vph.exam.aspect;
 import cn.vph.common.CommonConstant;
 import cn.vph.common.CommonErrorCode;
 import cn.vph.common.SessionData;
-import cn.vph.common.utils.AssertUtil;
+import cn.vph.common.util.AssertUtil;
 import cn.vph.exam.util.SessionUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -11,6 +11,7 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Conditional;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Method;
@@ -24,6 +25,7 @@ import java.lang.reflect.Method;
 @Aspect
 @Component
 @Slf4j
+@Conditional(EnableAspectCondition.class)
 public class AdministratorAspect {
 
     @Autowired

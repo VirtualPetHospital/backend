@@ -12,7 +12,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.yulichang.wrapper.MPJLambdaWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import cn.vph.common.utils.AssertUtil;
+import cn.vph.common.util.AssertUtil;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;

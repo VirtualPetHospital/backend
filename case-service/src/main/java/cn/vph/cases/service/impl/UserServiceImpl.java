@@ -15,7 +15,7 @@ import cn.vph.cases.util.CaptchaUtil;
 import cn.vph.cases.util.SessionUtil;
 import cn.vph.common.CommonConstant;
 import cn.vph.common.CommonErrorCode;
-import cn.vph.common.utils.AssertUtil;
+import cn.vph.common.util.AssertUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;

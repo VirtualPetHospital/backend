@@ -6,7 +6,7 @@ import cn.vph.cases.mapper.RoomAssetMapper;
 import cn.vph.cases.mapper.RoomMapper;
 import cn.vph.cases.service.RoomAssetService;
 import cn.vph.common.CommonErrorCode;
-import cn.vph.common.utils.AssertUtil;
+import cn.vph.common.util.AssertUtil;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.yulichang.wrapper.MPJLambdaWrapper;
 import org.springframework.beans.factory.annotation.Autowired;

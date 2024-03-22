@@ -1,4 +1,4 @@
-package cn.vph.common.utils;
+package cn.vph.common.util;
 
 import cn.vph.common.CommonErrorCode;
 import cn.vph.common.CommonException;

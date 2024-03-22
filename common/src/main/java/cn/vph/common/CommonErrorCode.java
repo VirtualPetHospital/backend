@@ -64,9 +64,20 @@ public enum CommonErrorCode {
     ROOM_ASSET_NOT_EXIST(17001, "科室设施不存在", "科室设施不存在"),
     ROOM_ASSET_ALREADY_EXIST(17002, "科室设施已存在", "科室设施已存在"),
     CANNOT_CHANGE_ROOM_OF_ROOM_ASSET(17003, "科室设施所属科室不可修改", "科室设施所属科室不可修改"),
+
+    /**
+     * 文件相关
+     */
+    FILE_NOT_EXIST(18001, "文件不存在", "文件不存在"),
+    READ_FILE_ERROR(18002, "读取文件失败", "读取文件失败"),
+    FILE_ALREADY_EXIST(18003, "文件已存在", "文件已存在"),
+    FILE_UPLOAD_FAIL(18004, "文件上传失败，请重试", "文件上传失败，请重试"),
+    FILE_DOWNLOAD_FAIL(18005, "文件下载失败，请重试", "文件下载失败，请重试"),
+
+
     /**
      * 以2开头的和业务相关
-     *
+     * <p>
      * 不存在: 2002
      * 不合法参数: 2003
      */
@@ -102,6 +113,7 @@ public enum CommonErrorCode {
     /**
      * 病例相关
      */
+
     MEDCASE_NOT_EXIST(2002, "病例不存在", "病例不存在"),
     ;
 

@@ -1,6 +1,6 @@
 package cn.vph.cases.util;
 
-import cn.vph.common.utils.BaseRedisUtil;
+import cn.vph.common.util.BaseRedisUtil;
 import org.springframework.stereotype.Component;
 
 /**

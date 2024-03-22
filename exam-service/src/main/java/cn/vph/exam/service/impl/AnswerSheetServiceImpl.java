@@ -1,7 +1,7 @@
 package cn.vph.exam.service.impl;
 
 import cn.vph.common.CommonErrorCode;
-import cn.vph.common.utils.AssertUtil;
+import cn.vph.common.util.AssertUtil;
 import cn.vph.exam.entity.AnswerSheet;
 import cn.vph.exam.entity.AnswerSheetItem;
 import cn.vph.exam.entity.Participant;

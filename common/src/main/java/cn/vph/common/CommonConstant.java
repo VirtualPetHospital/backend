@@ -1,5 +1,7 @@
 package cn.vph.common;
 
+import lombok.Getter;
+
 /**
  * @program: vph-backend
  * @description:
@@ -22,4 +24,24 @@ public class CommonConstant {
 
     public final static int SORT_ASC = 1;
     public final static int SORT_DESC = 2;
+
+//    public final static String FILE_HOME = "/home/vph/files";
+    public final static String FILE_HOME = "E:\\vph\\files";
+    @Getter
+    enum FileLoc {
+        DISEASE("disease"),
+        USER_AVATAR("user_avatar"),
+        MEDCASE_INFO("medcase_info"),
+        OPERATION("operation"),
+        ROOM("room"),
+        ROOM_ASSET("room_asset"),
+        ;
+
+        private final String location;
+
+        FileLoc(String location) {
+            this.location = location;
+        }
+    }
 }
+

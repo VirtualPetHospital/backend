@@ -4,6 +4,7 @@ package cn.vph.cases.util;
 import cn.vph.cases.entity.User;
 import cn.vph.common.CommonConstant;
 import cn.vph.common.SessionData;
+import cn.vph.common.util.BaseSessionUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -19,7 +20,8 @@ import java.util.UUID;
  **/
 
 @Component
-public class SessionUtil extends cn.vph.common.utils.BaseSessionUtil {
+public class SessionUtil extends BaseSessionUtil {
+
     @Autowired
     private HttpServletRequest request;
 
