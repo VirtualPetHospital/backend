@@ -1,5 +1,6 @@
 package cn.vph.cases.controller;
 
+import cn.vph.common.controller.BaseController;
 import cn.vph.cases.entity.Operation;
 import cn.vph.cases.service.OperationService;
 import cn.vph.common.Result;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("operations")
 @Api(value = "OperationController", tags = {"手术服务接口"})
 public class OperationController extends BaseController{
+
     @Autowired
     private OperationService operationService;
 

@@ -14,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 
 /**
  * @author Caroline
@@ -31,12 +30,6 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
     @Autowired
     private PaperQuestionMapper paperQuestionMapper;
 
-    @Override
-    public List<Question> listAllQuestions(Question question){
-        LambdaQueryWrapper<Question> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.orderByDesc(Question::getQuestionId);
-        return questionMapper.selectList(queryWrapper);
-    }
 
     @Override
     public Question getQuestionById(Integer questionId){

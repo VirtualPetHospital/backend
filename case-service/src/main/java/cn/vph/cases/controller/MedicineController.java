@@ -1,5 +1,6 @@
 package cn.vph.cases.controller;
 
+import cn.vph.common.controller.BaseController;
 import cn.vph.cases.entity.Medicine;
 import cn.vph.cases.service.MedicineService;
 import cn.vph.common.Result;

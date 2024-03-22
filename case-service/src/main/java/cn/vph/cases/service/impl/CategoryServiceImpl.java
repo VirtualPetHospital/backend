@@ -6,6 +6,7 @@ import cn.vph.cases.service.CategoryService;
 import cn.vph.common.CommonErrorCode;
 import cn.vph.common.CommonException;
 import cn.vph.common.util.AssertUtil;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.yulichang.wrapper.MPJLambdaWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,7 +19,8 @@ import org.springframework.transaction.annotation.Transactional;
  * @create: 2024-03-18 22:53
  **/
 @Service
-public class CategoryServiceImpl implements CategoryService {
+public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> implements CategoryService {
+
     @Autowired
     private CategoryMapper categoryMapper;
 
@@ -61,9 +63,5 @@ public class CategoryServiceImpl implements CategoryService {
         categoryMapper.updateById(category);
         return category;
     }
-
-    @Override
-    public Object list() {
-        return categoryMapper.selectList(null);
-    }
+    
 }

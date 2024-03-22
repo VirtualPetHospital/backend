@@ -107,7 +107,6 @@ public class UserController extends BaseController {
             @RequestParam(value = "disease", required = false) String disease,
             @RequestParam(value = "sort_by_view_time", required = false) Integer sortByViewTime
     ) {
-
         return Result.success(super.getData(userService.medcases(pageNum, pageSize, medcaseInfoKeyword, medcaseNameKeyword, disease, sortByViewTime)));
     }
 

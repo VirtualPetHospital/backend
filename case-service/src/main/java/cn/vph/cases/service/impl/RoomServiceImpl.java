@@ -9,6 +9,7 @@ import cn.vph.common.CommonErrorCode;
 import cn.vph.common.util.AssertUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.yulichang.wrapper.MPJLambdaWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,7 +21,8 @@ import org.springframework.stereotype.Service;
  * @create: 2024-03-20 11:56
  **/
 @Service
-public class RoomServiceImpl implements RoomService {
+public class RoomServiceImpl extends ServiceImpl<RoomMapper, Room> implements RoomService {
+
     @Autowired
     private RoomMapper roomMapper;
     @Autowired

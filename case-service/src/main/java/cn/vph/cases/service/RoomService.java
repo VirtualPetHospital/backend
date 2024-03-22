@@ -2,6 +2,7 @@ package cn.vph.cases.service;
 
 import cn.vph.cases.entity.Room;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
  * @program: vph-backend
@@ -9,7 +10,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
  * @author: astarforbae
  * @create: 2024-03-20 11:55
  **/
-public interface RoomService {
+public interface RoomService extends IService<Room> {
     Room add(Room room);
 
     Object delete(Integer roomId);

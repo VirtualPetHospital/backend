@@ -1,5 +1,6 @@
 package cn.vph.cases.controller;
 
+import cn.vph.common.controller.BaseController;
 import cn.vph.cases.entity.Inspection;
 import cn.vph.cases.service.InspectionService;
 import cn.vph.common.Result;

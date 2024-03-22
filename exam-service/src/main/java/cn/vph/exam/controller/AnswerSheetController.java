@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping(value = "answer-sheets")
 @Api(value = "AnswerSheetController", tags = {"答题卡接口"})
-public class AnswerSheetController extends BaseController{
+public class AnswerSheetController{
 
     @Autowired
     private AnswerSheetService answerSheetService;

@@ -1,10 +1,10 @@
 package cn.vph.exam.controller;
 
+import cn.vph.common.controller.BaseController;
 import cn.vph.common.Result;
 import cn.vph.common.annotation.Student;
 import cn.vph.common.annotation.Teacher;
 import cn.vph.exam.entity.Exam;
-import cn.vph.exam.mapper.ExamMapper;
 import cn.vph.exam.service.ExamService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -25,8 +25,6 @@ public class ExamController extends BaseController {
     @Autowired
     private ExamService examService;
 
-    @Autowired
-    private ExamMapper examMapper;
 
     @Student
     @GetMapping("/{exam_id}")

@@ -114,6 +114,7 @@ public enum CommonErrorCode {
      * 病例相关
      */
 
+    MEDCASE_NOT_EXIST(2002, "病例不存在", "病例不存在"),
     ;
 
 
