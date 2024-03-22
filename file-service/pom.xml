@@ -1,48 +1,55 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>backend</artifactId>
         <groupId>cn.vph</groupId>
         <version>1.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-
-    <artifactId>case-service</artifactId>
-
+    <artifactId>file-service</artifactId>
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     </properties>
-
     <dependencies>
         <!-- our common module 依赖-->
         <dependency>
             <groupId>cn.vph</groupId>
             <artifactId>common</artifactId>
-            <version>${project.version}</version> <!-- 注意修改版本 再clean 再install -->
+            <version>1.0-SNAPSHOT</version> <!-- 注意修改版本 再clean 再install -->
         </dependency>
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-devtools</artifactId>
             <optional>true</optional> <!-- 可选 -->
         </dependency>
         <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.11.0</version>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <!--        spring-boot-starter-logging-->
+        <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-mail</artifactId>
+            <artifactId>spring-boot-starter-logging</artifactId>
         </dependency>
     </dependencies>
-
     <build>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <!--<configuration>-->
-                    <!--<finalName>vph-${project.artifactId}</finalName>-->
-                    <!--<outputDirectory>../out/${project.artifactId}</outputDirectory>-->
+                <!--    <finalName>vph-${project.artifactId}</finalName>-->
+                <!--    <outputDirectory>../out/${project.artifactId}</outputDirectory>-->
                 <!--</configuration>-->
                 <executions>
                     <execution>
@@ -55,6 +62,4 @@
             </plugin>
         </plugins>
     </build>
-
-
 </project>

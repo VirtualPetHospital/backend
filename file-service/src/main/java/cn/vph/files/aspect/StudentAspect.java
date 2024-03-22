@@ -1,10 +1,10 @@
-package cn.vph.exam.aspect;
+package cn.vph.files.aspect;
 
 import cn.vph.common.CommonConstant;
 import cn.vph.common.CommonErrorCode;
 import cn.vph.common.SessionData;
 import cn.vph.common.util.AssertUtil;
-import cn.vph.exam.util.SessionUtil;
+import cn.vph.files.util.SessionUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;

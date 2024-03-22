@@ -1,10 +1,10 @@
-package cn.vph.exam.aspect;
+package cn.vph.files.aspect;
 
 import cn.vph.common.CommonConstant;
 import cn.vph.common.CommonErrorCode;
 import cn.vph.common.SessionData;
 import cn.vph.common.util.AssertUtil;
-import cn.vph.exam.util.SessionUtil;
+import cn.vph.files.util.SessionUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -26,19 +26,19 @@ import java.lang.reflect.Method;
 @Component
 @Slf4j
 @Conditional(EnableAspectCondition.class)
-public class StudentAspect {
+public class AdministratorAspect {
 
     @Autowired
     private SessionUtil sessionUtil;
 
-    @Around("@annotation(cn.vph.common.annotation.Student)")
-    public Object doAroundStudent(ProceedingJoinPoint joinPoint) throws Throwable {
+    @Around("@annotation(cn.vph.common.annotation.Administrator)")
+    public Object doAroundAdministrator(ProceedingJoinPoint joinPoint) throws Throwable {
         SessionData sessionData = sessionUtil.getSessionData();
 
         AssertUtil.isNotNull(sessionData, CommonErrorCode.USER_NOT_LOGGED_IN);
 
+        AssertUtil.in(sessionData.getType(), CommonConstant.AT_LEAST_ADMINISTRATOR, CommonErrorCode.UNAUTHORIZED_ACCESS);
 
-        AssertUtil.in(sessionData.getType(), CommonConstant.AT_LEAST_STUDENT, CommonErrorCode.UNAUTHORIZED_ACCESS);
         Method method = ((MethodSignature) joinPoint.getSignature()).getMethod();
 
         //log
