@@ -18,5 +18,5 @@ public interface DiseaseService extends IService<Disease> {
 
     Object listByCategory(Integer categoryId);
 
-    Object get(Integer diseaseId);
+    Object getDiseaseById(Integer diseaseId);
 }

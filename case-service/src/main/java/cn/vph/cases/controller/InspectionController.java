@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("inspections")
 @Api(value = "InspectionController", tags = {"检查项目接口"})
 public class InspectionController extends BaseController {
+
     @Autowired
     private InspectionService inspectionService;
 
@@ -40,7 +41,7 @@ public class InspectionController extends BaseController {
     }
 
     @Student
-    @GetMapping("list")
+    @GetMapping("")
     @ApiOperation(value = "查询检查项目列表")
     public Result<?> list(
             @RequestParam(value = "page_num", defaultValue = "1") Integer pageNum,

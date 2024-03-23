@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/rooms")
 @Api(value = "RoomController", tags = "科室服务接口")
 public class RoomController extends BaseController {
+
     @Autowired
     private RoomService roomService;
 
@@ -39,7 +40,7 @@ public class RoomController extends BaseController {
     }
 
     @Student
-    @GetMapping("/list")
+    @GetMapping("")
     @ApiOperation(value = "查询科室列表")
     public Result<?> list(
             @RequestParam(value = "page_num", defaultValue = "1") Integer pageNum,

@@ -76,7 +76,7 @@ public class DiseaseServiceImpl extends ServiceImpl<DiseaseMapper, Disease> impl
     }
 
     @Override
-    public Object get(Integer diseaseId) {
+    public Object getDiseaseById(Integer diseaseId) {
         // 判断是否存在疾病
         Disease disease = diseaseMapper.selectById(diseaseId);
         AssertUtil.isNotNull(disease, CommonErrorCode.DISEASE_NOT_EXIST);

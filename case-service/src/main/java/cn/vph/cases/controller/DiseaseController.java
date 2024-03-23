@@ -46,17 +46,17 @@ public class DiseaseController {
     }
 
     @Student
-    @GetMapping("/list/{categoryId}")
+    @GetMapping("/categories/{category_id}")
     @ApiOperation(value = "查询指定病种下的疾病")
-    public Result<?> list(@PathVariable Integer categoryId) {
+    public Result<?> list(@PathVariable(value = "category_id") Integer categoryId) {
         return Result.success(diseaseService.listByCategory(categoryId));
     }
 
     @Student
     @GetMapping("{diseaseId}")
     @ApiOperation(value = "查询单个疾病")
-    public Result<?> get(@PathVariable Integer diseaseId) {
-        return Result.success(diseaseService.get(diseaseId));
+    public Result<?> getDiseaseById(@PathVariable Integer diseaseId) {
+        return Result.success(diseaseService.getDiseaseById(diseaseId));
     }
 
 }
