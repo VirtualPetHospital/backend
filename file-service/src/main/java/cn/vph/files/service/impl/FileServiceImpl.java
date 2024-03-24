@@ -1,11 +1,12 @@
 package cn.vph.files.service.impl;
 
-import cn.vph.common.CommonConstant;
+import cn.vph.files.common.FileConstants;
 import cn.vph.common.CommonErrorCode;
 import cn.vph.common.CommonException;
 import cn.vph.files.pojo.VphFile;
 import cn.vph.files.service.FileService;
 import org.apache.commons.io.FileUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -24,10 +25,12 @@ import java.io.UnsupportedEncodingException;
  **/
 @Service
 public class FileServiceImpl implements FileService {
+    @Autowired
+    private FileConstants fileConstants;
     //TODO 文件名自动生成
     @Override
     public Object upload(MultipartFile file, String location) throws IOException {
-        String uploadPath = CommonConstant.FILE_HOME + File.separator + location;
+        String uploadPath = fileConstants.getFileDir() + File.separator + location;
         // 确认文件夹存在
         File uploadDir = new File(uploadPath);
         if (!uploadDir.exists()) {
@@ -42,7 +45,7 @@ public class FileServiceImpl implements FileService {
 
     @Override
     public Object download(String fileName, String location, HttpServletResponse response) throws UnsupportedEncodingException {
-        String downloadPath = CommonConstant.FILE_HOME + File.separator + location;
+        String downloadPath = fileConstants.getFileDir() + File.separator + location;
         File file = new File(downloadPath + File.separator + fileName);
         if (file.exists()) {
             response.setContentType(MediaType.APPLICATION_OCTET_STREAM_VALUE);

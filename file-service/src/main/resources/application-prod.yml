@@ -38,7 +38,7 @@ feign:
     max-connections-per-route: 50 # 单路径最大连接数
 
 swagger:
-    enable: true
+  enable: true
 #      defaultZone: http://127.0.0.1:10086/eureka
 
 vph:
