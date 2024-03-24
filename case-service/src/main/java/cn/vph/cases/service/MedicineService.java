@@ -18,4 +18,6 @@ public interface MedicineService extends IService<Medicine> {
     IPage<?> list(Integer pageNum, Integer pageSize, String nameKeyword);
 
     Object delete(Integer medicineId);
+
+    Object get(Integer medicineId);
 }

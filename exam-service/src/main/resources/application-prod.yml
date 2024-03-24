@@ -1,15 +1,15 @@
 server:
-  port: 8084
+  port: 8083
   servlet:
     context-path: /api
 spring:
   datasource:
-    url: jdbc:mysql://47.103.131.161:3306/vph_medcase?useSSL=false&allowPublicKeyRetrieval=true
+    url: jdbc:mysql://47.103.131.161:3306/vph_exam?useSSL=false&allowPublicKeyRetrieval=true
     username: root
     password: MySQLPaSsWord89h
     driver-class-name: com.mysql.jdbc.Driver
   application:
-    name: case-service
+    name: exam-service
   jackson:
     property-naming-strategy: CAMEL_CASE_TO_LOWER_CASE_WITH_UNDERSCORES
   # Redis
@@ -18,33 +18,11 @@ spring:
     port: 6379
     timeout: 1000
     password: Re1d1sPssw0rd
-  # mail
-  mail:
-    host: smtp.163.com
-    protocol: smtp
-    default-encoding: UTF-8
-    username: vphbackend@163.com
-    password: VAMXHRVFKIQVSKHD
-    test-connection: true
-    port: 465
-    properties:
-      mail:
-        smtp:
-          auth: true
-          starttls:
-            enable: true
-            required: true
-          ssl:
-            enable: true
-          socketFactory:
-            port: 465
-            class: javax.net.ssl.SSLSocketFactory
-
   cloud:
     nacos: # nacos 配置
-      server-addr: localhost:8848
+      server-addr: 47.103.131.161:8848
 mybatis:
-  type-aliases-package: cn.vph.case.entity
+  type-aliases-package: cn.vph.exam.entity
   configuration:
     map-underscore-to-camel-case: true
 logging:

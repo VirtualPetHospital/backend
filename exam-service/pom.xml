@@ -30,10 +30,10 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <!--<configuration>-->
-                <!--    <finalName>vph-${project.artifactId}</finalName>-->
-                <!--    <outputDirectory>../out/${project.artifactId}</outputDirectory>-->
-                <!--</configuration>-->
+                <configuration>
+                    <finalName>vph-${project.artifactId}</finalName>
+                    <outputDirectory>../out</outputDirectory>
+                </configuration>
                 <executions>
                     <execution>
                         <id>repackage</id>

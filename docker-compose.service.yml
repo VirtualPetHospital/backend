@@ -1,0 +1,34 @@
+# TODO 每个服务添加depends_on：网关
+version: '3'
+services:
+  case-service:
+    container_name: vph-case-service
+    build:
+      context: ./case-service
+      dockerfile: Dockerfile
+    ports:
+      - "8084:8084"
+    networks:
+      - vph-network
+  exam-service:
+    container_name: vph-exam-service
+    build:
+      context: ./exam-service
+      dockerfile: Dockerfile
+    ports:
+      - "8083:8083"
+    networks:
+      - vph-network
+
+  file-service:
+    container_name: vph-file-service
+    build:
+      context: ./file-service
+      dockerfile: Dockerfile
+    ports:
+      - "8085:8085"
+    networks:
+      - vph-network
+
+networks:
+  vph-network:

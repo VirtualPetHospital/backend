@@ -18,4 +18,3 @@ logging:
     cn.vph: debug
   pattern:
     dateformat: MM-dd HH:mm:ss:SSS
-

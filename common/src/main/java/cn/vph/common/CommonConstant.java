@@ -1,6 +1,7 @@
 package cn.vph.common;
 
 import lombok.Getter;
+import org.springframework.beans.factory.annotation.Value;
 
 /**
  * @program: vph-backend
@@ -26,6 +27,7 @@ public class CommonConstant {
     public final static int SORT_DESC = 2;
 
 //    public final static String FILE_HOME = "/home/vph/files";
+    @Value("${vph.file.path}")
     public final static String FILE_HOME = "E:\\vph\\files";
     @Getter
     enum FileLoc {

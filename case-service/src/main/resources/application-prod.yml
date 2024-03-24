@@ -26,7 +26,6 @@ spring:
     username: vphbackend@163.com
     password: VAMXHRVFKIQVSKHD
     test-connection: true
-    port: 465
     properties:
       mail:
         smtp:
@@ -34,15 +33,10 @@ spring:
           starttls:
             enable: true
             required: true
-          ssl:
-            enable: true
-          socketFactory:
-            port: 465
-            class: javax.net.ssl.SSLSocketFactory
 
   cloud:
     nacos: # nacos 配置
-      server-addr: localhost:8848
+      server-addr: 47.103.131.161:8848
 mybatis:
   type-aliases-package: cn.vph.case.entity
   configuration:

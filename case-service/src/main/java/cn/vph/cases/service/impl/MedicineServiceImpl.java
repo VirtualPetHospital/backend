@@ -65,4 +65,12 @@ public class MedicineServiceImpl extends ServiceImpl<MedicineMapper, Medicine> i
         return null;
     }
 
+    @Override
+    public Object get(Integer medicineId) {
+        // 是否存在
+        Medicine medicine = medicineMapper.selectById(medicineId);
+        AssertUtil.isNotNull(medicine, CommonErrorCode.MEDICINE_NOT_EXIST);
+        return medicine;
+    }
+
 }
