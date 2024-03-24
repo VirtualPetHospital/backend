@@ -4,7 +4,7 @@ server:
     context-path: /api
 spring:
   datasource:
-    url: jdbc:mysql://mysql-test:3306/vph_medcase?useSSL=false&allowPublicKeyRetrieval=true
+    url: jdbc:mysql://47.103.131.161:3306/vph_medcase?useSSL=false&allowPublicKeyRetrieval=true
     username: root
     password: MySQLPaSsWord89h
     driver-class-name: com.mysql.jdbc.Driver
@@ -14,7 +14,7 @@ spring:
     property-naming-strategy: CAMEL_CASE_TO_LOWER_CASE_WITH_UNDERSCORES
   # Redis
   redis:
-    host: redis
+    host: 47.103.131.161
     port: 6379
     timeout: 1000
     password: Re1d1sPssw0rd
