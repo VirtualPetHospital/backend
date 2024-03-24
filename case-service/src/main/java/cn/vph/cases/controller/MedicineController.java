@@ -40,7 +40,7 @@ public class MedicineController extends BaseController {
     }
 
     @Student
-    @GetMapping("")
+    @GetMapping
     @ApiOperation(value = "查询药品列表")
     public Result<?> list(
             @RequestParam(value = "page_num", defaultValue = "1") Integer pageNum,
@@ -50,6 +50,12 @@ public class MedicineController extends BaseController {
         return Result.success(super.getData(medicineService.list(pageNum, pageSize, nameKeyword)));
     }
 
+    @Administrator
+    @GetMapping("{medicineId}")
+    @ApiOperation(value = "查询单个药品")
+    public Result<?> get(@PathVariable Integer medicineId) {
+        return Result.success(medicineService.get(medicineId));
+    }
     @Administrator
     @DeleteMapping("{medicineId}")
     @ApiOperation(value = "删除药品")

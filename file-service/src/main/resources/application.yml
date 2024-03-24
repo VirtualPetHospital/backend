@@ -38,3 +38,6 @@ swagger:
 vph:
   aspect:
     enable: false
+
+  file:
+    path: E:\\vph\files

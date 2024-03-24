@@ -26,6 +26,7 @@ spring:
     username: vphbackend@163.com
     password: VAMXHRVFKIQVSKHD
     test-connection: true
+    port: 465
     properties:
       mail:
         smtp:
