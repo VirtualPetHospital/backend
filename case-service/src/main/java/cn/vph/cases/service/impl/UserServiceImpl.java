@@ -85,6 +85,17 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         String captcha = captchaUtil.getCaptcha(registerRequest.getEmail());
         // 判断验证码是否正确
         AssertUtil.isEqual(captcha, registerRequest.getCaptcha(), CommonErrorCode.WRONG_CAPTCHA);
+        // 判断邮箱是否重复
+        LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(User::getEmail, registerRequest.getEmail());
+        User user1 = userMapper.selectOne(wrapper);
+        AssertUtil.isNull(user1, CommonErrorCode.EMAIL_ALREADY_EXIST);
+        // 判断用户名是否存在
+        LambdaQueryWrapper<User> wrapper1 = new LambdaQueryWrapper<>();
+        wrapper1.eq(User::getNickname, registerRequest.getNickname());
+        User user2 = userMapper.selectOne(wrapper1);
+        AssertUtil.isNull(user2, CommonErrorCode.NICKNAME_ALREADY_EXIST);
+
         User user = new User(registerRequest);
         user.setPassword(convert(user.getPassword()));
         userMapper.insert(user);
@@ -124,6 +135,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Override
     public Object sendCaptcha(String email) {
+        // 检查邮箱是否已存在
+        LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(User::getEmail, email);
+        User user = userMapper.selectOne(wrapper);
+        AssertUtil.isNull(user, CommonErrorCode.EMAIL_ALREADY_EXIST);
         // 发送验证码
         SimpleMailMessage simpleEmailMessage = new SimpleMailMessage();
         simpleEmailMessage.setFrom(from);
