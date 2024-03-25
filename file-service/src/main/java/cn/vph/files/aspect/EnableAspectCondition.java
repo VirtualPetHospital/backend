@@ -15,6 +15,7 @@ public class EnableAspectCondition implements Condition {
     @Override
     public boolean matches(ConditionContext conditionContext, AnnotatedTypeMetadata annotatedTypeMetadata) {
         String enableAspect = conditionContext.getEnvironment().getProperty("vph.aspect.enable");
-        return false;
+        assert enableAspect != null;
+        return "true".equals(enableAspect);
     }
 }

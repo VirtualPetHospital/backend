@@ -153,6 +153,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Override
     public Object logout() {
+        // 检查是否登录
         sessionUtil.invalidate();
         return null;
     }
