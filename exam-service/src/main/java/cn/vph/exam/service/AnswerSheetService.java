@@ -7,5 +7,5 @@ public interface AnswerSheetService extends IService<AnswerSheet> {
     
     AnswerSheet add(AnswerSheet answerSheet);
 
-    AnswerSheet getAnswerSheetById(Integer answerSheetId);
+    AnswerSheet getAnswerSheetByExamId(Integer examId);
 }
