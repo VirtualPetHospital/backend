@@ -7,8 +7,10 @@ import cn.vph.exam.entity.AnswerSheetItem;
 import cn.vph.exam.entity.Participant;
 import cn.vph.exam.mapper.AnswerSheetItemMapper;
 import cn.vph.exam.mapper.AnswerSheetMapper;
+import cn.vph.exam.mapper.ExamMapper;
 import cn.vph.exam.mapper.ParticipantMapper;
 import cn.vph.exam.service.AnswerSheetService;
+import cn.vph.exam.service.ExamService;
 import cn.vph.exam.service.ParticipantService;
 import cn.vph.exam.util.SessionUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -35,6 +37,12 @@ public class AnswerSheetServiceImpl extends ServiceImpl<AnswerSheetMapper, Answe
 
     @Autowired
     private ParticipantMapper participantMapper;
+
+    @Autowired
+    private ExamService examService;
+
+    @Autowired
+    private ExamMapper examMapper;
 
     @Autowired
     private ParticipantService participantService;
@@ -81,14 +89,18 @@ public class AnswerSheetServiceImpl extends ServiceImpl<AnswerSheetMapper, Answe
     }
 
     @Override
-    public AnswerSheet getAnswerSheetById(Integer answerSheetId){
-        AssertUtil.isTrue(answerSheetId != null, CommonErrorCode.ANSWER_SHEET_NOT_EXIST);
+    public AnswerSheet getAnswerSheetByExamId(Integer examId){
+        AssertUtil.isTrue(examId != null, CommonErrorCode.EXAM_NOT_EXIST);
 
-        AnswerSheet answerSheet = answerSheetMapper.selectById(answerSheetId);
+        LambdaQueryWrapper<AnswerSheet> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(AnswerSheet::getExamId, examId);
+        queryWrapper.eq(AnswerSheet::getUserId, sessionUtil.getUserId());
+        AnswerSheet answerSheet = answerSheetMapper.selectOne(queryWrapper);
+
         AssertUtil.isTrue(answerSheet != null, CommonErrorCode.ANSWER_SHEET_NOT_EXIST);
         List<Integer> answerSheetItemIds = answerSheetItemMapper.selectList(
                 new LambdaQueryWrapper<AnswerSheetItem>()
-                        .eq(AnswerSheetItem::getAnswerSheetId, answerSheetId))
+                        .eq(AnswerSheetItem::getAnswerSheetId, examId))
                         .stream()
                         .map(AnswerSheetItem::getId)
                         .collect(Collectors.toList());

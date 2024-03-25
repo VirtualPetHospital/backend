@@ -40,11 +40,11 @@ public class AnswerSheetController{
     }
 
     @Student
-    @GetMapping("/{answer_sheet_id}")
+    @GetMapping("/{exam_id}")
     @ApiOperation(value = "查询单个试卷的答题卡")
-    public Result<?> getAnswerSheetById(@PathVariable(value = "answer_sheet_id") Integer answerSheetId)
+    public Result<?> getAnswerSheetById(@PathVariable(value = "exam_id") Integer examId)
     {
-        return Result.success(answerSheetService.getAnswerSheetById(answerSheetId));
+        return Result.success(answerSheetService.getAnswerSheetByExamId(examId));
     }
 
 }
