@@ -110,12 +110,6 @@ public class UserController extends BaseController {
         return Result.success(super.getData(userService.medcases(pageNum, pageSize, medcaseInfoKeyword, medcaseNameKeyword, disease, sortByViewTime)));
     }
 
-    @GetMapping("exams")
-    @ApiOperation(value = "查询用户参与的考试")
-    public Result<Object> exams() {
-        //TODO 查询用户参与的考试
-        return Result.success(null);
-    }
 
     @PostMapping("captcha")
     @ApiOperation(value = "请求验证码")

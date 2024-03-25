@@ -20,7 +20,7 @@ spring:
     password: Re1d1sPssw0rd
   cloud:
     nacos: # nacos 配置
-      server-addr: 47.103.131.161:8848
+      server-addr: 47.113.220.49:8848
 mybatis:
   type-aliases-package: cn.vph.exam.entity
   configuration:
