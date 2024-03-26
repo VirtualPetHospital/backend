@@ -1,7 +1,7 @@
 package cn.vph.gpt.service.impl;
 
 import cn.vph.common.CommonErrorCode;
-import cn.vph.common.util.AssertUtil;
+import cn.vph.common.CommonException;
 import cn.vph.gpt.entity.FastGptDTO;
 import cn.vph.gpt.entity.Message;
 import cn.vph.gpt.service.GptService;
@@ -57,10 +57,13 @@ public class GptServiceImpl implements GptService {
 
 
         // 使用Jsonobject 接收返回参数
-        ResponseEntity<JSONObject> responseEntity = restTemplate.exchange(requestEntity, JSONObject.class);
-        JSONObject jsonObject = responseEntity.getBody();
-        // 返回jsonObject choices数组中的第一个元素的message的content字段
-        AssertUtil.isNotNull(jsonObject, CommonErrorCode.GPT_CONNECTION_ERROR);
-        return jsonObject.getJSONArray("choices").getJSONObject(0).getJSONObject("message").getString("content");
+        try {
+            ResponseEntity<JSONObject> responseEntity = restTemplate.exchange(requestEntity, JSONObject.class);
+            JSONObject jsonObject = responseEntity.getBody();
+            return jsonObject.getJSONArray("choices").getJSONObject(0).getJSONObject("message").getString("content");
+        } catch (Exception e) {
+            throw new CommonException(CommonErrorCode.GPT_CONNECTION_ERROR);
+        }
+
     }
 }

@@ -119,7 +119,7 @@ public enum CommonErrorCode {
     /**
      * 智能对话助手相关
      */
-    GPT_CONNECTION_ERROR(3001, "连接失败或超时", "暂时无法进行对话，请稍后"),
+    GPT_CONNECTION_ERROR(3001, "连接失败或超时", "系统繁忙，请稍后再尝试"),
 
     ;
     /**
