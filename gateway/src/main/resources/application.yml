@@ -20,6 +20,10 @@ spring:
           uri: lb://file-service
           predicates:
             - Path=/files/**, /files
+        - id: gpt-service
+          uri: lb://gpt-service
+          predicates:
+            - Path=/gpts/**
       default-filters:
         - PrefixPath=/api
   jackson:

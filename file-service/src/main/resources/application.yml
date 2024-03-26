@@ -37,6 +37,6 @@ swagger:
 #      defaultZone: http://127.0.0.1:10086/eureka
 vph:
   aspect:
-    enable: false
+    enable: true
   file:
     path: E:\\vph\files

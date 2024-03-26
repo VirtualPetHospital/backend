@@ -115,9 +115,13 @@ public enum CommonErrorCode {
      */
 
     MEDCASE_NOT_EXIST(2002, "病例不存在", "病例不存在"),
+
+    /**
+     * 智能对话助手相关
+     */
+    GPT_CONNECTION_ERROR(3001, "连接失败或超时", "暂时无法进行对话，请稍后"),
+
     ;
-
-
     /**
      * 错误码
      */
