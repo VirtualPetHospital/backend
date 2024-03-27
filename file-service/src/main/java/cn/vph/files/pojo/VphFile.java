@@ -14,4 +14,5 @@ import lombok.Data;
 public class VphFile {
     private String fileName;
     private String location;
+    private String type;
 }
