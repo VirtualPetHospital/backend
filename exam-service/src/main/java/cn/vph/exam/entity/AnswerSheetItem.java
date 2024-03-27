@@ -1,9 +1,6 @@
 package cn.vph.exam.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
 import lombok.Data;
 
 /**
@@ -24,6 +21,7 @@ public class AnswerSheetItem {
     @TableField("question_id")
     private Integer questionId;
 
+    @TableField(updateStrategy = FieldStrategy.IGNORED, insertStrategy = FieldStrategy.IGNORED)
     private String answer;
 
     public AnswerSheetItem() {

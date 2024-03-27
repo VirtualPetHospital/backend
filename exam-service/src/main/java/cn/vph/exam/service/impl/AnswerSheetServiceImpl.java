@@ -60,8 +60,8 @@ public class AnswerSheetServiceImpl extends ServiceImpl<AnswerSheetMapper, Answe
 
         // 设置用户id
         answerSheet.setUserId(sessionUtil.getUserId());
-
-        answerSheetAlreadyExist(answerSheet.getExamId(), answerSheet.getUserId());
+        // 检查答题卡是否不存在
+        AssertUtil.isFalse(answerSheetAlreadyExist(answerSheet.getExamId(), answerSheet.getUserId()), CommonErrorCode.ANSWER_SHEET_ALREADY_EXIST);
 
         // 检查是否报名 未报名自动报名
         // participated 设置为true
@@ -89,6 +89,35 @@ public class AnswerSheetServiceImpl extends ServiceImpl<AnswerSheetMapper, Answe
     }
 
     @Override
+    @Transactional
+    public AnswerSheet update(Integer answerSheetId, AnswerSheet answerSheet){
+        AssertUtil.isTrue(answerSheetId != null && answerSheet != null, CommonErrorCode.EXAM_NOT_EXIST);
+        answerSheet.setUserId(sessionUtil.getUserId());
+
+        // 检查答题卡是否已存在
+        AssertUtil.isTrue(answerSheetAlreadyExist(answerSheet.getExamId(), answerSheet.getUserId()), CommonErrorCode.ANSWER_SHEET_NOT_EXIST);
+
+        // add 时已经添加了participant了 这里不处理
+
+        // TODO 题目数量 == exam题目数量校验
+        AssertUtil.isTrue(answerSheet.getAnswers().size() > 0, CommonErrorCode.ANSWERS_NOT_EXIST);
+        answerSheet.setAnswerSheetId(answerSheetId);
+        answerSheetMapper.updateById(answerSheet);
+
+        answerSheet.getAnswers().forEach(answerSheetItem -> {
+            answerIsValid(answerSheetItem.getAnswer());
+            answerSheetItem.setAnswerSheetId(answerSheet.getAnswerSheetId());
+            // xxx 已设置answer字段可更新为null
+            answerSheetItemMapper.updateById(answerSheetItem);
+        });
+        AnswerSheet updatedAnswerSheet = answerSheetMapper.selectById(answerSheetId);
+        updatedAnswerSheet.setAnswers(answerSheetItemMapper.selectList(
+                new LambdaQueryWrapper<AnswerSheetItem>()
+                        .eq(AnswerSheetItem::getAnswerSheetId, answerSheetId)));
+        return updatedAnswerSheet;
+    }
+
+    @Override
     public AnswerSheet getAnswerSheetByExamId(Integer examId){
         AssertUtil.isTrue(examId != null, CommonErrorCode.EXAM_NOT_EXIST);
 
@@ -113,16 +142,16 @@ public class AnswerSheetServiceImpl extends ServiceImpl<AnswerSheetMapper, Answe
         return answerSheet;
     }
 
-    private void answerSheetAlreadyExist(Integer examId, Integer userId){
-        AssertUtil.isTrue(
-                answerSheetMapper.selectCount(
+    private boolean answerSheetAlreadyExist(Integer examId, Integer userId){
+        return answerSheetMapper.selectCount(
                         new LambdaQueryWrapper<AnswerSheet>()
                                 .eq(AnswerSheet::getExamId, examId)
-                                .eq(AnswerSheet::getUserId, userId)) > 0,
-                CommonErrorCode.ANSWER_SHEET_ALREADY_EXIST);
+                                .eq(AnswerSheet::getUserId, userId)) > 0;
     }
+
     private void answerIsValid(String answer){
         AssertUtil.isTrue(
+                answer == null ||
                 answer.equals("A") ||  answer.equals("B") ||
                         answer.equals("C") || answer.equals("D") ,
                 CommonErrorCode.QUESTION_ANSWER_NOT_VALID);
