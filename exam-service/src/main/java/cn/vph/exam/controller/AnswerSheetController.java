@@ -39,6 +39,15 @@ public class AnswerSheetController{
         return Result.success(answerSheetService.add(answerSheet));
     }
 
+
+    @Student
+    @PutMapping("/{answer_sheet_id}")
+    @ApiOperation(value = "更新答题卡")
+    public Result<?> update(@PathVariable(value = "answer_sheet_id") Integer answerSheetId, @RequestBody AnswerSheet answerSheet)
+    {
+        return Result.success(answerSheetService.update(answerSheetId, answerSheet));
+    }
+
     @Student
     @GetMapping("/{exam_id}")
     @ApiOperation(value = "查询单个试卷的答题卡")
