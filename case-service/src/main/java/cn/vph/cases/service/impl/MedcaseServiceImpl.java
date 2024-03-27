@@ -5,6 +5,7 @@ import cn.vph.cases.mapper.*;
 import cn.vph.cases.service.MedcaseInspectionService;
 import cn.vph.cases.service.MedcaseMedicineService;
 import cn.vph.cases.service.MedcaseService;
+import cn.vph.cases.util.SessionUtil;
 import cn.vph.common.CommonErrorCode;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -15,6 +16,8 @@ import org.springframework.stereotype.Service;
 import cn.vph.common.util.AssertUtil;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -44,6 +47,10 @@ public class MedcaseServiceImpl extends ServiceImpl<MedcaseMapper, Medcase> impl
     private MedcaseInspectionMapper medcaseInspectionMapper;
     @Autowired
     private MedcaseMedicineMapper medcaseMedicineMapper;
+    @Autowired
+    private UserMedcaseMapper userMedcaseMapper;
+    @Autowired
+    private SessionUtil sessionUtil;
 
 
 
@@ -52,6 +59,18 @@ public class MedcaseServiceImpl extends ServiceImpl<MedcaseMapper, Medcase> impl
         Medcase medcase = medcaseMapper.selectById(medcaseId);
         AssertUtil.isNotNull(medcase, CommonErrorCode.MEDCASE_NOT_EXIST);
 
+        UserMedcase userMedcase = userMedcaseMapper.selectOne(new MPJLambdaWrapper<UserMedcase>().eq(UserMedcase::getMedcaseId, medcaseId).eq(UserMedcase::getUserId, sessionUtil.getUserId()));
+        if(userMedcase == null){
+            userMedcase = new UserMedcase();
+            userMedcase.setMedcaseId(medcaseId);
+            userMedcase.setUserId(sessionUtil.getUserId());
+            userMedcase.setViewTime(LocalDateTime.now());
+            userMedcaseMapper.insert(userMedcase);
+        }
+        else{
+            userMedcase.setViewTime(LocalDateTime.now());
+            userMedcaseMapper.updateById(userMedcase);
+        }
         return initMedcase(medcase);
     }
 
