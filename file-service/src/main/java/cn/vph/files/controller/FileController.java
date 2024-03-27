@@ -41,9 +41,8 @@ public class FileController {
     @ApiOperation(value = "下载文件")
     public Result<?> download(
             @RequestParam("file_name") String fileName,
-            @RequestParam("location") String location,
             HttpServletResponse response
     ) throws UnsupportedEncodingException {
-        return Result.success(fileService.download(fileName, location, response));
+        return Result.success(fileService.download(fileName, response));
     }
 }

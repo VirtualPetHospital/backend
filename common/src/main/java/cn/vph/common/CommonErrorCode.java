@@ -73,7 +73,8 @@ public enum CommonErrorCode {
     FILE_ALREADY_EXIST(18003, "文件已存在", "文件已存在"),
     FILE_UPLOAD_FAIL(18004, "文件上传失败，请重试", "文件上传失败，请重试"),
     FILE_DOWNLOAD_FAIL(18005, "文件下载失败，请重试", "文件下载失败，请重试"),
-
+    FILE_LOCATION_ERROR(18006, "文件存储位置非法", "文件存储位置非法"),
+    FILE_TYPE_ERROR(18007, "文件类型非法", "文件类型非法"),
 
     /**
      * 以2开头的和业务相关

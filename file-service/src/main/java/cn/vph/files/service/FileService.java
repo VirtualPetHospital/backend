@@ -15,5 +15,5 @@ import java.io.UnsupportedEncodingException;
 public interface FileService {
     Object upload(MultipartFile file, String location) throws IOException;
 
-    Object download(String fileName, String location, HttpServletResponse response) throws UnsupportedEncodingException;
+    Object download(String fileName, HttpServletResponse response) throws UnsupportedEncodingException;
 }
