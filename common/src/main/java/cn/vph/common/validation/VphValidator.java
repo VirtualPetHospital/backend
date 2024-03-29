@@ -34,7 +34,7 @@ public class VphValidator implements ConstraintValidator<VphValidation, String> 
         } else if ("fileName".equals(rule)) {
             // 不为空，可以null，长度小于100，由汉字、大小写字母、数字、下划线（_）、连字符（-）构成
             return isNull(value) || (!isEmpty(value) && value.matches("[\\u4E00-\\u9FA5a-zA-Z0-9_-]+") && value.length() < 100);
-        } else if ("num".equals(rule)) {
+        } else if ("number".equals(rule)) {
             // 不为空，不为null，两位小数，默认为0.00，范围：0.00-99999.99，
             return !isNull(value) && !isEmpty(value) && value.matches("^(0|[1-9][0-9]{0,4})(\\.[0-9]{1,2})?$");
         } else if ("time".equals(rule)) {
