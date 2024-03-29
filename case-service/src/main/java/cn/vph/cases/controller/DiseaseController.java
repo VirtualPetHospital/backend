@@ -10,6 +10,8 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 /**
  * @program: vph-backend
  * @description:
@@ -26,7 +28,7 @@ public class DiseaseController {
     @Administrator
     @PostMapping
     @ApiOperation(value = "新增疾病")
-    public Result<?> add(@RequestBody Disease disease) {
+    public Result<?> add(@Valid @RequestBody Disease disease) {
         return Result.success(diseaseService.add(disease));
     }
 
@@ -40,7 +42,7 @@ public class DiseaseController {
     @Administrator
     @PutMapping("{diseaseId}")
     @ApiOperation(value = "更新疾病")
-    public Result<?> update(@PathVariable Integer diseaseId, @RequestBody Disease disease) {
+    public Result<?> update(@PathVariable Integer diseaseId,@Valid @RequestBody Disease disease) {
         disease.setDiseaseId(diseaseId);
         return Result.success(diseaseService.update(disease));
     }
