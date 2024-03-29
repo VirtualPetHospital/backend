@@ -96,4 +96,5 @@ public class BaseGlobalExceptionHandler {
         log.error("HttpRequestMethodNotSupportedException: ", e);
         return Result.result(CommonErrorCode.INVALID_METHOD, e.getMessage());
     }
+
 }
