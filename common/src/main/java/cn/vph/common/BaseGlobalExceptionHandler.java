@@ -2,6 +2,7 @@ package cn.vph.common;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -88,5 +89,11 @@ public class BaseGlobalExceptionHandler {
     public Result<?> exceptionHandler(Exception e) {
         log.error("Exception: ", e);
         return Result.result(CommonErrorCode.SYSTEM_ERROR);
+    }
+
+    @ExceptionHandler(value = HttpRequestMethodNotSupportedException.class)
+    public Result<?> httpRequestMethodNotSupportedExceptionHandler(HttpRequestMethodNotSupportedException e) {
+        log.error("HttpRequestMethodNotSupportedException: ", e);
+        return Result.result(CommonErrorCode.INVALID_METHOD, e.getMessage());
     }
 }
