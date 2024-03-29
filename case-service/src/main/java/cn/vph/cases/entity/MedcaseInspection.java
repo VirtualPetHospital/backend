@@ -28,6 +28,5 @@ public class MedcaseInspection implements Serializable {
     @TableField(value = "inspection_id")
     private Integer inspectionId;
 
-    // TODO 要不要在这儿封装inspection类？
 
 }
