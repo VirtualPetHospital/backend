@@ -127,7 +127,7 @@ public class FileServiceImpl implements FileService {
                 throw new CommonException(CommonErrorCode.FILE_DOWNLOAD_FAIL);
             }
         }
-        return null;
+        throw new CommonException(CommonErrorCode.FILE_NOT_EXIST);
     }
 
     public boolean containsString(String[] array, String str) {
@@ -161,11 +161,14 @@ public class FileServiceImpl implements FileService {
         } else if ("gif".equals(fileType)) {
             convertGifToJpeg(file, dest);
         }
-
     }
 
     public void convertVideoToMp4(MultipartFile file, String dest, String fileType) throws IOException {
-        return;
+        if("mp4".equals(fileType)){
+            byte[] bytes = file.getBytes();
+            File destFile = new File(dest);
+            FileUtils.writeByteArrayToFile(destFile, bytes);
+        }
     }
 
     public void convertPngToJpeg(MultipartFile file, String dest) throws IOException {
