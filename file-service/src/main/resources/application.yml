@@ -20,6 +20,10 @@ spring:
   cloud:
     nacos:
       server-addr: localhost:8848
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
 logging:
   level:
     cn.vph: debug
