@@ -34,13 +34,32 @@ public class VphValidator implements ConstraintValidator<VphValidation, String> 
         } else if ("fileName".equals(rule)) {
             // 不为空，可以null，长度小于100，由汉字、大小写字母、数字、下划线（_）、连字符（-）构成
             return isNull(value) || (!isEmpty(value) && value.matches("[\\u4E00-\\u9FA5a-zA-Z0-9_-]+") && value.length() < 100);
-        } else if ("number".equals(rule)) {
+        } else if ("number".equals(rule) || "price".equals(rule)) {
             // 不为空，不为null，两位小数，默认为0.00，范围：0.00-99999.99，
             return !isNull(value) && !isEmpty(value) && value.matches("^(0|[1-9][0-9]{0,4})(\\.[0-9]{1,2})?$");
         } else if ("time".equals(rule)) {
             //  不为空，不为null，时间，格式：yyyy-MM-dd HH:mm:ss
             return !isNull(value) && !isEmpty(value) && value.matches("^\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}$");
-        } else {
+        } else if("posInt".equals(rule)){
+            // 不为空，不为null，正整数
+            return !isNull(value) && !isEmpty(value) && value.matches("^[1-9]\\d*$");
+        } else if("nickname".equals(rule)){
+            // 用户名，不为空，不可重复，长度1-30，由汉字、大小写字母、数字、下划线（_）、连字符（-）构成，不包含特殊字符和空格；
+            return !isNull(value) && !isEmpty(value) && value.matches("[\\u4E00-\\u9FA5a-zA-Z0-9_-]+") && value.length() < 30;
+        } else if("userType".equals(rule)){
+            // 不为空，为student,teacher,administrator之一
+            return !isNull(value) && !isEmpty(value) && value.matches("^(student|teacher|administrator)$");
+        } else if("password".equals(rule)){
+            // 长度6-18
+            return !isNull(value) && !isEmpty(value) && value.length() >= 6 && value.length() <= 18;
+        } else if("email".equals(rule)){
+            // 邮箱
+            return !isNull(value) && !isEmpty(value) && value.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+.[a-zA-Z]{2,}$");
+        } else if("userLevel".equals(rule)){
+            // 不为空，不为null，1-5
+            return !isNull(value) && !isEmpty(value) && value.matches("^[1-5]$");
+        }
+        else {
             return false;
         }
     }

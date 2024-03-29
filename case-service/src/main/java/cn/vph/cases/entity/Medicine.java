@@ -1,5 +1,6 @@
 package cn.vph.cases.entity;
 
+import cn.vph.common.validation.VphValidation;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -19,7 +20,9 @@ public class Medicine implements Serializable {
     @TableId(value = "medicine_id", type = IdType.AUTO)
     private Integer medicineId;
 
+    @VphValidation("simpleName")
     private String name;
 
+    @VphValidation("price")
     private Double price;
 }

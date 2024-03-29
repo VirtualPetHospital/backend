@@ -11,9 +11,9 @@ import com.alibaba.fastjson.JSONObject;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -38,7 +38,7 @@ public class UserController extends BaseController {
 
     @PostMapping
     @ApiOperation(value = "新增用户")
-    public Result<User> register(@RequestBody RegisterRequest registerRequest) {
+    public Result<User> register(@Valid @RequestBody RegisterRequest registerRequest) {
         return Result.success(userService.register(registerRequest));
     }
 
@@ -53,7 +53,7 @@ public class UserController extends BaseController {
     @Student
     @PutMapping
     @ApiOperation(value = "更新用户信息")
-    public Result<User> update(@Validated @RequestBody User user) {
+    public Result<User> update(@Valid @RequestBody User user) {
         return Result.success(userService.update(user));
     }
 

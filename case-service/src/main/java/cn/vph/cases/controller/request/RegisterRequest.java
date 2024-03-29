@@ -1,5 +1,6 @@
 package cn.vph.cases.controller.request;
 
+import cn.vph.common.validation.VphValidation;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,15 +16,20 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class RegisterRequest {
 
+    @VphValidation("nickname")
     private String nickname;
 
+    @VphValidation("userType")
     private String type;
 
+    @VphValidation("password")
     private String password;
 
+    @VphValidation("email")
     private String email;
 
     private String captcha;
 
+    @VphValidation("fileName")
     private String avatarUrl;
 }
