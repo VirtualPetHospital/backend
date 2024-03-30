@@ -11,6 +11,8 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 /**
  * @program: vph-backend
  * @description:
@@ -28,14 +30,14 @@ public class InspectionController extends BaseController {
     @Administrator
     @PostMapping
     @ApiOperation(value = "新增检查项目")
-    public Result<?> add(@RequestBody Inspection inspection) {
+    public Result<?> add(@Valid @RequestBody Inspection inspection) {
         return Result.success(inspectionService.add(inspection));
     }
 
     @Administrator
     @PutMapping("{inspectionId}")
     @ApiOperation(value = "更新检查项目")
-    public Result<?> update(@PathVariable Integer inspectionId, @RequestBody Inspection inspection) {
+    public Result<?> update(@PathVariable Integer inspectionId,@Valid @RequestBody Inspection inspection) {
         inspection.setInspectionId(inspectionId);
         return Result.success(inspectionService.update(inspection));
     }

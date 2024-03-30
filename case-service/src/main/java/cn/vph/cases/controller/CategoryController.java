@@ -13,6 +13,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -35,14 +36,14 @@ public class CategoryController extends BaseController{
     @Administrator
     @PostMapping
     @ApiOperation(value = "新增病种")
-    public Result<?> add(@RequestBody Category category){
+    public Result<?> add(@Valid @RequestBody Category category){
         return Result.success(categoryService.add(category));
     }
 
     @Administrator
     @PutMapping("{categoryId}")
     @ApiOperation(value = "更新病种")
-    public Result<?> update(@PathVariable  Integer categoryId,@RequestBody Category category){
+    public Result<?> update(@PathVariable  Integer categoryId,@Valid @RequestBody Category category){
         category.setCategoryId(categoryId);
         return Result.success(categoryService.update(category));
     }

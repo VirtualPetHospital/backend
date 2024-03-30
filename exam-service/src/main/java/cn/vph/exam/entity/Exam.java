@@ -1,17 +1,16 @@
 package cn.vph.exam.entity;
 
+import cn.vph.common.validation.VphValidation;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import io.swagger.models.auth.In;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 /**
  * @author Caroline
@@ -28,6 +27,7 @@ public class Exam implements Serializable {
     /**
      * 考试名，参见m_simple_name
      */
+    @VphValidation("simpleName")
     private String name;
 
     /**
@@ -49,6 +49,7 @@ public class Exam implements Serializable {
     /**
      * 考试时长，分钟，不为空，不为null，int类型，范围1-300
      */
+    @VphValidation("duration")
     private Integer duration;
 
     @TableField("paper_id")
@@ -57,6 +58,7 @@ public class Exam implements Serializable {
     /**
      * 等级，不为空，初始为1，最大为5，int类型
      */
+    @VphValidation("level")
     private Integer level;
 
     @TableField(exist = false)

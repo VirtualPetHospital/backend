@@ -23,6 +23,11 @@
             <artifactId>common</artifactId>
             <version>1.0-SNAPSHOT</version> <!-- 注意修改版本 再clean 再install -->
         </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <optional>true</optional> <!-- 可选 -->
+        </dependency>
     </dependencies>
 
     <build>

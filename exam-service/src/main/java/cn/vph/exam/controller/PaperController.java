@@ -15,6 +15,8 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 /**
  * @author Caroline
  * @description 试卷接口
@@ -61,14 +63,14 @@ public class PaperController extends BaseController {
     @Teacher
     @PostMapping("")
     @ApiOperation(value = "新增试卷")
-    public Result<?> addPaper(@RequestBody Paper paper){
+    public Result<?> addPaper(@Valid @RequestBody Paper paper){
         return Result.success(paperService.add(paper));
     }
 
     @Teacher
     @PutMapping("/{paper_id}")
     @ApiOperation(value = "更新试卷")
-    public Result<?> updatePaper(@PathVariable("paper_id") Integer paperId, @RequestBody Paper paper){
+    public Result<?> updatePaper(@PathVariable("paper_id") Integer paperId,@Valid @RequestBody Paper paper){
         paper.setPaperId(paperId);
         return Result.success(paperService.update(paper));
     }

@@ -65,4 +65,4 @@ swagger:
 
 vph:
   aspect:
-    enable: true
+    enable: false

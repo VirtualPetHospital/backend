@@ -1,5 +1,6 @@
 package cn.vph.exam.entity;
 
+import cn.vph.common.validation.VphValidation;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -24,6 +25,7 @@ public class Paper implements Serializable {
     /**
      * 试卷名，参见m_simple_name
      */
+    @VphValidation("simpleName")
     private String name;
 
 
@@ -31,6 +33,7 @@ public class Paper implements Serializable {
      * 题目个数，不为空，不为null，int，范围1-40
      */
     @TableField(value = "question_num")
+    @VphValidation("questionNum")
     private Integer questionNum;
 
     /**

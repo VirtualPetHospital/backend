@@ -21,6 +21,11 @@ spring:
   cloud:
     nacos: # nacos 配置
       server-addr: 47.113.220.49:8848
+  servlet:
+    multipart:
+      max-file-size: 1GB
+      max-request-size: 10GB
+      enabled: false
 mybatis:
   type-aliases-package: cn.vph.file.entity
   configuration:

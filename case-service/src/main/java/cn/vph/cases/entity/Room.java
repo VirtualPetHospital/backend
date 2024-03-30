@@ -1,5 +1,6 @@
 package cn.vph.cases.entity;
 
+import cn.vph.common.validation.VphValidation;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -21,10 +22,13 @@ public class Room implements Serializable {
     @TableId(value = "room_id", type = IdType.AUTO)
     private Integer roomId;
 
+    @VphValidation("text")
     private String description;
 
+    @VphValidation("simpleName")
     private String name;
 
+    @VphValidation("fileName")
     private String photo;
 
     @TableField(exist = false)

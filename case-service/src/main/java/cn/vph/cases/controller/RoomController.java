@@ -11,6 +11,8 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 /**
  * @program: vph-backend
  * @description:
@@ -28,7 +30,7 @@ public class RoomController extends BaseController {
     @Administrator
     @PostMapping
     @ApiOperation(value = "新增科室")
-    public Result<Room> add(@RequestBody Room room) {
+    public Result<Room> add(@Valid @RequestBody Room room) {
         return Result.success(roomService.add(room));
     }
 
@@ -60,7 +62,7 @@ public class RoomController extends BaseController {
     @Administrator
     @PutMapping("{roomId}")
     @ApiOperation(value = "更新科室")
-    public Result<Room> update(@PathVariable Integer roomId, @RequestBody Room room) {
+    public Result<Room> update(@Valid @PathVariable Integer roomId, @RequestBody Room room) {
         return Result.success(roomService.update(roomId, room));
     }
 }

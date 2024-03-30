@@ -1,5 +1,6 @@
 package cn.vph.exam.entity;
 
+import cn.vph.common.validation.VphValidation;
 import com.baomidou.mybatisplus.annotation.*;
 import lombok.Data;
 
@@ -22,6 +23,7 @@ public class AnswerSheetItem {
     private Integer questionId;
 
     @TableField(updateStrategy = FieldStrategy.IGNORED, insertStrategy = FieldStrategy.IGNORED)
+    @VphValidation("answer")
     private String answer;
 
     public AnswerSheetItem() {
