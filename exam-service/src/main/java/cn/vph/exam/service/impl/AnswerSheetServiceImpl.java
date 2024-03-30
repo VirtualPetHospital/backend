@@ -72,7 +72,6 @@ public class AnswerSheetServiceImpl extends ServiceImpl<AnswerSheetMapper, Answe
         Participant participant = participantService.getParticipant(answerSheet.getExamId(), sessionUtil.getUserId());
         participantService.updateToParticipated(participant.getId());
 
-        // TODO 题目数量==exam题目数量校验
         AssertUtil.isTrue(answerSheet.getAnswers().size() > 0, CommonErrorCode.ANSWERS_NOT_EXIST);
 
         answerSheet.setCreateTime(LocalDateTime.now());
@@ -99,7 +98,6 @@ public class AnswerSheetServiceImpl extends ServiceImpl<AnswerSheetMapper, Answe
 
         // add 时已经添加了participant了 这里不处理
 
-        // TODO 题目数量 == exam题目数量校验
         AssertUtil.isTrue(answerSheet.getAnswers().size() > 0, CommonErrorCode.ANSWERS_NOT_EXIST);
         answerSheet.setAnswerSheetId(answerSheetId);
         answerSheetMapper.updateById(answerSheet);

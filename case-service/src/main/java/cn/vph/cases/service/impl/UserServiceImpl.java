@@ -159,11 +159,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     @Override
-    public Boolean checkNickname(String nickname) {
+    public void checkNickname(String nickname) {
+        String validStr = "^[a-zA-Z0-9_]+$";
+        AssertUtil.isTrue(nickname.matches(validStr), CommonErrorCode.ILLEGAL_USER_INFO);
         LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(User::getNickname, nickname);
         User user = userMapper.selectOne(wrapper);
-        return user == null;
+        AssertUtil.isNull(user, CommonErrorCode.NICKNAME_ALREADY_EXIST);
     }
 
     @Override
