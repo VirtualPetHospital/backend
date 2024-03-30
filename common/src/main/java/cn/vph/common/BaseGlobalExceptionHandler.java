@@ -1,12 +1,12 @@
 package cn.vph.common;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import javax.validation.ConstraintViolation;
 import java.util.stream.Collectors;
 
 /**
@@ -78,7 +78,11 @@ public class BaseGlobalExceptionHandler {
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
     public Result<?> methodArgumentNotValidExceptionHandler(MethodArgumentNotValidException e) {
         log.error("MethodArgumentNotValidException: ", e);
-        String message = e.getBindingResult().getAllErrors().stream().map(DefaultMessageSourceResolvable::getDefaultMessage).collect(Collectors.joining());
+        String message = e.getBindingResult().getAllErrors().stream()
+                .map(err -> err.unwrap(ConstraintViolation.class))
+                .map(err -> String.format("'%s' %s", err.getPropertyPath(), err.getMessage()))
+                .collect(Collectors.toList())
+                .toString();
         return Result.result(CommonErrorCode.INVALID_PARAM, message);
     }
 
