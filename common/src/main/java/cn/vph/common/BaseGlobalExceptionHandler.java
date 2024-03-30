@@ -7,7 +7,6 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import java.util.List;
 import java.util.stream.Collectors;
 
 /**
@@ -63,6 +62,7 @@ public class BaseGlobalExceptionHandler {
 
     /**
      * 公共异常
+     *
      * @param e
      * @return
      */
@@ -78,11 +78,8 @@ public class BaseGlobalExceptionHandler {
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
     public Result<?> methodArgumentNotValidExceptionHandler(MethodArgumentNotValidException e) {
         log.error("MethodArgumentNotValidException: ", e);
-        List<String> info = e.getBindingResult().getAllErrors()
-                .stream()
-                .map(DefaultMessageSourceResolvable::getDefaultMessage)
-                .collect(Collectors.toList());
-        return Result.result(CommonErrorCode.INVALID_PARAM, info.toString());
+        String message = e.getBindingResult().getAllErrors().stream().map(DefaultMessageSourceResolvable::getDefaultMessage).collect(Collectors.joining());
+        return Result.result(CommonErrorCode.INVALID_PARAM, message);
     }
 
     @ExceptionHandler(value = Exception.class)

@@ -11,7 +11,9 @@ import java.lang.annotation.*;
  * @create: 2024-03-29 22:49
  **/
 @Documented
-@Constraint(validatedBy = VphValidator.class)
+@Constraint(validatedBy ={VphIntegerValidator.class, VphDoubleValidator.class, VphStringValidator.class})
+//@Constraint(validatedBy = VphStringValidator.class)
+
 @Target({ElementType.FIELD, ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface VphValidation {
