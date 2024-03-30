@@ -1,6 +1,7 @@
 package cn.vph.common;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -98,4 +99,9 @@ public class BaseGlobalExceptionHandler {
         return Result.result(CommonErrorCode.INVALID_METHOD, e.getMessage());
     }
 
+    @ExceptionHandler(value = HttpMessageNotReadableException.class)
+    public Result<?> httpMessageNotReadableExceptionHandler(HttpMessageNotReadableException e) {
+        log.error("HttpMessageNotReadableException: ", e);
+        return Result.result(CommonErrorCode.INVALID_PARAM, e.getMessage().split(":")[0].trim());
+    }
 }
