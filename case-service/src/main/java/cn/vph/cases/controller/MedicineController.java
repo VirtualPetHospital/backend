@@ -11,6 +11,8 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 /**
  * @program: vph-backend
  * @description:
@@ -27,14 +29,14 @@ public class MedicineController extends BaseController {
     @Administrator
     @PostMapping
     @ApiOperation(value = "新增药品")
-    public Result<?> add(@RequestBody Medicine medicine) {
+    public Result<?> add(@Valid @RequestBody Medicine medicine) {
         return Result.success(medicineService.add(medicine));
     }
 
     @Administrator
     @PutMapping("{medicineId}")
     @ApiOperation(value = "更新药品")
-    public Result<?> update(@PathVariable Integer medicineId, @RequestBody Medicine medicine) {
+    public Result<?> update(@PathVariable Integer medicineId, @Valid @RequestBody Medicine medicine) {
         medicine.setMedicineId(medicineId);
         return Result.success(medicineService.update(medicine));
     }
@@ -56,6 +58,7 @@ public class MedicineController extends BaseController {
     public Result<?> get(@PathVariable Integer medicineId) {
         return Result.success(medicineService.get(medicineId));
     }
+
     @Administrator
     @DeleteMapping("{medicineId}")
     @ApiOperation(value = "删除药品")

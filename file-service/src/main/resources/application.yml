@@ -22,8 +22,9 @@ spring:
       server-addr: localhost:8848
   servlet:
     multipart:
-      max-file-size: 100MB
-      max-request-size: 100MB
+      max-file-size: 1GB
+      max-request-size: 10GB
+      enabled: false
 logging:
   level:
     cn.vph: debug

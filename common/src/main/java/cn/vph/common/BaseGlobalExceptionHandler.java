@@ -1,12 +1,13 @@
 package cn.vph.common;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.support.DefaultMessageSourceResolvable;
+import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import java.util.List;
+import javax.validation.ConstraintViolation;
 import java.util.stream.Collectors;
 
 /**
@@ -62,6 +63,7 @@ public class BaseGlobalExceptionHandler {
 
     /**
      * 公共异常
+     *
      * @param e
      * @return
      */
@@ -77,16 +79,29 @@ public class BaseGlobalExceptionHandler {
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
     public Result<?> methodArgumentNotValidExceptionHandler(MethodArgumentNotValidException e) {
         log.error("MethodArgumentNotValidException: ", e);
-        List<String> info = e.getBindingResult().getAllErrors()
-                .stream()
-                .map(DefaultMessageSourceResolvable::getDefaultMessage)
-                .collect(Collectors.toList());
-        return Result.result(CommonErrorCode.INVALID_PARAM, info.toString());
+        String message = e.getBindingResult().getAllErrors().stream()
+                .map(err -> err.unwrap(ConstraintViolation.class))
+                .map(err -> String.format("'%s' %s", err.getPropertyPath(), err.getMessage()))
+                .collect(Collectors.toList())
+                .toString();
+        return Result.result(CommonErrorCode.INVALID_PARAM, message);
     }
 
     @ExceptionHandler(value = Exception.class)
     public Result<?> exceptionHandler(Exception e) {
         log.error("Exception: ", e);
         return Result.result(CommonErrorCode.SYSTEM_ERROR);
+    }
+
+    @ExceptionHandler(value = HttpRequestMethodNotSupportedException.class)
+    public Result<?> httpRequestMethodNotSupportedExceptionHandler(HttpRequestMethodNotSupportedException e) {
+        log.error("HttpRequestMethodNotSupportedException: ", e);
+        return Result.result(CommonErrorCode.INVALID_METHOD, e.getMessage());
+    }
+
+    @ExceptionHandler(value = HttpMessageNotReadableException.class)
+    public Result<?> httpMessageNotReadableExceptionHandler(HttpMessageNotReadableException e) {
+        log.error("HttpMessageNotReadableException: ", e);
+        return Result.result(CommonErrorCode.INVALID_PARAM, e.getMessage().split(":")[0].trim());
     }
 }

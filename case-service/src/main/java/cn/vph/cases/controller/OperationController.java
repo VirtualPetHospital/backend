@@ -11,6 +11,8 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 /**
  * @program: vph-backend
  * @description:
@@ -29,7 +31,7 @@ public class OperationController extends BaseController{
     @Administrator
     @PostMapping
     @ApiOperation(value = "新增手术")
-    public Result<Operation> add(@RequestBody Operation operation) {
+    public Result<Operation> add(@Valid @RequestBody Operation operation) {
         return Result.success(operationService.add(operation));
     }
 
@@ -43,7 +45,7 @@ public class OperationController extends BaseController{
     @Administrator
     @PutMapping("{operationId}")
     @ApiOperation(value = "更新手术")
-    public Result<Operation> update(@PathVariable Integer operationId, @RequestBody Operation operation) {
+    public Result<Operation> update(@Valid @PathVariable Integer operationId, @RequestBody Operation operation) {
         operation.setOperationId(operationId);
         return Result.success(operationService.update(operation));
     }

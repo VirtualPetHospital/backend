@@ -1,15 +1,17 @@
 package cn.vph.cases.controller;
 
-import cn.vph.common.annotation.Student;
-import cn.vph.common.controller.BaseController;
 import cn.vph.cases.entity.Medcase;
 import cn.vph.cases.service.MedcaseService;
 import cn.vph.common.Result;
 import cn.vph.common.annotation.Administrator;
+import cn.vph.common.annotation.Student;
+import cn.vph.common.controller.BaseController;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping("medcases")
@@ -42,14 +44,14 @@ public class MedcaseController extends BaseController {
     @Administrator
     @PostMapping
     @ApiOperation(value = "新增病例")
-    public Result<?> addMedcase(@RequestBody Medcase medcase) {
+    public Result<?> addMedcase(@Valid @RequestBody Medcase medcase) {
         return Result.success(medcaseService.add(medcase));
     }
 
     @Administrator
     @PutMapping("/{medcase_id}")
     @ApiOperation(value = "更新病例")
-    public Result<?> updateMedcase(@PathVariable(value = "medcase_id") Integer medcaseId, @RequestBody Medcase medcase) {
+    public Result<?> updateMedcase(@PathVariable(value = "medcase_id") Integer medcaseId,@Valid @RequestBody Medcase medcase) {
         medcase.setMedcaseId(medcaseId);
         return Result.success(medcaseService.update(medcase));
     }
