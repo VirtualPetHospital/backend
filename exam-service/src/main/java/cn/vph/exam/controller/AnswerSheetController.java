@@ -34,7 +34,7 @@ public class AnswerSheetController{
     @Student
     @PostMapping("")
     @ApiOperation(value = "新增答题卡")
-    public Result<?> add(@RequestBody AnswerSheet answerSheet)
+    public Result<?> add( @RequestBody AnswerSheet answerSheet)
     {
         return Result.success(answerSheetService.add(answerSheet));
     }

@@ -52,9 +52,15 @@ public class VphStringValidator implements ConstraintValidator<VphValidation, St
         } else if("email".equals(rule)){
             // 邮箱
             return !isNull(value) && !isEmpty(value) && value.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+.[a-zA-Z]{2,}$");
-        } else if("userLevel".equals(rule)){
+        } else if("level".equals(rule)){
             // 不为空，不为null，1-5
             return !isNull(value) && !isEmpty(value) && value.matches("^[1-5]$");
+        } else if("answer".equals(rule)){
+            // 必须为A、B、C、D
+            return !isNull(value) && !isEmpty(value) && value.matches("^[A-D]$");
+        } else if("optionDescription".equals(rule)){
+            // 不为空，不为null，长度小于50，由汉字、大小写字母、数字、下划线（_）、连字符（-）构成
+            return !isNull(value) && !isEmpty(value) && value.matches("[\\u4E00-\\u9FA5a-zA-Z0-9_-]+") && value.length() < 50;
         }
         else {
             return false;

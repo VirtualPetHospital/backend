@@ -25,7 +25,14 @@ public class VphIntegerValidator implements ConstraintValidator<VphValidation, I
         } else if ("userLevel".equals(rule)) {
             // 不为空，不为null，1-5
             return integer != null && integer >= 1 && integer <= 5;
-        } else {
+        } else if("duration".equals(rule)){
+            // 不为空，不为null，1-300
+            return integer != null && integer >= 1 && integer <= 300;
+        } else if("questionNum".equals(rule)){
+            // 不为空，不为null，int，范围1-40
+            return integer != null && integer >= 1 && integer <= 40;
+        }
+        else {
             return false;
         }
     }

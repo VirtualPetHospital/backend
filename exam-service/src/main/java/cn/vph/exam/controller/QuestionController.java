@@ -17,6 +17,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 /**
@@ -70,14 +71,14 @@ public class QuestionController extends BaseController {
     @Teacher
     @PostMapping("")
     @ApiOperation(value = "新增题目")
-    public Result<?> addQuestion(@RequestBody Question question){
+    public Result<?> addQuestion(@Valid @RequestBody Question question){
         return Result.success(questionService.add(question));
     }
 
     @Teacher
     @PutMapping("/{question_id}")
     @ApiOperation(value = "更新题目")
-    public Result<?> updateQuestion(@PathVariable("question_id") Integer questionId, @RequestBody Question question){
+    public Result<?> updateQuestion(@PathVariable("question_id") Integer questionId, @Valid @RequestBody Question question){
         question.setQuestionId(questionId);
 
         return Result.success(questionService.update(question));

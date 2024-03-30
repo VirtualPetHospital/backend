@@ -11,6 +11,8 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 /**
  * @program: vph-backend
  * @description: 考试服务接口
@@ -29,13 +31,11 @@ public class ExamController extends BaseController {
     @Student
     @GetMapping("/{exam_id}")
     @ApiOperation(value = "查询单个考试")
-    public Result<?> getExamById(@PathVariable(value = "exam_id") Integer examId)
-    {
+    public Result<?> getExamById(@PathVariable(value = "exam_id") Integer examId) {
         return Result.success(examService.getExamById(examId));
     }
 
     /**
-     *
      * @param pageSize
      * @param pageNum
      * @param nameKeyword     考试名称关键字
@@ -54,8 +54,7 @@ public class ExamController extends BaseController {
             @RequestParam(value = "level", required = false) Integer level,
             @RequestParam(value = "sort_by_start_time", defaultValue = "1", required = false) Integer sortByStartTime,
             @RequestParam(value = "participated", required = false) Boolean participated
-    )
-    {
+    ) {
         return Result.success(super.getData(examService.getExamList(pageSize, pageNum, nameKeyword, level, sortByStartTime, participated)));
     }
 
@@ -63,16 +62,14 @@ public class ExamController extends BaseController {
     @Teacher
     @PostMapping("")
     @ApiOperation(value = "新增考试")
-    public Result<?> addExam(@RequestBody Exam exam)
-    {
+    public Result<?> addExam(@Valid @RequestBody Exam exam) {
         return Result.success(examService.add(exam));
     }
 
     @Teacher
     @PutMapping("/{exam_id}")
     @ApiOperation(value = "更新考试")
-    public Result<?> updateExam(@PathVariable("exam_id") Integer examId, @RequestBody Exam exam)
-    {
+    public Result<?> updateExam(@PathVariable("exam_id") Integer examId, @Valid @RequestBody Exam exam) {
         exam.setExamId(examId);
         return Result.success(examService.update(exam));
     }
@@ -80,22 +77,21 @@ public class ExamController extends BaseController {
     @Teacher
     @DeleteMapping("/{exam_id}")
     @ApiOperation(value = "删除考试")
-    public Result<?> deleteExam(@PathVariable("exam_id") Integer examId)
-    {
+    public Result<?> deleteExam(@PathVariable("exam_id") Integer examId) {
         examService.delete(examId);
         return Result.success();
     }
 
     /**
      * 报名考试, 暂时只有学生可以报名
+     *
      * @param examId
      * @return
      */
     @Student
     @PostMapping("/enroll/{exam_id}")
     @ApiOperation(value = "报名考试")
-    public Result<?> enrollExam(@PathVariable("exam_id") Integer examId)
-    {
+    public Result<?> enrollExam(@PathVariable("exam_id") Integer examId) {
         examService.enroll(examId);
         return Result.success("报名考试成功", null);
     }
@@ -103,8 +99,7 @@ public class ExamController extends BaseController {
     @Student
     @PostMapping("/cancel-enroll/{exam_id}")
     @ApiOperation(value = "取消报名考试")
-    public Result<?> unEnrollExam(@PathVariable("exam_id") Integer examId)
-    {
+    public Result<?> unEnrollExam(@PathVariable("exam_id") Integer examId) {
         examService.unEnroll(examId);
         return Result.success("取消报名考试成功", null);
     }
