@@ -73,7 +73,9 @@ public class UserController extends BaseController {
     @GetMapping("nickname")
     @ApiOperation(value = "检查用户名是否可用")
     public Result<Boolean> checkNickname(@NotNull @RequestParam String nickname) {
-        return Result.success(userService.checkNickname(nickname));
+
+        userService.checkNickname(nickname);
+        return Result.success("用户名可用", null);
     }
 
     @GetMapping("email")
