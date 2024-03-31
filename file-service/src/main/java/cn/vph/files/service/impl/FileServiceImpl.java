@@ -124,7 +124,9 @@ public class FileServiceImpl implements FileService {
             outputStream.close();
         } catch (IOException e) {
             throw new CommonException(CommonErrorCode.FILE_DOWNLOAD_FAIL);
-        }}
+        }
+        return null;
+    }
 
     @Override
     // TODO 获取视频封面
