@@ -40,20 +40,20 @@ public class FileServiceImpl implements FileService {
 
         // 检查文件后缀
         String fileName = file.getOriginalFilename();
-        String fileType = fileName.substring(fileName.lastIndexOf(".") + 1);
+        String fileSuffix = fileName.substring(fileName.lastIndexOf(".") + 1);
         // type = photo or video
         String type;
         if ("user-avatar".equals(location) || "room".equals(location)) {
             // 只能存储图片的类型
-            AssertUtil.in(fileType, fileConstants.PHOTO_TYPES, CommonErrorCode.FILE_TYPE_ERROR);
+            AssertUtil.in(fileSuffix, fileConstants.PHOTO_TYPES, CommonErrorCode.FILE_TYPE_ERROR);
             type = "photo";
         } else {
             // 图片/类型
-            if (containsString(fileConstants.PHOTO_TYPES, fileType)) {
+            if (containsString(fileConstants.PHOTO_TYPES, fileSuffix)) {
                 type = "photo";
             }
             // 视频类型
-            else if (containsString(fileConstants.VIDEO_TYPES, fileType)) {
+            else if (containsString(fileConstants.VIDEO_TYPES, fileSuffix)) {
                 type = "video";
             } else {
                 throw new CommonException(CommonErrorCode.FILE_TYPE_ERROR);
@@ -74,12 +74,12 @@ public class FileServiceImpl implements FileService {
         if ("photo".equals(type)) {
             newFileName += ".jpeg";
             filePath += ".jpeg";
-            convertPhotoToJpeg(file, filePath, fileType);
+            convertPhotoToJpeg(file, filePath, fileSuffix);
         } else {
             // 视频
             newFileName += ".mp4";
             filePath += ".mp4";
-            convertVideoToMp4(file, filePath, fileType);
+            convertVideoToMp4(file, newFileName, filePath, fileSuffix);
         }
         return new VphFile(newFileName, location, type);
     }
@@ -107,27 +107,29 @@ public class FileServiceImpl implements FileService {
         String downloadPath = fileConstants.FILE_DIR + File.separator + location + File.separator + type;
         File file = new File(downloadPath + File.separator + fileName);
 
-        if (file.exists()) {
-
-            String contentType;
-            if ("photo".equals(type)) {
-                contentType = "image/jpeg";
-            } else {
-                contentType = "video/mp4";
-            }
-            response.setContentType(contentType);
-            response.addHeader("Content-Disposition", "attachment;fileName=" + fileName);
-            response.setContentLength((int) file.length());
-            try {
-                ServletOutputStream outputStream = response.getOutputStream();
-                outputStream.write(FileUtils.readFileToByteArray(file));
-                outputStream.flush();
-                outputStream.close();
-            } catch (IOException e) {
-                throw new CommonException(CommonErrorCode.FILE_DOWNLOAD_FAIL);
-            }
+        AssertUtil.isTrue(file.exists(), CommonErrorCode.FILE_NOT_EXIST);
+        String contentType;
+        if ("photo".equals(type)) {
+            contentType = "image/jpeg";
+        } else {
+            contentType = "video/mp4";
         }
-        throw new CommonException(CommonErrorCode.FILE_NOT_EXIST);
+        response.setContentType(contentType);
+        response.addHeader("Content-Disposition", "attachment;fileName=" + fileName);
+        response.setContentLength((int) file.length());
+        try {
+            ServletOutputStream outputStream = response.getOutputStream();
+            outputStream.write(FileUtils.readFileToByteArray(file));
+            outputStream.flush();
+            outputStream.close();
+        } catch (IOException e) {
+            throw new CommonException(CommonErrorCode.FILE_DOWNLOAD_FAIL);
+        }}
+
+    @Override
+    // TODO 获取视频封面
+    public Object getVideoCover(String fileName, HttpServletResponse response) {
+        return null;
     }
 
     public boolean containsString(String[] array, String str) {
@@ -163,12 +165,15 @@ public class FileServiceImpl implements FileService {
         }
     }
 
-    public void convertVideoToMp4(MultipartFile file, String dest, String fileType) throws IOException {
-        if("mp4".equals(fileType)){
+    public void convertVideoToMp4(MultipartFile file, String fileName, String dest, String fileType) throws IOException {
+        if ("mp4".equals(fileType)) {
             byte[] bytes = file.getBytes();
             File destFile = new File(dest);
             FileUtils.writeByteArrayToFile(destFile, bytes);
         }
+
+
+        // 存储视频封面
     }
 
     public void convertPngToJpeg(MultipartFile file, String dest) throws IOException {

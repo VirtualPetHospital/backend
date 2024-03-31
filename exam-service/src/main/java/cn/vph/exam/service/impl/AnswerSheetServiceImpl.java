@@ -56,7 +56,7 @@ public class AnswerSheetServiceImpl extends ServiceImpl<AnswerSheetMapper, Answe
 
     @Override
     @Transactional
-    public AnswerSheet add(AnswerSheet answerSheet){
+    public AnswerSheet add(AnswerSheet answerSheet) {
 
         // 设置用户id
         answerSheet.setUserId(sessionUtil.getUserId());
@@ -66,7 +66,7 @@ public class AnswerSheetServiceImpl extends ServiceImpl<AnswerSheetMapper, Answe
         // 检查是否报名 未报名自动报名
         // participated 设置为true
         boolean enrolled = participantService.isEnrolled(answerSheet.getExamId(), sessionUtil.getUserId());
-        if(!enrolled){
+        if (!enrolled) {
             participantService.add(answerSheet.getExamId(), sessionUtil.getUserId());
         }
         Participant participant = participantService.getParticipant(answerSheet.getExamId(), sessionUtil.getUserId());
@@ -90,7 +90,7 @@ public class AnswerSheetServiceImpl extends ServiceImpl<AnswerSheetMapper, Answe
 
     @Override
     @Transactional
-    public AnswerSheet update(Integer answerSheetId, AnswerSheet answerSheet){
+    public AnswerSheet update(Integer answerSheetId, AnswerSheet answerSheet) {
         AssertUtil.isTrue(answerSheetId != null && answerSheet != null, CommonErrorCode.EXAM_NOT_EXIST);
         answerSheet.setUserId(sessionUtil.getUserId());
 
@@ -118,7 +118,7 @@ public class AnswerSheetServiceImpl extends ServiceImpl<AnswerSheetMapper, Answe
     }
 
     @Override
-    public AnswerSheet getAnswerSheetByExamId(Integer examId){
+    public AnswerSheet getAnswerSheetByExamId(Integer examId) {
         AssertUtil.isTrue(examId != null, CommonErrorCode.EXAM_NOT_EXIST);
 
         LambdaQueryWrapper<AnswerSheet> queryWrapper = new LambdaQueryWrapper<>();
@@ -128,32 +128,31 @@ public class AnswerSheetServiceImpl extends ServiceImpl<AnswerSheetMapper, Answe
 
         AssertUtil.isTrue(answerSheet != null, CommonErrorCode.ANSWER_SHEET_NOT_EXIST);
         List<Integer> answerSheetItemIds = answerSheetItemMapper.selectList(
-                new LambdaQueryWrapper<AnswerSheetItem>()
-                        .eq(AnswerSheetItem::getAnswerSheetId, examId))
-                        .stream()
-                        .map(AnswerSheetItem::getId)
-                        .collect(Collectors.toList());
-        if(answerSheetItemIds.isEmpty()){
+                        new LambdaQueryWrapper<AnswerSheetItem>()
+                                .eq(AnswerSheetItem::getAnswerSheetId, answerSheet.getAnswerSheetId()))
+                .stream()
+                .map(AnswerSheetItem::getId)
+                .collect(Collectors.toList());
+        if (answerSheetItemIds.isEmpty()) {
             answerSheet.setAnswers(Collections.emptyList());
-        }
-        else{
+        } else {
             answerSheet.setAnswers(answerSheetItemMapper.selectBatchIds(answerSheetItemIds));
         }
         return answerSheet;
     }
 
-    private boolean answerSheetAlreadyExist(Integer examId, Integer userId){
+    private boolean answerSheetAlreadyExist(Integer examId, Integer userId) {
         return answerSheetMapper.selectCount(
-                        new LambdaQueryWrapper<AnswerSheet>()
-                                .eq(AnswerSheet::getExamId, examId)
-                                .eq(AnswerSheet::getUserId, userId)) > 0;
+                new LambdaQueryWrapper<AnswerSheet>()
+                        .eq(AnswerSheet::getExamId, examId)
+                        .eq(AnswerSheet::getUserId, userId)) > 0;
     }
 
-    private void answerIsValid(String answer){
+    private void answerIsValid(String answer) {
         AssertUtil.isTrue(
                 answer == null ||
-                answer.equals("A") ||  answer.equals("B") ||
-                        answer.equals("C") || answer.equals("D") ,
+                        answer.equals("A") || answer.equals("B") ||
+                        answer.equals("C") || answer.equals("D"),
                 CommonErrorCode.QUESTION_ANSWER_NOT_VALID);
     }
 }
