@@ -25,8 +25,9 @@ public class DiseaseController {
     @Autowired
     private DiseaseService diseaseService;
 
-    @Administrator
+
     @PostMapping
+    @Administrator
     @ApiOperation(value = "新增疾病")
     public Result<?> add(@Valid @RequestBody Disease disease) {
         return Result.success(diseaseService.add(disease));
