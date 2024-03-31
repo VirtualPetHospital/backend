@@ -6,21 +6,17 @@ import cn.vph.common.util.AssertUtil;
 import cn.vph.files.common.FileConstants;
 import cn.vph.files.pojo.VphFile;
 import cn.vph.files.service.FileService;
+import cn.vph.files.util.FileUtil;
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.imageio.ImageIO;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
-import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 /**
  * @program: vph-backend
@@ -33,6 +29,8 @@ public class FileServiceImpl implements FileService {
     @Autowired
     private FileConstants fileConstants;
 
+    @Autowired
+    FileUtil fileUtil;
     @Override
     public Object upload(MultipartFile file, String location) throws IOException {
         // 检查是否合法位置
@@ -68,18 +66,20 @@ public class FileServiceImpl implements FileService {
             uploadDir.mkdirs();
         }
 
-        String newFileName = location + fileConstants.SEPARATOR + type + fileConstants.SEPARATOR + generateFileNameByTime();
+        String newFileName = location + fileConstants.SEPARATOR + type + fileConstants.SEPARATOR + fileUtil.generateFileNameByTime();
         String filePath = uploadPath + File.separator + newFileName;
 
+        String dest = filePath + "." + fileSuffix;
+        File destFile = new File(dest);
+        file.transferTo(destFile);
         if ("photo".equals(type)) {
+            // 转换图片格式
+            fileUtil.convertPhotoToJpeg(dest);
             newFileName += ".jpeg";
-            filePath += ".jpeg";
-            convertPhotoToJpeg(file, filePath, fileSuffix);
         } else {
-            // 视频
+            // 转换视频格式
+            fileUtil.convertVideoToMp4(dest);
             newFileName += ".mp4";
-            filePath += ".mp4";
-            convertVideoToMp4(file, newFileName, filePath, fileSuffix);
         }
         return new VphFile(newFileName, location, type);
     }
@@ -128,11 +128,6 @@ public class FileServiceImpl implements FileService {
         return null;
     }
 
-    @Override
-    // TODO 获取视频封面
-    public Object getVideoCover(String fileName, HttpServletResponse response) {
-        return null;
-    }
 
     public boolean containsString(String[] array, String str) {
         for (String s : array) {
@@ -142,55 +137,5 @@ public class FileServiceImpl implements FileService {
         }
         return false;
     }
-
-    public String generateFileNameByTime() {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
-
-        // 获取当前时间
-        Date currentDate = new Date();
-
-        // 使用 SimpleDateFormat 对象格式化日期时间
-        String formattedDateTime = sdf.format(currentDate);
-
-        return formattedDateTime;
-    }
-
-    public void convertPhotoToJpeg(MultipartFile file, String dest, String fileType) throws IOException {
-        if ("jpg".equals(fileType) || "jpeg".equals(fileType)) {
-            byte[] bytes = file.getBytes();
-            File destFile = new File(dest);
-            FileUtils.writeByteArrayToFile(destFile, bytes);
-        } else if ("png".equals(fileType)) {
-            convertPngToJpeg(file, dest);
-        } else if ("gif".equals(fileType)) {
-            convertGifToJpeg(file, dest);
-        }
-    }
-
-    public void convertVideoToMp4(MultipartFile file, String fileName, String dest, String fileType) throws IOException {
-        if ("mp4".equals(fileType)) {
-            byte[] bytes = file.getBytes();
-            File destFile = new File(dest);
-            FileUtils.writeByteArrayToFile(destFile, bytes);
-        }
-
-
-        // 存储视频封面
-    }
-
-    public void convertPngToJpeg(MultipartFile file, String dest) throws IOException {
-        BufferedImage image = ImageIO.read(file.getInputStream());
-        BufferedImage newBufferedImage = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_INT_RGB);
-        newBufferedImage.createGraphics().drawImage(image, 0, 0, Color.WHITE, null);
-        ImageIO.write(newBufferedImage, "jpeg", new File(dest));
-    }
-
-    public void convertGifToJpeg(MultipartFile file, String dest) throws IOException {
-        BufferedImage image = ImageIO.read(file.getInputStream());
-        BufferedImage newBufferedImage = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_INT_RGB);
-        newBufferedImage.createGraphics().drawImage(image, 0, 0, Color.WHITE, null);
-        ImageIO.write(newBufferedImage, "jpeg", new File(dest));
-    }
-
 
 }

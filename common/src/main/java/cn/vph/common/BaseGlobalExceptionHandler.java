@@ -6,6 +6,7 @@ import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import javax.validation.ConstraintViolation;
 import java.util.stream.Collectors;
@@ -104,4 +105,11 @@ public class BaseGlobalExceptionHandler {
         log.error("HttpMessageNotReadableException: ", e);
         return Result.result(CommonErrorCode.INVALID_PARAM, e.getMessage().split(":")[0].trim());
     }
+
+    @ExceptionHandler(value = MethodArgumentTypeMismatchException.class)
+    public Result<?> methodArgumentTypeMismatchExceptionHandler(MethodArgumentTypeMismatchException e) {
+        log.error("MethodArgumentTypeMismatchException: ", e);
+        return Result.result(CommonErrorCode.INVALID_PARAM);
+    }
+
 }

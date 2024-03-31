@@ -76,6 +76,7 @@ public enum CommonErrorCode {
     FILE_DOWNLOAD_FAIL(18005, "文件下载失败，请重试", "文件下载失败，请重试"),
     FILE_LOCATION_ERROR(18006, "文件存储位置非法", "文件存储位置非法"),
     FILE_TYPE_ERROR(18007, "文件类型非法", "文件类型非法"),
+    FILE_CONVERT_ERROR(18008, "文件转换失败", "文件转换失败"),
 
     /**
      * 以2开头的和业务相关

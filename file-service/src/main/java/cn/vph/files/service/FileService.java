@@ -17,5 +17,4 @@ public interface FileService {
 
     Object download(String fileName, HttpServletResponse response) throws UnsupportedEncodingException;
 
-    Object getVideoCover(String fileName, HttpServletResponse response);
 }
