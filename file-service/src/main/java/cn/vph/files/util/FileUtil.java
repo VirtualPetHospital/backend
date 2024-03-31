@@ -1,18 +1,18 @@
 package cn.vph.files.util;
 
+import cn.vph.common.CommonErrorCode;
+import cn.vph.common.CommonException;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import ws.schild.jave.process.ProcessWrapper;
-import ws.schild.jave.process.ffmpeg.DefaultFFMPEGLocator;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @program: vph-backend
@@ -22,31 +22,58 @@ import java.util.Date;
  **/
 @Component
 public class FileUtil {
+    @Value("${ffmpeg.path}")
+    private String ffmpegPath;
+
+    /**
+     * 能够转换avi,mov,mpg
+     * @param videoPath
+     * @throws IOException
+     */
     public void convertVideoToMp4(String videoPath) throws IOException {
         String fileSuffix = videoPath.substring(videoPath.lastIndexOf(".") + 1);
         if ("mp4".equals(fileSuffix)) {
             return;
         }
-        String dest = videoPath.substring(0, videoPath.lastIndexOf(".")) + ".mp4";
-        ProcessWrapper ffmpeg = new DefaultFFMPEGLocator().createExecutor();
-        ffmpeg.addArgument("-i");
-        ffmpeg.addArgument(videoPath);
-        ffmpeg.addArgument("-c:v");
-        ffmpeg.addArgument("libx264");
-        ffmpeg.addArgument("-crf");
-        ffmpeg.addArgument("19");
-        ffmpeg.addArgument("-strict");
-        ffmpeg.addArgument("experimental");
-        ffmpeg.addArgument(dest);
-        ffmpeg.execute();
-        try (BufferedReader br = new BufferedReader(new InputStreamReader(ffmpeg.getErrorStream()))) {
-            blockFfmpeg(br);
+        List<String> command = new ArrayList<String>();
+        command.add(ffmpegPath);
+        command.add("-i");
+        command.add(videoPath);
+        command.add(videoPath.substring(0, videoPath.lastIndexOf(".")) + ".mp4");
+
+        InputStream errorStream = null;
+        InputStreamReader inputStreamReader = null;
+        BufferedReader br = null;
+        try {
+            ProcessBuilder builder = new ProcessBuilder(command);
+            Process process = builder.start();
+            errorStream = process.getErrorStream();
+            inputStreamReader = new InputStreamReader(errorStream);
+            br = new BufferedReader(inputStreamReader);
+            while (br.readLine() != null) {
+            }
+        } catch (IOException e) {
+            throw new CommonException(CommonErrorCode.FILE_CONVERT_ERROR);
+        } finally {
+            if (br != null) {
+                br.close();
+            }
+            if (inputStreamReader != null) {
+                inputStreamReader.close();
+            }
+            if (errorStream != null) {
+                errorStream.close();
+            }
+            //删除原来的文件
+            File file = new File(videoPath);
+            if (file.exists()) {
+                file.delete();
+            }
         }
-//        File file = new File();
-//        file.createNewFile();
+
     }
 
-    private static void blockFfmpeg (BufferedReader br) throws IOException {
+    private static void blockFfmpeg(BufferedReader br) throws IOException {
         String line;
         // 该方法阻塞线程，直至合成成功
         while ((line = br.readLine()) != null) {
@@ -54,7 +81,7 @@ public class FileUtil {
         }
     }
 
-    private static void doNothing (String line){
+    private static void doNothing(String line) {
         System.out.println(line);
     }
 

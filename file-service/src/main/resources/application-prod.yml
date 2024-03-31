@@ -51,3 +51,6 @@ vph:
     enable: true
   file:
     path: /home/vph_files/
+
+ffmpeg:
+  path: /usr/bin/ffmpeg
