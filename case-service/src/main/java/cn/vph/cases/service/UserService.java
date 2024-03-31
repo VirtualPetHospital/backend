@@ -1,6 +1,7 @@
 package cn.vph.cases.service;
 
 import cn.vph.cases.controller.request.RegisterRequest;
+import cn.vph.cases.controller.response.UserResponse;
 import cn.vph.cases.entity.User;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
@@ -12,15 +13,15 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @create: 2024-03-17 18:23
  **/
 public interface UserService extends IService<User> {
-    User login(String nickname, String password);
+    UserResponse login(String nickname, String password);
 
-    User me();
+    UserResponse me();
 
-    User register(RegisterRequest registerRequests);
+    UserResponse register(RegisterRequest registerRequests);
 
     Object delete(Integer userId);
 
-    User update(User user);
+    UserResponse update(User user);
 
     Object sendCaptcha(String email);
 

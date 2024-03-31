@@ -1,6 +1,7 @@
 package cn.vph.cases.controller;
 
 import cn.vph.cases.controller.request.RegisterRequest;
+import cn.vph.cases.controller.response.UserResponse;
 import cn.vph.cases.entity.User;
 import cn.vph.cases.service.UserService;
 import cn.vph.common.Result;
@@ -32,13 +33,13 @@ public class UserController extends BaseController {
     @Student
     @GetMapping("me")
     @ApiOperation(value = "获取当前用户信息")
-    public Result<User> me() {
+    public Result<UserResponse> me() {
         return Result.success(userService.me());
     }
 
     @PostMapping
     @ApiOperation(value = "新增用户")
-    public Result<User> register(@Valid @RequestBody RegisterRequest registerRequest) {
+    public Result<UserResponse> register(@Valid @RequestBody RegisterRequest registerRequest) {
         return Result.success(userService.register(registerRequest));
     }
 
@@ -53,13 +54,13 @@ public class UserController extends BaseController {
     @Student
     @PutMapping
     @ApiOperation(value = "更新用户信息")
-    public Result<User> update(@Valid @RequestBody User user) {
+    public Result<UserResponse> update(@Valid @RequestBody User user) {
         return Result.success(userService.update(user));
     }
 
     @PostMapping("login")
     @ApiOperation(value = "用户登录")
-    public Result<User> login(@RequestBody User user) {
+    public Result<UserResponse> login(@RequestBody User user) {
         return Result.success(userService.login(user.getNickname(), user.getPassword()));
     }
 
