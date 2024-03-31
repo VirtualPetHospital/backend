@@ -81,7 +81,8 @@ public class UserController extends BaseController {
     @GetMapping("email")
     @ApiOperation(value = "检查邮箱是否可用")
     public Result<Boolean> checkEmail(@RequestParam String email) {
-        return Result.success(userService.checkEmail(email));
+        userService.checkEmail(email);
+        return Result.success("邮箱可用", null);
     }
 
     @Administrator
