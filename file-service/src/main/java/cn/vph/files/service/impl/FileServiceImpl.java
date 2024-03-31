@@ -61,7 +61,7 @@ public class FileServiceImpl implements FileService {
         }
 
         // 存储位置
-        String uploadPath = fileConstants.FILE_DIR + File.separator + location + File.separator + type;
+        String uploadPath = fileConstants.FILE_DIR;
         // 确认文件夹存在
         File uploadDir = new File(uploadPath);
         if (!uploadDir.exists()) {
@@ -104,7 +104,7 @@ public class FileServiceImpl implements FileService {
 
         AssertUtil.in(location, fileConstants.LOCATIONS, CommonErrorCode.FILE_NOT_EXIST);
 
-        String downloadPath = fileConstants.FILE_DIR + File.separator + location + File.separator + type;
+        String downloadPath = fileConstants.FILE_DIR;
         File file = new File(downloadPath + File.separator + fileName);
 
         AssertUtil.isTrue(file.exists(), CommonErrorCode.FILE_NOT_EXIST);

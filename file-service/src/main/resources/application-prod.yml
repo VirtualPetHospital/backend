@@ -50,4 +50,4 @@ vph:
   aspect:
     enable: true
   file:
-    path: /home/vph_files
+    path: /home/vph_files/

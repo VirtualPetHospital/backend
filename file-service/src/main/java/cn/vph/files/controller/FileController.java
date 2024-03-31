@@ -46,13 +46,13 @@ public class FileController {
         return Result.success(fileService.download(fileName, response));
     }
 
-    @Student
-    @GetMapping("videos/cover")
-    @ApiOperation(value = "获取视频封面")
-    public Result<?> getVideoCover(
-            @RequestParam("file_name") String fileName,
-            HttpServletResponse response
-    ) throws IOException {
-        return Result.success(fileService.getVideoCover(fileName, response));
-    }
+//    @Student
+//    @GetMapping("videos/cover")
+//    @ApiOperation(value = "获取视频封面")
+//    public Result<?> getVideoCover(
+//            @RequestParam("file_name") String fileName,
+//            HttpServletResponse response
+//    ) throws IOException {
+//        return Result.success(fileService.getVideoCover(fileName, response));
+//    }
 }
