@@ -79,6 +79,7 @@ public class ExamServiceImpl extends ServiceImpl<ExamMapper, Exam> implements Ex
         if(!curPage.getRecords().isEmpty()){
             curPage.getRecords().forEach(exam -> {
                 exam.setPaper(paperService.getPaperById(exam.getPaperId()));
+//                exam.setParticipated(participated);
             });
         }
         return curPage;
