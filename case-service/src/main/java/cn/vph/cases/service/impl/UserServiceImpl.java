@@ -179,7 +179,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Override
     public void checkEmail(String email) {
 
-        AssertUtil.isTrue(isEmailValid(email), CommonErrorCode.ILLEGAL_EMAIL);
+//        AssertUtil.isTrue(isEmailValid(email), CommonErrorCode.ILLEGAL_EMAIL);
 
         LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(User::getEmail, email);
