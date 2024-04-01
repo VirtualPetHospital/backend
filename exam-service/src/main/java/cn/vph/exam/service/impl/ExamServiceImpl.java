@@ -121,10 +121,16 @@ public class ExamServiceImpl extends ServiceImpl<ExamMapper, Exam> implements Ex
          * 2. 一个学生只能报名一次
          */
         AssertUtil.isTrue(sessionUtil.getUserType().equals(CommonConstant.USER_STUDENT), CommonErrorCode.UNAUTHORIZED_ACCESS);
-        Participant participant = new Participant(examId, sessionUtil.getUserId(), false);
-        AssertUtil.isTrue(participantMapper.selectCount(new LambdaQueryWrapper<>(new Participant(examId, participant.getUserId()))) > 0, CommonErrorCode.EXAM_ALREADY_ENROLLED);
 
-        participantMapper.insert(participant);
+        LambdaQueryWrapper<Participant> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(Participant::getExamId, examId)
+               .eq(Participant::getUserId, sessionUtil.getUserId());
+        AssertUtil.isTrue(
+                participantMapper.selectCount(wrapper) < 1,
+                CommonErrorCode.EXAM_ALREADY_ENROLLED);
+
+
+        participantMapper.insert(new Participant(examId, sessionUtil.getUserId(), false));
     }
 
     @Override
