@@ -84,9 +84,10 @@ public class QuestionController extends BaseController {
         return Result.success(questionService.update(question));
     }
 
-    @Teacher
+
     @DeleteMapping("/{question_id}")
     @ApiOperation(value = "删除题目")
+    @Teacher
     public Result<?> deleteQuestion(@PathVariable("question_id") Integer questionId){
 
         questionService.delete(questionId);

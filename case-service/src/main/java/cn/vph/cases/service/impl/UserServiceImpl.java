@@ -29,6 +29,9 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 /**
  * @program: vph-backend
  * @description:
@@ -82,6 +85,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Override
     @Transactional
     public UserResponse register(RegisterRequest registerRequest) {
+
+        // 邮箱是否合法
+        AssertUtil.isTrue(isEmailValid(registerRequest.getEmail()), CommonErrorCode.ILLEGAL_EMAIL);
+
         // 从redis中获取验证码
         String captcha = captchaUtil.getCaptcha(registerRequest.getEmail());
         // 判断验证码是否正确
@@ -160,19 +167,24 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     @Override
-    public Boolean checkNickname(String nickname) {
+    public void checkNickname(String nickname) {
+        String validStr = "^[a-zA-Z0-9_]+$";
+        AssertUtil.isTrue(nickname.matches(validStr), CommonErrorCode.ILLEGAL_USER_INFO);
         LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(User::getNickname, nickname);
         User user = userMapper.selectOne(wrapper);
-        return user == null;
+        AssertUtil.isNull(user, CommonErrorCode.NICKNAME_ALREADY_EXIST);
     }
 
     @Override
-    public Boolean checkEmail(String email) {
+    public void checkEmail(String email) {
+
+        AssertUtil.isTrue(isEmailValid(email), CommonErrorCode.ILLEGAL_EMAIL);
+
         LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(User::getEmail, email);
         User user = userMapper.selectOne(wrapper);
-        return user == null;
+        AssertUtil.isNull(user, CommonErrorCode.EMAIL_ALREADY_EXIST);
     }
 
     @Override
@@ -240,5 +252,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         return medcaseMapper.selectPage(new Page<>(pageNum, pageSize), wrapper);
     }
 
-
+    private boolean isEmailValid(String email) {
+        String EMAIL_REGEX = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
+        Pattern pattern = Pattern.compile(EMAIL_REGEX);
+        Matcher emailMatcher = pattern.matcher(email);
+        return emailMatcher.matches();
+    }
 }

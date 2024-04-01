@@ -4,6 +4,7 @@ import cn.vph.cases.entity.Disease;
 import cn.vph.cases.mapper.CategoryMapper;
 import cn.vph.cases.mapper.DiseaseMapper;
 import cn.vph.cases.service.DiseaseService;
+import cn.vph.cases.util.SessionUtil;
 import cn.vph.common.CommonErrorCode;
 import cn.vph.common.CommonException;
 import cn.vph.common.util.AssertUtil;
@@ -30,8 +31,11 @@ public class DiseaseServiceImpl extends ServiceImpl<DiseaseMapper, Disease> impl
         return diseaseMapper.selectOne(queryWrapper);
     }
 
+    @Autowired
+    private SessionUtil sessionUtil;
     @Override
     public Object add(Disease disease) {
+        System.out.println("user id = " + sessionUtil.getUserId());
         // 判断疾病是否存在
         Disease dis = selectByName(disease.getName());
         AssertUtil.isNull(dis, CommonErrorCode.DISEASE_ALREADY_EXIST);

@@ -27,9 +27,9 @@ public interface UserService extends IService<User> {
 
     Object logout();
 
-    Boolean checkNickname(String nickname);
+    void checkNickname(String nickname);
 
-    Boolean checkEmail(String email);
+    void checkEmail(String email);
 
     IPage<?> list(Integer pageNum, Integer pageSize, String type, String nicknameKeyword, Integer sortByNickname);
 

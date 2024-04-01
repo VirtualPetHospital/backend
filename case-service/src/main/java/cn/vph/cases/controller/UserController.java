@@ -74,13 +74,16 @@ public class UserController extends BaseController {
     @GetMapping("nickname")
     @ApiOperation(value = "检查用户名是否可用")
     public Result<Boolean> checkNickname(@NotNull @RequestParam String nickname) {
-        return Result.success(userService.checkNickname(nickname));
+
+        userService.checkNickname(nickname);
+        return Result.success("用户名可用", null);
     }
 
     @GetMapping("email")
     @ApiOperation(value = "检查邮箱是否可用")
     public Result<Boolean> checkEmail(@RequestParam String email) {
-        return Result.success(userService.checkEmail(email));
+        userService.checkEmail(email);
+        return Result.success("邮箱可用", null);
     }
 
     @Administrator
