@@ -19,6 +19,7 @@ public class UserResponse {
     private String nickname;
     private String type;
     private String avatarUrl;
+    private String email;
     private Integer level;
     public UserResponse(User u){
         this.userId = u.getUserId();
@@ -26,5 +27,6 @@ public class UserResponse {
         this.type = u.getType();
         this.avatarUrl = u.getAvatarUrl();
         this.level = u.getLevel();
+        this.email = u.getEmail();
     }
 }
