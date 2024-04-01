@@ -20,6 +20,6 @@ public class FileConstants {
 
     public final String[] PHOTO_TYPES = {"jpg", "jpeg", "png", "gif", "bmp"};
 
-    public final String[] VIDEO_TYPES = {"mp4", "avi", "mov", "wmv", "flv", "rmvb", "3gp", "mkv"};
+    public final String[] VIDEO_TYPES = {"mp4", "avi", "mov", "wmv", "flv", "rmvb", "3gp", "mkv", "mpg","asx"};
     public final String SEPARATOR = "_";
 }

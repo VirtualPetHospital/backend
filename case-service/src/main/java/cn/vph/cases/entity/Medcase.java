@@ -60,7 +60,6 @@ public class Medcase implements Serializable {
     private Operation operation;
 
     @TableField(exist = false)
-    // TODO 这里怎么检验
     private List<MedcaseInspection> inspections;
 
     @TableField(exist = false)
