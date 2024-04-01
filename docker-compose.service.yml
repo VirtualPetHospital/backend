@@ -1,4 +1,4 @@
-# TODO 每个服务添加depends_on：网关
+# 每个服务添加depends_on：网关
 version: '3'
 services:
   case-service:

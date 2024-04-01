@@ -17,7 +17,6 @@ public class WebMvcConfig implements WebMvcConfigurer {
     @Value("${vph.file.path}")
     private String filePath;
 
-    // TODO 怎么做用户校验
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/files/**").addResourceLocations("file:" + filePath);
