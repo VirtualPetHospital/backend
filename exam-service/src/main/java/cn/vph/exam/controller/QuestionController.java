@@ -92,4 +92,13 @@ public class QuestionController extends BaseController {
         questionService.delete(questionId);
         return Result.success();
     }
+
+    @GetMapping("/questions-count/{category_id}")
+    @ApiOperation(value = "查询某个病种下的题目数量")
+    public Long getQuestionCountByCategoryId(@PathVariable("category_id") Integer categoryId){
+        LambdaQueryWrapper<Question> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(Question::getCategoryId, categoryId);
+        queryWrapper.select(Question::getQuestionId);
+        return questionMapper.selectCount(queryWrapper);
+    }
 }

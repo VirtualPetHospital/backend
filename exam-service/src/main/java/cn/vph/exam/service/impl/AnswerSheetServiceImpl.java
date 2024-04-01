@@ -4,13 +4,13 @@ import cn.vph.common.CommonErrorCode;
 import cn.vph.common.util.AssertUtil;
 import cn.vph.exam.entity.AnswerSheet;
 import cn.vph.exam.entity.AnswerSheetItem;
+import cn.vph.exam.entity.Paper;
 import cn.vph.exam.entity.Participant;
 import cn.vph.exam.mapper.AnswerSheetItemMapper;
 import cn.vph.exam.mapper.AnswerSheetMapper;
 import cn.vph.exam.mapper.ExamMapper;
-import cn.vph.exam.mapper.ParticipantMapper;
 import cn.vph.exam.service.AnswerSheetService;
-import cn.vph.exam.service.ExamService;
+import cn.vph.exam.service.PaperService;
 import cn.vph.exam.service.ParticipantService;
 import cn.vph.exam.util.SessionUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -36,10 +36,7 @@ public class AnswerSheetServiceImpl extends ServiceImpl<AnswerSheetMapper, Answe
     private AnswerSheetMapper answerSheetMapper;
 
     @Autowired
-    private ParticipantMapper participantMapper;
-
-    @Autowired
-    private ExamService examService;
+    private PaperService paperService;
 
     @Autowired
     private ExamMapper examMapper;
@@ -72,8 +69,11 @@ public class AnswerSheetServiceImpl extends ServiceImpl<AnswerSheetMapper, Answe
         Participant participant = participantService.getParticipant(answerSheet.getExamId(), sessionUtil.getUserId());
         participantService.updateToParticipated(participant.getId());
 
-        // TODO 题目数量==exam题目数量校验
-        AssertUtil.isTrue(answerSheet.getAnswers().size() > 0, CommonErrorCode.ANSWERS_NOT_EXIST);
+        // 查出对应的试卷
+        Paper paper = paperService.getPaperById(examMapper.selectById(answerSheet.getExamId()).getPaperId());
+        // 检查答题卡是否和试卷对应
+        checkAnswerSheetAndPaper(answerSheet, paper);
+
 
         answerSheet.setCreateTime(LocalDateTime.now());
         answerSheetMapper.insert(answerSheet);
@@ -99,8 +99,11 @@ public class AnswerSheetServiceImpl extends ServiceImpl<AnswerSheetMapper, Answe
 
         // add 时已经添加了participant了 这里不处理
 
-        // TODO 题目数量 == exam题目数量校验
-        AssertUtil.isTrue(answerSheet.getAnswers().size() > 0, CommonErrorCode.ANSWERS_NOT_EXIST);
+        // 查出对应的试卷
+        Paper paper = paperService.getPaperById(examMapper.selectById(answerSheet.getExamId()).getPaperId());
+        // 检查答题卡是否和试卷对应
+        checkAnswerSheetAndPaper(answerSheet, paper);
+
         answerSheet.setAnswerSheetId(answerSheetId);
         answerSheetMapper.updateById(answerSheet);
 
@@ -154,5 +157,14 @@ public class AnswerSheetServiceImpl extends ServiceImpl<AnswerSheetMapper, Answe
                         answer.equals("A") || answer.equals("B") ||
                         answer.equals("C") || answer.equals("D"),
                 CommonErrorCode.QUESTION_ANSWER_NOT_VALID);
+    }
+
+    private void checkAnswerSheetAndPaper(AnswerSheet answerSheet, Paper paper) {
+        AssertUtil.isTrue(answerSheet.getAnswers().size() == paper.getQuestions().size(), CommonErrorCode.ANSWER_SHEET_NOT_MATCH);
+        // 遍历答题卡中的题目
+        for (int i = 0; i < answerSheet.getAnswers().size(); i++) {
+            // 答题卡中的题目和paper中的对应
+            AssertUtil.isTrue(answerSheet.getAnswers().get(i).getQuestionId().equals(paper.getQuestions().get(i).getQuestionId()), CommonErrorCode.ANSWER_SHEET_NOT_MATCH);
+        }
     }
 }

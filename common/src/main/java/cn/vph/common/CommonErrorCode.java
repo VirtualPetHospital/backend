@@ -44,16 +44,19 @@ public enum CommonErrorCode {
     CANNOT_DELETE_CATEGORY(13001, "该病种下有疾病，无法删除", "该病种下有疾病，无法删除"),
     CATEGORY_NOT_EXIST(13002, "病种不存在", "病种不存在"),
     CATEGORY_ALREADY_EXIST(13003, "病种已存在", "病种已存在"),
+    CATEGORY_HAS_QUESTION(13004, "该病种下有题目，无法删除", "该病种下有题目，无法删除"),
     /**
      * 药品相关
      */
     MEDICINE_NOT_EXIST(14002, "药品不存在", "药品不存在"),
     MEDICINE_ALREADY_EXIST(13003, "药品已存在", "药品已存在"),
+    MEDICINE_USED_BY_MEDCASE(14004, "该药品已被病例引用，无法删除", "该药品已被病例引用，无法删除"),
     /**
      * 检查项目相关
      */
     INSPECTION_NOT_EXIST(15001, "检查项目不存在", "检查项目不存在"),
     INSPECTION_ALREADY_EXIST(15002, "检查项目已存在", "检查项目已存在"),
+    INSPECTION_HAS_MEDCASE(15003, "该检查项目下有病例，无法删除", "部分病例中包含此检查项目，无法删除"),
     /**
      * 科室相关
      */
@@ -113,6 +116,7 @@ public enum CommonErrorCode {
     ANSWER_SHEET_NOT_EXIST(2002, "答题卡不存在", "答题卡不存在"),
     ANSWERS_NOT_EXIST(2003, "答案不能为空", "答案不能为空"),
     ANSWER_SHEET_ALREADY_EXIST(2003, "已提交过答题卡", "已提交过答题卡"),
+    ANSWER_SHEET_NOT_MATCH(2003, "答题卡与考试不匹配", "答题卡与试卷不匹配"),
     /**
      * 病例相关
      */

@@ -43,7 +43,6 @@ public class User implements Serializable {
     @VphValidation("email")
     private String email;
 
-    @VphValidation("level")
     private Integer level;
 
     /**
