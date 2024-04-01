@@ -80,6 +80,7 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
         AssertUtil.isNotNull(questionMapper.selectById(questionId), CommonErrorCode.QUESTION_NOT_EXIST);
     }
 
+
     private void answerIsValid(String answer){
         AssertUtil.isTrue(
                 answer.equals("A") ||  answer.equals("B") ||

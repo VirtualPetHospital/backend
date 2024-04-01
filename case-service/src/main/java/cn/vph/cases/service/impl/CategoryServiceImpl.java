@@ -1,5 +1,6 @@
 package cn.vph.cases.service.impl;
 
+import cn.vph.cases.clients.QuestionFeignClient;
 import cn.vph.cases.entity.Category;
 import cn.vph.cases.mapper.CategoryMapper;
 import cn.vph.cases.service.CategoryService;
@@ -24,6 +25,9 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
     @Autowired
     private CategoryMapper categoryMapper;
 
+    @Autowired
+    private QuestionFeignClient questionFeignClient;
+
     public Category selectByName(String name) {
         MPJLambdaWrapper<Category> queryWrapper = new MPJLambdaWrapper<>();
         queryWrapper.eq(Category::getName, name);
@@ -42,9 +46,10 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
     @Override
     @Transactional
     public Object delete(Integer categoryId) {
-        // TODO 检查是否有题目
         // 不存在则抛出异常
         AssertUtil.isNotNull(categoryMapper.selectById(categoryId), CommonErrorCode.CATEGORY_NOT_EXIST);
+        Long count = questionFeignClient.getQuestionCountByCategoryId(categoryId);
+        AssertUtil.isTrue(count == 0, CommonErrorCode.CATEGORY_HAS_QUESTION);
         try {
             categoryMapper.deleteById(categoryId);
         } catch (Exception e) {

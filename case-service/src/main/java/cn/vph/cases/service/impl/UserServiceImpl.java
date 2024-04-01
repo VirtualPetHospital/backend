@@ -2,6 +2,7 @@ package cn.vph.cases.service.impl;
 
 import cn.hutool.crypto.SecureUtil;
 import cn.vph.cases.controller.request.RegisterRequest;
+import cn.vph.cases.controller.response.UserResponse;
 import cn.vph.cases.entity.Disease;
 import cn.vph.cases.entity.Medcase;
 import cn.vph.cases.entity.User;
@@ -65,25 +66,25 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     @Override
-    public User login(String nickname, String password) {
+    public UserResponse login(String nickname, String password) {
         LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(User::getNickname, nickname);
         User user = userMapper.selectOne(wrapper);
         AssertUtil.isNotNull(user, CommonErrorCode.USER_NOT_EXIST);
         AssertUtil.isEqual(user.getPassword(), convert(password), CommonErrorCode.WRONG_PASSWORD_OR_NICKNAME);
         sessionUtil.setSession(user);
-        return user;
+        return new UserResponse(user);
     }
 
     @Override
-    public User me() {
+    public UserResponse me() {
         Integer userId = sessionUtil.getUserId();
-        return userMapper.selectById(userId);
+        return new UserResponse(userMapper.selectById(userId));
     }
 
     @Override
     @Transactional
-    public User register(RegisterRequest registerRequest) {
+    public UserResponse register(RegisterRequest registerRequest) {
 
         // 邮箱是否合法
         AssertUtil.isTrue(isEmailValid(registerRequest.getEmail()), CommonErrorCode.ILLEGAL_EMAIL);
@@ -106,7 +107,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         User user = new User(registerRequest);
         user.setPassword(convert(user.getPassword()));
         userMapper.insert(user);
-        return user;
+        return new UserResponse(user);
     }
 
     @Override
@@ -124,7 +125,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Override
     @Transactional
-    public User update(User user) {
+    public UserResponse update(User user) {
         // 先查是否存在
         LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(User::getNickname, user.getNickname());
@@ -137,7 +138,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         // 更新用户
         user.setUserId(sessionUtil.getUserId());
         userMapper.updateById(user);
-        return user;
+        return new UserResponse(user);
     }
 
     @Override
@@ -189,6 +190,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Override
     public IPage<?> list(Integer pageNum, Integer pageSize, String type, String nicknameKeyword, Integer sortByNickname) {
         LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
+        wrapper.select(User::getUserId, User::getNickname, User::getType, User::getAvatarUrl, User::getLevel);
         if (type != null && !type.isEmpty()) {
             wrapper.eq(User::getType, type);
         }

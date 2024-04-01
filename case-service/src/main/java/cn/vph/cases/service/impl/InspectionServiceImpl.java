@@ -1,10 +1,13 @@
 package cn.vph.cases.service.impl;
 
 import cn.vph.cases.entity.Inspection;
+import cn.vph.cases.entity.MedcaseInspection;
 import cn.vph.cases.mapper.InspectionMapper;
+import cn.vph.cases.mapper.MedcaseInspectionMapper;
 import cn.vph.cases.service.InspectionService;
 import cn.vph.common.CommonErrorCode;
 import cn.vph.common.util.AssertUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -23,6 +26,9 @@ public class InspectionServiceImpl extends ServiceImpl<InspectionMapper, Inspect
 
     @Autowired
     private InspectionMapper inspectionMapper;
+
+    @Autowired
+    private MedcaseInspectionMapper medcaseInspectionMapper;
 
     public Inspection selectByName(String name) {
         MPJLambdaWrapper<Inspection> queryWrapper = new MPJLambdaWrapper<>();
@@ -67,7 +73,9 @@ public class InspectionServiceImpl extends ServiceImpl<InspectionMapper, Inspect
 
     @Override
     public Object delete(Integer inspectionId) {
-        // TODO 如果被病例引用则抛出异常
+        LambdaQueryWrapper<MedcaseInspection> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(MedcaseInspection::getInspectionId, inspectionId);
+        AssertUtil.isTrue(medcaseInspectionMapper.selectCount(queryWrapper) == 0, CommonErrorCode.INSPECTION_HAS_MEDCASE);
         // 不存在则抛出异常
         AssertUtil.isNotNull(inspectionMapper.selectById(inspectionId), CommonErrorCode.INSPECTION_NOT_EXIST);
         inspectionMapper.deleteById(inspectionId);

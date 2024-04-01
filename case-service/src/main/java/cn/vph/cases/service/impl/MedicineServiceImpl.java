@@ -1,10 +1,13 @@
 package cn.vph.cases.service.impl;
 
+import cn.vph.cases.entity.MedcaseMedicine;
 import cn.vph.cases.entity.Medicine;
+import cn.vph.cases.mapper.MedcaseMedicineMapper;
 import cn.vph.cases.mapper.MedicineMapper;
 import cn.vph.cases.service.MedicineService;
 import cn.vph.common.CommonErrorCode;
 import cn.vph.common.util.AssertUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.yulichang.wrapper.MPJLambdaWrapper;
@@ -21,6 +24,9 @@ import org.springframework.stereotype.Service;
 public class MedicineServiceImpl extends ServiceImpl<MedicineMapper, Medicine> implements MedicineService {
     @Autowired
     private MedicineMapper medicineMapper;
+
+    @Autowired
+    private MedcaseMedicineMapper medcaseMedicineMapper;
 
     public Medicine selectByName(String name) {
         MPJLambdaWrapper<Medicine> queryWrapper = new MPJLambdaWrapper<>();
@@ -58,9 +64,12 @@ public class MedicineServiceImpl extends ServiceImpl<MedicineMapper, Medicine> i
 
     @Override
     public Object delete(Integer medicineId) {
-        //TODO 检查被病例引用
         // 是否存在
         AssertUtil.isNotNull(medicineMapper.selectById(medicineId), CommonErrorCode.MEDICINE_NOT_EXIST);
+        LambdaQueryWrapper<MedcaseMedicine> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(MedcaseMedicine::getMedicineId, medicineId);
+        AssertUtil.isTrue(medcaseMedicineMapper.selectCount(queryWrapper) == 0, CommonErrorCode.MEDICINE_USED_BY_MEDCASE);
+
         medicineMapper.deleteById(medicineId);
         return null;
     }
