@@ -39,7 +39,7 @@ public class ExamController extends BaseController {
      * @param pageSize
      * @param pageNum
      * @param nameKeyword     考试名称关键字
-     * @param level           考试等级
+     * @param level           考试等级 1-5
      * @param sortByStartTime 默认1升序，2降序，不给这个字段就不针对时间排序
      * @param participated    true是已经报名的，false是没报名的
      * @return Result

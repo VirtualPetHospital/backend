@@ -62,5 +62,10 @@ public class Exam implements Serializable {
     private Integer level;
 
     @TableField(exist = false)
+    private Boolean participated;
+
+    @TableField(exist = false)
     private Paper paper;
+
+
 }
