@@ -74,7 +74,6 @@ public class AnswerSheetServiceImpl extends ServiceImpl<AnswerSheetMapper, Answe
         // 检查答题卡是否和试卷对应
         checkAnswerSheetAndPaper(answerSheet, paper);
 
-
         answerSheet.setCreateTime(LocalDateTime.now());
         answerSheetMapper.insert(answerSheet);
 
@@ -93,7 +92,8 @@ public class AnswerSheetServiceImpl extends ServiceImpl<AnswerSheetMapper, Answe
     public AnswerSheet update(Integer answerSheetId, AnswerSheet answerSheet) {
         AssertUtil.isTrue(answerSheetId != null && answerSheet != null, CommonErrorCode.EXAM_NOT_EXIST);
         answerSheet.setUserId(sessionUtil.getUserId());
-
+        answerSheet.setAnswerSheetId(answerSheetId);
+        answerSheet.setCreateTime(LocalDateTime.now());
         // 检查答题卡是否已存在
         AssertUtil.isTrue(answerSheetAlreadyExist(answerSheet.getExamId(), answerSheet.getUserId()), CommonErrorCode.ANSWER_SHEET_NOT_EXIST);
 
@@ -104,20 +104,16 @@ public class AnswerSheetServiceImpl extends ServiceImpl<AnswerSheetMapper, Answe
         // 检查答题卡是否和试卷对应
         checkAnswerSheetAndPaper(answerSheet, paper);
 
-        answerSheet.setAnswerSheetId(answerSheetId);
         answerSheetMapper.updateById(answerSheet);
 
         answerSheet.getAnswers().forEach(answerSheetItem -> {
+            AssertUtil.isNotNull(answerSheetItem.getId(), CommonErrorCode.ANSWER_SHEET_ITEM_VALUE_ERROR);
             answerIsValid(answerSheetItem.getAnswer());
             answerSheetItem.setAnswerSheetId(answerSheet.getAnswerSheetId());
             // xxx 已设置answer字段可更新为null
             answerSheetItemMapper.updateById(answerSheetItem);
         });
-        AnswerSheet updatedAnswerSheet = answerSheetMapper.selectById(answerSheetId);
-        updatedAnswerSheet.setAnswers(answerSheetItemMapper.selectList(
-                new LambdaQueryWrapper<AnswerSheetItem>()
-                        .eq(AnswerSheetItem::getAnswerSheetId, answerSheetId)));
-        return updatedAnswerSheet;
+        return answerSheet;
     }
 
     @Override
