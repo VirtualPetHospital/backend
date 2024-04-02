@@ -60,6 +60,8 @@ public class DiseaseServiceImpl extends ServiceImpl<DiseaseMapper, Disease> impl
 
     @Override
     public Object update(Disease disease) {
+        // 根据id判断疾病是否存在
+        AssertUtil.isNotNull(diseaseMapper.selectById(disease.getDiseaseId()), CommonErrorCode.DISEASE_NOT_EXIST);
         // 判断疾病是否存在
         Disease dis = selectByName(disease.getName());
         // 判断是否是当前疾病

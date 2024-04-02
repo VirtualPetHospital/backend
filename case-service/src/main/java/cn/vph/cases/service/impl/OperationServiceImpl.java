@@ -63,6 +63,8 @@ public class OperationServiceImpl extends ServiceImpl<OperationMapper, Operation
     @Override
     @Transactional
     public Operation update(Operation operation) {
+        // 根据id查询是否存在
+        AssertUtil.isNotNull(operationMapper.selectById(operation.getOperationId()), CommonErrorCode.OPERATION_NOT_EXIST);
         // 是否存在相同名字的operation
         Operation ope = selectByName(operation.getName());
         // 是否是当前operation

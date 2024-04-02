@@ -45,6 +45,8 @@ public class MedicineServiceImpl extends ServiceImpl<MedicineMapper, Medicine> i
 
     @Override
     public Object update(Medicine medicine) {
+        // 查询id是否存在
+        AssertUtil.isNotNull(medicineMapper.selectById(medicine.getMedicineId()), CommonErrorCode.MEDICINE_NOT_EXIST);
         // 是否存在相同名字的药品
         Medicine med = selectByName(medicine.getName());
         // 是否是当前药品
