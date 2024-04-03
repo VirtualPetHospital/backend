@@ -185,23 +185,27 @@ public class MedcaseServiceImpl extends ServiceImpl<MedcaseMapper, Medcase> impl
         AtomicReference<Double> price = new AtomicReference<>((double) medcase.getOperation().getPrice());
 
         // 添加新的检查项目和药品
-        medcase.getInspections().forEach(medcaseInspection -> {
-            // 检查项目存在
-            AssertUtil.isNotNull(inspectionMapper.selectById(medcaseInspection.getInspectionId()), CommonErrorCode.INSPECTION_NOT_EXIST);
-            medcaseInspection.setMedcaseId(medcase.getMedcaseId());
-            medcaseInspectionService.add(medcaseInspection);
-        });
-        medcase.getMedicines().forEach(medcaseMedicine -> {
-            // 药品存在
-            Medicine medicine = medicineMapper.selectById(medcaseMedicine.getMedicineId());
-            AssertUtil.isNotNull(medicine, CommonErrorCode.MEDICINE_NOT_EXIST);
+        if(medcase.getInspections() != null){
+            medcase.getInspections().forEach(medcaseInspection -> {
+                // 检查项目存在
+                AssertUtil.isNotNull(inspectionMapper.selectById(medcaseInspection.getInspectionId()), CommonErrorCode.INSPECTION_NOT_EXIST);
+                medcaseInspection.setMedcaseId(medcase.getMedcaseId());
+                medcaseInspectionService.add(medcaseInspection);
+            });
+        }
+        if(medcase.getMedicines() != null){
+            medcase.getMedicines().forEach(medcaseMedicine -> {
+                // 药品存在
+                Medicine medicine = medicineMapper.selectById(medcaseMedicine.getMedicineId());
+                AssertUtil.isNotNull(medicine, CommonErrorCode.MEDICINE_NOT_EXIST);
 
-            medcaseMedicine.setMedcaseId(medcase.getMedcaseId());
-            // 药品数量大于0
-            AssertUtil.isTrue(medcaseMedicine.getNum() > 0, CommonErrorCode.MEDICINE_NUM_ERROR);
-            price.accumulateAndGet(medicine.getPrice(), Double::sum);
-            medcaseMedicineService.add(medcaseMedicine);
-        });
+                medcaseMedicine.setMedcaseId(medcase.getMedcaseId());
+                // 药品数量大于0
+                AssertUtil.isTrue(medcaseMedicine.getNum() > 0, CommonErrorCode.MEDICINE_NUM_ERROR);
+                price.accumulateAndGet(medicine.getPrice(), Double::sum);
+                medcaseMedicineService.add(medcaseMedicine);
+            });
+        }
         medcase.setPrice(price.get());
     }
 }
