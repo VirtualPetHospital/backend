@@ -31,6 +31,7 @@ public class FileServiceImpl implements FileService {
 
     @Autowired
     FileUtil fileUtil;
+
     @Override
     public Object upload(MultipartFile file, String location) throws IOException {
         // 检查是否合法位置
@@ -137,5 +138,4 @@ public class FileServiceImpl implements FileService {
         }
         return false;
     }
-
 }
