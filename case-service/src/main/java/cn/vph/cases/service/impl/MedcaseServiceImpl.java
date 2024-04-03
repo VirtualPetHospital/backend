@@ -7,17 +7,16 @@ import cn.vph.cases.service.MedcaseMedicineService;
 import cn.vph.cases.service.MedcaseService;
 import cn.vph.cases.util.SessionUtil;
 import cn.vph.common.CommonErrorCode;
+import cn.vph.common.util.AssertUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.yulichang.wrapper.MPJLambdaWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import cn.vph.common.util.AssertUtil;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -112,11 +111,11 @@ public class MedcaseServiceImpl extends ServiceImpl<MedcaseMapper, Medcase> impl
         // 手术存在
         AssertUtil.isNotNull(operationMapper.selectById(medcase.getOperationId()), CommonErrorCode.OPERATION_NOT_EXIST);
 
-        medcaseMapper.updateById(medcase);
 
         // 更新多对多关系
         updateInspectionsMedicines(medcase);
 
+        medcaseMapper.updateById(medcase);
         return medcase;
     }
 
@@ -164,13 +163,21 @@ public class MedcaseServiceImpl extends ServiceImpl<MedcaseMapper, Medcase> impl
         medcaseMedicineService.deleteByMedcaseId(medcase.getMedcaseId());
 
         // 添加新的检查项目和药品
-        medcase.getInspections().forEach(inspection -> {
-            AssertUtil.isNotNull(inspectionMapper.selectById(inspection.getId()), CommonErrorCode.INSPECTION_NOT_EXIST);
-            medcaseInspectionService.add(inspection);
+        medcase.getInspections().forEach(medcaseInspection -> {
+            // 检查项目存在
+            Inspection inspection = inspectionMapper.selectById(medcaseInspection.getInspectionId());
+            AssertUtil.isNotNull(inspection, CommonErrorCode.INSPECTION_NOT_EXIST);
+            // medcaseInspection 值在low和high之间
+            AssertUtil.isTrue(inspection.getLow() <= medcaseInspection.getValue() && medcaseInspection.getValue() <= inspection.getHigh(), CommonErrorCode.INSPECTION_VALUE_ERROR);
+            medcaseInspectionService.add(medcaseInspection);
         });
-        medcase.getMedicines().forEach(medicine -> {
-            AssertUtil.isNotNull(medicineMapper.selectById(medicine.getId()), CommonErrorCode.MEDICINE_NOT_EXIST);
-            medcaseMedicineService.add(medicine);
+        medcase.getMedicines().forEach(medcaseMedicine -> {
+            // 药品存在
+            Medicine medicine = medicineMapper.selectById(medcaseMedicine.getMedicineId());
+            AssertUtil.isNotNull(medicine, CommonErrorCode.MEDICINE_NOT_EXIST);
+            // 药品数量大于0
+            AssertUtil.isTrue(medcaseMedicine.getNum() > 0, CommonErrorCode.MEDICINE_NUM_ERROR);
+            medcaseMedicineService.add(medcaseMedicine);
         });
     }
 }

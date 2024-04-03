@@ -52,12 +52,14 @@ public enum CommonErrorCode {
     MEDICINE_NOT_EXIST(14002, "药品不存在", "药品不存在"),
     MEDICINE_ALREADY_EXIST(13003, "药品已存在", "药品已存在"),
     MEDICINE_USED_BY_MEDCASE(14004, "该药品已被病例引用，无法删除", "该药品已被病例引用，无法删除"),
+    MEDICINE_NUM_ERROR(14005, "药品数量不合法", "药品数量不合法"),
     /**
      * 检查项目相关
      */
     INSPECTION_NOT_EXIST(15001, "检查项目不存在", "检查项目不存在"),
     INSPECTION_ALREADY_EXIST(15002, "检查项目已存在", "检查项目已存在"),
     INSPECTION_HAS_MEDCASE(15003, "该检查项目下有病例，无法删除", "部分病例中包含此检查项目，无法删除"),
+    INSPECTION_VALUE_ERROR(15004, "检查项目值不合法", "检查项目值不合法"),
     /**
      * 科室相关
      */
