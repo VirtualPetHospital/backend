@@ -98,7 +98,7 @@ public class MedcaseServiceImpl extends ServiceImpl<MedcaseMapper, Medcase> impl
         AssertUtil.isNotNull(operationMapper.selectById(medcase.getOperationId()), CommonErrorCode.OPERATION_NOT_EXIST);
 
         medcaseMapper.insert(medcase);
-        
+
         // inspections
         // medicines
         updateInspectionsMedicines(medcase);
