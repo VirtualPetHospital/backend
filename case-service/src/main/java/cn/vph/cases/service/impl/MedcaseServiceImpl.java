@@ -102,9 +102,13 @@ public class MedcaseServiceImpl extends ServiceImpl<MedcaseMapper, Medcase> impl
         // 病例名不重复或者重复但是同一个病例
         AssertUtil.isTrue(oldMedcase == null || oldMedcase.getMedcaseId().equals(medcase.getMedcaseId()), CommonErrorCode.MEDCASE_NAME_EXIST);
 
+        medcaseMapper.insert(medcase);
+
+        // inspections
+        // medicines
         updateInspectionsMedicines(medcase);
 
-        medcaseMapper.insert(medcase);
+
         return medcase;
     }
 
