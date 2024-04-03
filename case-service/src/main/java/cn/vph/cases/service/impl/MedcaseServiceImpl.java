@@ -159,6 +159,7 @@ public class MedcaseServiceImpl extends ServiceImpl<MedcaseMapper, Medcase> impl
          */
         Operation operation = operationMapper.selectById(medcase.getOperationId());
         AssertUtil.isNotNull(operation, CommonErrorCode.OPERATION_NOT_EXIST);
+        medcase.setOperation(operation);
         /**
          * inspections
          */
