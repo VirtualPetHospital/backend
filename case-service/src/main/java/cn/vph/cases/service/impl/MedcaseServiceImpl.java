@@ -97,7 +97,8 @@ public class MedcaseServiceImpl extends ServiceImpl<MedcaseMapper, Medcase> impl
         // 手术存在
         AssertUtil.isNotNull(operationMapper.selectById(medcase.getOperationId()), CommonErrorCode.OPERATION_NOT_EXIST);
 
-        // inspections中的检查项目存在
+        // inspections
+        // medicines
         updateInspectionsMedicines(medcase);
 
         medcaseMapper.insert(medcase);
@@ -164,22 +165,23 @@ public class MedcaseServiceImpl extends ServiceImpl<MedcaseMapper, Medcase> impl
         medcaseInspectionService.deleteByMedcaseId(medcase.getMedcaseId());
         medcaseMedicineService.deleteByMedcaseId(medcase.getMedcaseId());
         AtomicReference<Double> price = new AtomicReference<>((double) medcase.getOperation().getPrice());
+
         // 添加新的检查项目和药品
         medcase.getInspections().forEach(medcaseInspection -> {
             // 检查项目存在
-            Inspection inspection = inspectionMapper.selectById(medcaseInspection.getInspectionId());
-            AssertUtil.isNotNull(inspection, CommonErrorCode.INSPECTION_NOT_EXIST);
-            // medcaseInspection 值在low和high之间
-            AssertUtil.isTrue(inspection.getLow() <= medcaseInspection.getValue() && medcaseInspection.getValue() <= inspection.getHigh(), CommonErrorCode.INSPECTION_VALUE_ERROR);
+            AssertUtil.isNotNull(inspectionMapper.selectById(medcaseInspection.getInspectionId()), CommonErrorCode.INSPECTION_NOT_EXIST);
+            medcaseInspection.setMedcaseId(medcase.getMedcaseId());
             medcaseInspectionService.add(medcaseInspection);
         });
         medcase.getMedicines().forEach(medcaseMedicine -> {
             // 药品存在
             Medicine medicine = medicineMapper.selectById(medcaseMedicine.getMedicineId());
             AssertUtil.isNotNull(medicine, CommonErrorCode.MEDICINE_NOT_EXIST);
+
+            medcaseMedicine.setMedcaseId(medcase.getMedcaseId());
             // 药品数量大于0
             AssertUtil.isTrue(medcaseMedicine.getNum() > 0, CommonErrorCode.MEDICINE_NUM_ERROR);
-            price.updateAndGet(v -> new Double((double) (v + medicine.getPrice())));
+            price.accumulateAndGet(medicine.getPrice(), Double::sum);
             medcaseMedicineService.add(medcaseMedicine);
         });
         medcase.setPrice(price.get());
