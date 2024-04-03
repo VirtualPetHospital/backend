@@ -129,7 +129,7 @@ public class ExamServiceImpl extends ServiceImpl<ExamMapper, Exam> implements Ex
                 answerSheetService.delete(answerSheet.getAnswerSheetId());
             }
         }
-        
+
         examMapper.deleteById(examId);
     }
 
