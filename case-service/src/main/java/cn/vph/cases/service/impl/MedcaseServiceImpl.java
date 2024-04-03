@@ -163,6 +163,10 @@ public class MedcaseServiceImpl extends ServiceImpl<MedcaseMapper, Medcase> impl
         // 删除旧的检查项目和药品
         medcaseInspectionService.deleteByMedcaseId(medcase.getMedcaseId());
         medcaseMedicineService.deleteByMedcaseId(medcase.getMedcaseId());
+        // 查询Operation
+        Operation operation = operationMapper.selectById(medcase.getOperationId());
+        AssertUtil.isNotNull(operation, CommonErrorCode.OPERATION_NOT_EXIST);
+        medcase.setOperation(operation);
         AtomicReference<Double> price = new AtomicReference<>((double) medcase.getOperation().getPrice());
         // 添加新的检查项目和药品
         medcase.getInspections().forEach(medcaseInspection -> {
