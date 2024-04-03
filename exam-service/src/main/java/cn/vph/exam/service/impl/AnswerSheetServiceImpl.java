@@ -74,7 +74,7 @@ public class AnswerSheetServiceImpl extends ServiceImpl<AnswerSheetMapper, Answe
         // 检查答题卡是否和试卷对应
         checkAnswerSheetAndPaper(answerSheet, paper);
 
-        answerSheet.setCreateTime(LocalDateTime.now());
+        answerSheet.setUpdateTime(LocalDateTime.now());
         answerSheetMapper.insert(answerSheet);
 
         answerSheet.getAnswers().forEach(answerSheetItem -> {

@@ -7,18 +7,18 @@ import cn.vph.cases.service.MedcaseMedicineService;
 import cn.vph.cases.service.MedcaseService;
 import cn.vph.cases.util.SessionUtil;
 import cn.vph.common.CommonErrorCode;
+import cn.vph.common.util.AssertUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.yulichang.wrapper.MPJLambdaWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import cn.vph.common.util.AssertUtil;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * @program: vph-backend
@@ -96,11 +96,12 @@ public class MedcaseServiceImpl extends ServiceImpl<MedcaseMapper, Medcase> impl
 
         // 手术存在
         AssertUtil.isNotNull(operationMapper.selectById(medcase.getOperationId()), CommonErrorCode.OPERATION_NOT_EXIST);
-        medcaseMapper.insert(medcase);
 
         // inspections
         // medicines
         updateInspectionsMedicines(medcase);
+
+        medcaseMapper.insert(medcase);
         return medcase;
     }
 
@@ -113,11 +114,11 @@ public class MedcaseServiceImpl extends ServiceImpl<MedcaseMapper, Medcase> impl
         // 手术存在
         AssertUtil.isNotNull(operationMapper.selectById(medcase.getOperationId()), CommonErrorCode.OPERATION_NOT_EXIST);
 
-        medcaseMapper.updateById(medcase);
 
         // 更新多对多关系
         updateInspectionsMedicines(medcase);
 
+        medcaseMapper.updateById(medcase);
         return medcase;
     }
 
@@ -163,17 +164,26 @@ public class MedcaseServiceImpl extends ServiceImpl<MedcaseMapper, Medcase> impl
         // 删除旧的检查项目和药品
         medcaseInspectionService.deleteByMedcaseId(medcase.getMedcaseId());
         medcaseMedicineService.deleteByMedcaseId(medcase.getMedcaseId());
+        AtomicReference<Double> price = new AtomicReference<>((double) medcase.getOperation().getPrice());
 
         // 添加新的检查项目和药品
-        medcase.getInspections().forEach(inspection -> {
-            AssertUtil.isNotNull(inspectionMapper.selectById(inspection.getInspectionId()), CommonErrorCode.INSPECTION_NOT_EXIST);
-            inspection.setMedcaseId(medcase.getMedcaseId());
-            medcaseInspectionService.add(inspection);
+        medcase.getInspections().forEach(medcaseInspection -> {
+            // 检查项目存在
+            AssertUtil.isNotNull(inspectionMapper.selectById(medcaseInspection.getInspectionId()), CommonErrorCode.INSPECTION_NOT_EXIST);
+            medcaseInspection.setMedcaseId(medcase.getMedcaseId());
+            medcaseInspectionService.add(medcaseInspection);
         });
-        medcase.getMedicines().forEach(medicine -> {
-            AssertUtil.isNotNull(medicineMapper.selectById(medicine.getMedicineId()), CommonErrorCode.MEDICINE_NOT_EXIST);
-            medicine.setMedcaseId(medcase.getMedcaseId());
-            medcaseMedicineService.add(medicine);
+        medcase.getMedicines().forEach(medcaseMedicine -> {
+            // 药品存在
+            Medicine medicine = medicineMapper.selectById(medcaseMedicine.getMedicineId());
+            AssertUtil.isNotNull(medicine, CommonErrorCode.MEDICINE_NOT_EXIST);
+
+            medcaseMedicine.setMedcaseId(medcase.getMedcaseId());
+            // 药品数量大于0
+            AssertUtil.isTrue(medcaseMedicine.getNum() > 0, CommonErrorCode.MEDICINE_NUM_ERROR);
+            price.accumulateAndGet(medicine.getPrice(), Double::sum);
+            medcaseMedicineService.add(medcaseMedicine);
         });
+        medcase.setPrice(price.get());
     }
 }

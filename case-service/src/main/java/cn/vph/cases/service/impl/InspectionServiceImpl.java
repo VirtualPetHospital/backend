@@ -46,6 +46,8 @@ public class InspectionServiceImpl extends ServiceImpl<InspectionMapper, Inspect
 
     @Override
     public Object update(Inspection inspection) {
+        // 根据id查询是否存在
+        AssertUtil.isNotNull(inspectionMapper.selectById(inspection.getInspectionId()), CommonErrorCode.INSPECTION_NOT_EXIST);
         // 是否存在相同名字的检查项目
         Inspection ins = selectByName(inspection.getName());
         // 是否是当前检查项目

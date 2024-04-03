@@ -61,6 +61,7 @@ public class CategoryController extends BaseController{
         return Result.success(categoryService.list());
     }
 
+    @Student
     @GetMapping("")
     @ApiOperation(
             value = "根据关键词查询病种列表"
