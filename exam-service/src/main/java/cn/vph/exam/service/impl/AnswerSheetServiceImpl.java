@@ -75,7 +75,7 @@ public class AnswerSheetServiceImpl extends ServiceImpl<AnswerSheetMapper, Answe
         checkAnswerSheetAndPaper(answerSheet, paper);
 
 
-        answerSheet.setCreateTime(LocalDateTime.now());
+        answerSheet.setUpdateTime(LocalDateTime.now());
         answerSheetMapper.insert(answerSheet);
 
         answerSheet.getAnswers().forEach(answerSheetItem -> {
