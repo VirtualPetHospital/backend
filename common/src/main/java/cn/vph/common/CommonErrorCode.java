@@ -97,7 +97,7 @@ public enum CommonErrorCode {
      * 题目相关
      */
     QUESTION_NOT_EXIST(2002, "题目不存在", "题目不存在"),
-    QUESTION_ANSWER_NOT_VALID(2003, "answer字段不合法，题目答案只能是A/B/C/D", "answer字段不合法，题目答案只能是A/B/C/D"),
+    QUESTION_ANSWER_NOT_VALID(2003, "answer字段不合法，题目答案只能是A/B/C/D", "answer不合法，题目答案只能是A/B/C/D，答题卡中answer可为null"),
     /**
      * 试卷相关
      */
@@ -120,11 +120,12 @@ public enum CommonErrorCode {
     ANSWERS_NOT_EXIST(2003, "答案不能为空", "答案不能为空"),
     ANSWER_SHEET_ALREADY_EXIST(2003, "已提交过答题卡", "已提交过答题卡"),
     ANSWER_SHEET_NOT_MATCH(2003, "答题卡与考试不匹配", "答题卡与试卷不匹配"),
+    ANSWER_SHEET_ITEM_VALUE_ERROR(2003, "答题卡单项未指定id", "答题卡单项未指定id"),
     /**
      * 病例相关
      */
-
     MEDCASE_NOT_EXIST(2002, "病例不存在", "病例不存在"),
+    MEDCASE_NAME_ALREADY_EXIST(2003, "病例名称已存在", "病例名称已存在"),
 
     /**
      * 智能对话助手相关
