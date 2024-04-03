@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
@@ -70,9 +71,11 @@ public class FileServiceImpl implements FileService {
         String newFileName = location + fileConstants.SEPARATOR + type + fileConstants.SEPARATOR + fileUtil.generateFileNameByTime();
         String filePath = uploadPath + File.separator + newFileName;
 
+        // 先对文件进行存储
         String dest = filePath + "." + fileSuffix;
         File destFile = new File(dest);
         file.transferTo(destFile);
+        // 再对存储的文件进行统一文件格式转化
         if ("photo".equals(type)) {
             // 转换图片格式
             fileUtil.convertPhotoToJpeg(dest);
@@ -128,7 +131,6 @@ public class FileServiceImpl implements FileService {
         }
         return null;
     }
-
 
     public boolean containsString(String[] array, String str) {
         for (String s : array) {
