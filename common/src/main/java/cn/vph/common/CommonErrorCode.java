@@ -122,8 +122,8 @@ public enum CommonErrorCode {
     /**
      * 病例相关
      */
-
     MEDCASE_NOT_EXIST(2002, "病例不存在", "病例不存在"),
+    MEDCASE_NAME_ALREADY_EXIST(2003, "病例名称已存在", "病例名称已存在"),
 
     /**
      * 智能对话助手相关

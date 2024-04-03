@@ -98,7 +98,8 @@ public class MedcaseServiceImpl extends ServiceImpl<MedcaseMapper, Medcase> impl
         AssertUtil.isNotNull(operationMapper.selectById(medcase.getOperationId()), CommonErrorCode.OPERATION_NOT_EXIST);
         medcaseMapper.insert(medcase);
 
-        // inspections中的检查项目存在
+        // inspections
+        // medicines
         updateInspectionsMedicines(medcase);
         return medcase;
     }
@@ -165,11 +166,13 @@ public class MedcaseServiceImpl extends ServiceImpl<MedcaseMapper, Medcase> impl
 
         // 添加新的检查项目和药品
         medcase.getInspections().forEach(inspection -> {
-            AssertUtil.isNotNull(inspectionMapper.selectById(inspection.getId()), CommonErrorCode.INSPECTION_NOT_EXIST);
+            AssertUtil.isNotNull(inspectionMapper.selectById(inspection.getInspectionId()), CommonErrorCode.INSPECTION_NOT_EXIST);
+            inspection.setMedcaseId(medcase.getMedcaseId());
             medcaseInspectionService.add(inspection);
         });
         medcase.getMedicines().forEach(medicine -> {
-            AssertUtil.isNotNull(medicineMapper.selectById(medicine.getId()), CommonErrorCode.MEDICINE_NOT_EXIST);
+            AssertUtil.isNotNull(medicineMapper.selectById(medicine.getMedicineId()), CommonErrorCode.MEDICINE_NOT_EXIST);
+            medicine.setMedcaseId(medcase.getMedcaseId());
             medcaseMedicineService.add(medicine);
         });
     }
