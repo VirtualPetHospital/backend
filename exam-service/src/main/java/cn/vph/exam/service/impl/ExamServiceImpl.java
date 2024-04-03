@@ -3,10 +3,12 @@ package cn.vph.exam.service.impl;
 import cn.vph.common.CommonConstant;
 import cn.vph.common.CommonErrorCode;
 import cn.vph.common.util.AssertUtil;
+import cn.vph.exam.entity.AnswerSheet;
 import cn.vph.exam.entity.Exam;
 import cn.vph.exam.entity.Participant;
 import cn.vph.exam.mapper.ExamMapper;
 import cn.vph.exam.mapper.ParticipantMapper;
+import cn.vph.exam.service.AnswerSheetService;
 import cn.vph.exam.service.ExamService;
 import cn.vph.exam.service.PaperService;
 import cn.vph.exam.util.SessionUtil;
@@ -20,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.temporal.ChronoUnit;
+import java.util.List;
 
 /**
  * @author Caroline
@@ -37,6 +40,10 @@ public class ExamServiceImpl extends ServiceImpl<ExamMapper, Exam> implements Ex
     
     @Autowired
     private ParticipantMapper participantMapper;
+
+
+    @Autowired
+    private AnswerSheetService answerSheetService;
 
     @Autowired
     private SessionUtil sessionUtil;
@@ -91,6 +98,7 @@ public class ExamServiceImpl extends ServiceImpl<ExamMapper, Exam> implements Ex
     public Exam add(Exam exam){
         nameIsUnique(exam);
         examTimeIsValid(exam);
+        AssertUtil.isNotNull(paperService.getPaperById(exam.getPaperId()), CommonErrorCode.PAPER_NOT_EXIST);
         examMapper.insert(exam);
         return exam;
     }
@@ -101,6 +109,7 @@ public class ExamServiceImpl extends ServiceImpl<ExamMapper, Exam> implements Ex
         nameIsUnique(exam);
         exists(exam.getExamId());
         examTimeIsValid(exam);
+        AssertUtil.isNotNull(paperService.getPaperById(exam.getPaperId()), CommonErrorCode.PAPER_NOT_EXIST);
         examMapper.updateById(exam);
         return exam;
     }
@@ -109,6 +118,18 @@ public class ExamServiceImpl extends ServiceImpl<ExamMapper, Exam> implements Ex
     @Transactional
     public void delete(Integer examId){
         exists(examId);
+        LambdaQueryWrapper<Participant> participantWrapper = new LambdaQueryWrapper<>();
+        participantWrapper.eq(Participant::getExamId, examId);
+        participantMapper.delete(participantWrapper);
+        LambdaQueryWrapper<AnswerSheet> answerSheetWrapper = new LambdaQueryWrapper<>();
+        answerSheetWrapper.eq(AnswerSheet::getExamId, examId);
+        List<AnswerSheet> answerSheets = answerSheetService.list(answerSheetWrapper);
+        if(!answerSheets.isEmpty()){
+            for (AnswerSheet answerSheet : answerSheets) {
+                answerSheetService.delete(answerSheet.getAnswerSheetId());
+            }
+        }
+        
         examMapper.deleteById(examId);
     }
 

@@ -140,6 +140,20 @@ public class AnswerSheetServiceImpl extends ServiceImpl<AnswerSheetMapper, Answe
         return answerSheet;
     }
 
+    @Override
+    @Transactional
+    public void delete(Integer answerSheetId) {
+        if(answerSheetId == null) {
+            return;
+        }
+        AnswerSheet answerSheet = answerSheetMapper.selectById(answerSheetId);
+        if(answerSheet != null) {
+
+            answerSheetItemMapper.delete(new LambdaQueryWrapper<AnswerSheetItem>().eq(AnswerSheetItem::getAnswerSheetId, answerSheetId));
+            answerSheetMapper.deleteById(answerSheetId);
+        }
+    }
+
     private boolean answerSheetAlreadyExist(Integer examId, Integer userId) {
         return answerSheetMapper.selectCount(
                 new LambdaQueryWrapper<AnswerSheet>()
