@@ -8,6 +8,7 @@ import cn.vph.cases.service.MedcaseService;
 import cn.vph.cases.util.SessionUtil;
 import cn.vph.common.CommonErrorCode;
 import cn.vph.common.util.AssertUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -53,21 +54,19 @@ public class MedcaseServiceImpl extends ServiceImpl<MedcaseMapper, Medcase> impl
     private SessionUtil sessionUtil;
 
 
-
     @Override
-    public Medcase getMedcaseById(Integer medcaseId){
+    public Medcase getMedcaseById(Integer medcaseId) {
         Medcase medcase = medcaseMapper.selectById(medcaseId);
         AssertUtil.isNotNull(medcase, CommonErrorCode.MEDCASE_NOT_EXIST);
 
         UserMedcase userMedcase = userMedcaseMapper.selectOne(new MPJLambdaWrapper<UserMedcase>().eq(UserMedcase::getMedcaseId, medcaseId).eq(UserMedcase::getUserId, sessionUtil.getUserId()));
-        if(userMedcase == null){
+        if (userMedcase == null) {
             userMedcase = new UserMedcase();
             userMedcase.setMedcaseId(medcaseId);
             userMedcase.setUserId(sessionUtil.getUserId());
             userMedcase.setViewTime(LocalDateTime.now());
             userMedcaseMapper.insert(userMedcase);
-        }
-        else{
+        } else {
             userMedcase.setViewTime(LocalDateTime.now());
             userMedcaseMapper.updateById(userMedcase);
         }
@@ -76,7 +75,7 @@ public class MedcaseServiceImpl extends ServiceImpl<MedcaseMapper, Medcase> impl
 
 
     @Override
-    public IPage<?> getMedcaseList(Integer pageSize, Integer pageNum, String infoKeyword, String nameKeyword, String diseaseName){
+    public IPage<?> getMedcaseList(Integer pageSize, Integer pageNum, String infoKeyword, String nameKeyword, String diseaseName) {
         MPJLambdaWrapper<Medcase> wrapper = new MPJLambdaWrapper<>();
         wrapper.selectAll(Medcase.class)
                 .leftJoin(Disease.class, Disease::getDiseaseId, Medcase::getDiseaseId)
@@ -96,9 +95,13 @@ public class MedcaseServiceImpl extends ServiceImpl<MedcaseMapper, Medcase> impl
 
         // 手术存在
         AssertUtil.isNotNull(operationMapper.selectById(medcase.getOperationId()), CommonErrorCode.OPERATION_NOT_EXIST);
+        // 根据病例名查病例
+        LambdaQueryWrapper<Medcase> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(Medcase::getName, medcase.getName());
+        Medcase oldMedcase = medcaseMapper.selectOne(wrapper);
+        // 病例名不重复或者重复但是同一个病例
+        AssertUtil.isTrue(oldMedcase == null || oldMedcase.getMedcaseId().equals(medcase.getMedcaseId()), CommonErrorCode.MEDCASE_NAME_EXIST);
 
-        // inspections
-        // medicines
         updateInspectionsMedicines(medcase);
 
         medcaseMapper.insert(medcase);
@@ -113,6 +116,13 @@ public class MedcaseServiceImpl extends ServiceImpl<MedcaseMapper, Medcase> impl
 
         // 手术存在
         AssertUtil.isNotNull(operationMapper.selectById(medcase.getOperationId()), CommonErrorCode.OPERATION_NOT_EXIST);
+
+        // 根据病例名查病例
+        LambdaQueryWrapper<Medcase> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(Medcase::getName, medcase.getName());
+        Medcase oldMedcase = medcaseMapper.selectOne(wrapper);
+        // 病例名不重复或者重复但是同一个病例
+        AssertUtil.isTrue(oldMedcase == null || oldMedcase.getMedcaseId().equals(medcase.getMedcaseId()), CommonErrorCode.MEDCASE_NAME_EXIST);
 
 
         // 更新多对多关系
@@ -133,7 +143,7 @@ public class MedcaseServiceImpl extends ServiceImpl<MedcaseMapper, Medcase> impl
     }
 
 
-    private Medcase initMedcase(Medcase medcase){
+    private Medcase initMedcase(Medcase medcase) {
         /**
          * disease
          */
@@ -160,7 +170,7 @@ public class MedcaseServiceImpl extends ServiceImpl<MedcaseMapper, Medcase> impl
         return medcase;
     }
 
-    private void updateInspectionsMedicines(Medcase medcase){
+    private void updateInspectionsMedicines(Medcase medcase) {
         // 删除旧的检查项目和药品
         medcaseInspectionService.deleteByMedcaseId(medcase.getMedcaseId());
         medcaseMedicineService.deleteByMedcaseId(medcase.getMedcaseId());
