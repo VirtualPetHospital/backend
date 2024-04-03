@@ -33,8 +33,8 @@ public class AnswerSheet implements Serializable {
 
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-    @TableField("create_time")
-    private LocalDateTime createTime;
+    @TableField("update_time")
+    private LocalDateTime updateTime;
 
     @TableField(exist = false)
     List<AnswerSheetItem> answers;
