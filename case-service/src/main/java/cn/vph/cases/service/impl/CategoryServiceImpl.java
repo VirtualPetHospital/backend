@@ -4,6 +4,7 @@ import cn.vph.cases.clients.QuestionFeignClient;
 import cn.vph.cases.entity.Category;
 import cn.vph.cases.mapper.CategoryMapper;
 import cn.vph.cases.service.CategoryService;
+import cn.vph.cases.util.SessionUtil;
 import cn.vph.common.CommonErrorCode;
 import cn.vph.common.CommonException;
 import cn.vph.common.util.AssertUtil;
@@ -43,11 +44,16 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
         return category;
     }
 
+    @Autowired
+    private SessionUtil sessionUtil;
+
     @Override
     @Transactional
     public Object delete(Integer categoryId) {
         // 不存在则抛出异常
         AssertUtil.isNotNull(categoryMapper.selectById(categoryId), CommonErrorCode.CATEGORY_NOT_EXIST);
+        System.out.println("userid ===============");
+        System.out.println(sessionUtil.getUserId());
         Long count = questionFeignClient.getQuestionCountByCategoryId(categoryId);
         AssertUtil.isTrue(count == 0, CommonErrorCode.CATEGORY_HAS_QUESTION);
         try {
