@@ -16,6 +16,11 @@ spring:
           uri: lb://exam-service
           predicates:
             - Path=/exams, /exams/**, /papers, /papers/**, /answer-sheets/**,/questions/**
+          filters:
+            - name: ExcludeRouteFilter
+              args:
+                excludePaths:
+                  - /questions/questions-count/{category_id}
         - id: file-service
           uri: lb://file-service
           predicates:
