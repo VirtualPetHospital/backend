@@ -2,9 +2,8 @@ package cn.vph.gateway;
 
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
-import org.springframework.stereotype.Component;
 
-@Component
+//@Component
 public class ExcludeRouteFilter extends AbstractGatewayFilterFactory<ExcludeRouteFilter.Config> {
 
     public ExcludeRouteFilter() {
