@@ -93,7 +93,7 @@ public class AnswerSheetServiceImpl extends ServiceImpl<AnswerSheetMapper, Answe
         AssertUtil.isTrue(answerSheetId != null && answerSheet != null, CommonErrorCode.EXAM_NOT_EXIST);
         answerSheet.setUserId(sessionUtil.getUserId());
         answerSheet.setAnswerSheetId(answerSheetId);
-        answerSheet.setCreateTime(LocalDateTime.now());
+        answerSheet.setUpdateTime(LocalDateTime.now());
         // 检查答题卡是否已存在
         AssertUtil.isTrue(answerSheetAlreadyExist(answerSheet.getExamId(), answerSheet.getUserId()), CommonErrorCode.ANSWER_SHEET_NOT_EXIST);
 
