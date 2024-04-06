@@ -22,6 +22,12 @@ public class CommonConstant {
     public final static String USER_TEACHER = "teacher";
     public final static String USER_ADMIN = "administrator";
 
+    /**
+     * user upgrade
+     */
+    public final static Integer EXAM_NUM_FOR_UPGRADE = 5;
+    public final static Integer MIN_LEVEL = 1;
+    public final static Integer MAX_LEVEL = 5;
 
     public final static int SORT_ASC = 1;
     public final static int SORT_DESC = 2;

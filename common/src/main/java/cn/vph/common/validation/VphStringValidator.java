@@ -52,12 +52,7 @@ public class VphStringValidator implements ConstraintValidator<VphValidation, St
         } else if("email".equals(rule)){
             // 邮箱
             return !isNull(value) && !isEmpty(value) && value.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+.[a-zA-Z]{2,}$");
-        }
-       /* else if("level".equals(rule)){
-            // 不为空，不为null，1-5
-            return !isNull(value) && !isEmpty(value) && value.matches("^[1-5]$");
-        } */
-        else if("answer".equals(rule)){
+        }  else if("answer".equals(rule)){
             // 必须为A、B、C、D
             return !isNull(value) && !isEmpty(value) && value.matches("^[A-D]$");
         } else if("optionDescription".equals(rule)){
