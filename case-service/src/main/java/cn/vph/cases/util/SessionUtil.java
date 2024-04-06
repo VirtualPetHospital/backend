@@ -5,6 +5,7 @@ import cn.vph.cases.entity.User;
 import cn.vph.common.CommonConstant;
 import cn.vph.common.SessionData;
 import cn.vph.common.util.BaseSessionUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -20,6 +21,7 @@ import java.util.UUID;
  **/
 
 @Component
+@Slf4j
 public class SessionUtil extends BaseSessionUtil {
 
     @Autowired
@@ -64,5 +66,11 @@ public class SessionUtil extends BaseSessionUtil {
         response.setHeader(CommonConstant.SESSION, key);
     }
 
+    public void updateSession(User user, String key){
+        SessionData sessionData = new SessionData(user.getUserId(), user.getType(), user.getLevel());
+        log.error(sessionData.toString());
+        log.error(key);
+        redisUtil.set(key, sessionData, 86400); // 24小时过期
+    }
 }
 

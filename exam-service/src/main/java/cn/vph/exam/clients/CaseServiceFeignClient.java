@@ -1,8 +1,8 @@
 package cn.vph.exam.clients;
 
-import cn.vph.common.Result;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
@@ -14,8 +14,10 @@ import java.util.List;
  */
 
 @FeignClient(name = "case-service")
-public interface CategoryFeignClient {
+public interface CaseServiceFeignClient {
 
     @GetMapping("/api/categories/keyword-ids")
     List<Integer> getCategoryIds(@RequestParam(value = "category_keyword") String keyword);
+    @PostMapping("/api/users/upgrade")
+    void upgrade(@RequestParam(value = "num_current_level") Integer numCurrentLevel, @RequestParam(value="user_id") Integer userId, @RequestParam(value="session_id") String sessionId);
 }

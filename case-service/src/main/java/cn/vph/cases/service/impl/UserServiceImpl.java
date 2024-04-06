@@ -106,6 +106,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
         User user = new User(registerRequest);
         user.setPassword(convert(user.getPassword()));
+        user.setUpgradeProgress(CommonConstant.EXAM_NUM_FOR_UPGRADE);
+        user.setLevel(CommonConstant.MIN_LEVEL);
         userMapper.insert(user);
         return new UserResponse(user);
     }
@@ -250,6 +252,25 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         }
 
         return medcaseMapper.selectPage(new Page<>(pageNum, pageSize), wrapper);
+    }
+
+    @Override
+    public void upgrade(Integer numCurrentLevel, Integer userId, String sessionId) {
+        User user = userMapper.selectById(userId);
+        AssertUtil.isNotNull(user, CommonErrorCode.USER_NOT_EXIST);
+        if(numCurrentLevel  < CommonConstant.EXAM_NUM_FOR_UPGRADE){
+            user.setUpgradeProgress(CommonConstant.EXAM_NUM_FOR_UPGRADE - numCurrentLevel);
+        } else{
+            // 满足升级条件
+            if(user.getLevel() >= CommonConstant.MAX_LEVEL){
+                return;
+            }
+            user.setUpgradeProgress(CommonConstant.EXAM_NUM_FOR_UPGRADE);
+            user.setLevel(user.getLevel() + 1);
+            // 更新session
+            sessionUtil.updateSession(user, sessionId);
+        }
+        userMapper.updateById(user);
     }
 
     private boolean isEmailValid(String email) {

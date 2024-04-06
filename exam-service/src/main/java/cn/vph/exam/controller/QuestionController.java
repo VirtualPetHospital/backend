@@ -5,7 +5,7 @@ import cn.vph.common.controller.BaseController;
 import cn.vph.common.Result;
 import cn.vph.common.annotation.Student;
 import cn.vph.common.annotation.Teacher;
-import cn.vph.exam.clients.CategoryFeignClient;
+import cn.vph.exam.clients.CaseServiceFeignClient;
 import cn.vph.exam.entity.Question;
 import cn.vph.exam.mapper.QuestionMapper;
 import cn.vph.exam.service.QuestionService;
@@ -37,7 +37,7 @@ public class QuestionController extends BaseController {
     private QuestionService questionService;
 
     @Autowired
-    private CategoryFeignClient categoryFeignClient;
+    private CaseServiceFeignClient caseServiceFeignClient;
 
     @Student
     @GetMapping("/{question_id}")
@@ -59,7 +59,7 @@ public class QuestionController extends BaseController {
     {
         LambdaQueryWrapper<Question> queryWrapper = new LambdaQueryWrapper<>();
         if(categoryKeyWord != null && !categoryKeyWord.isEmpty()){
-            List<Integer> categoryIds = categoryFeignClient.getCategoryIds(categoryKeyWord);
+            List<Integer> categoryIds = caseServiceFeignClient.getCategoryIds(categoryKeyWord);
             queryWrapper.in(Question::getCategoryId, categoryIds);
         }
         queryWrapper.like(descriptionKeyWord != null && !descriptionKeyWord.isEmpty(), Question::getDescription, descriptionKeyWord);

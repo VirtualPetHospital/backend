@@ -2,19 +2,20 @@ package cn.vph.exam.service.impl;
 
 import cn.vph.common.CommonErrorCode;
 import cn.vph.common.util.AssertUtil;
-import cn.vph.exam.entity.AnswerSheet;
-import cn.vph.exam.entity.AnswerSheetItem;
-import cn.vph.exam.entity.Paper;
-import cn.vph.exam.entity.Participant;
+import cn.vph.exam.clients.CaseServiceFeignClient;
+import cn.vph.exam.entity.*;
 import cn.vph.exam.mapper.AnswerSheetItemMapper;
 import cn.vph.exam.mapper.AnswerSheetMapper;
 import cn.vph.exam.mapper.ExamMapper;
+import cn.vph.exam.mapper.ParticipantMapper;
 import cn.vph.exam.service.AnswerSheetService;
 import cn.vph.exam.service.PaperService;
 import cn.vph.exam.service.ParticipantService;
 import cn.vph.exam.util.SessionUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.github.yulichang.wrapper.MPJLambdaWrapper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,6 +31,7 @@ import java.util.stream.Collectors;
  * @create 2024/3/19 20:00
  */
 @Service
+@Slf4j
 public class AnswerSheetServiceImpl extends ServiceImpl<AnswerSheetMapper, AnswerSheet> implements AnswerSheetService {
 
     @Autowired
@@ -50,6 +52,10 @@ public class AnswerSheetServiceImpl extends ServiceImpl<AnswerSheetMapper, Answe
     @Autowired
     private AnswerSheetItemMapper answerSheetItemMapper;
 
+    @Autowired
+    private CaseServiceFeignClient caseServiceFeignClient;
+    @Autowired
+    private ParticipantMapper participantMapper;
 
     @Override
     @Transactional
@@ -172,5 +178,20 @@ public class AnswerSheetServiceImpl extends ServiceImpl<AnswerSheetMapper, Answe
             }
         }
         answerSheet.setScore((double) correctCnt / size * 100);
+        calculateUpgrade();
+    }
+
+    private void calculateUpgrade(){
+        // 连接participant表和exam表，查询用户已经参与的,level等于user_level的exam
+        Integer userLevel = sessionUtil.getUserLevel();
+        MPJLambdaWrapper<Participant> wrapper = new MPJLambdaWrapper<>();
+        wrapper.leftJoin(Exam.class, Exam::getExamId, Participant::getExamId);
+        wrapper.eq(Participant::getUserId, sessionUtil.getUserId());
+        wrapper.eq(Participant::getParticipated, true);
+        wrapper.eq(Exam::getLevel, userLevel);
+        // selectCount
+        int count = participantMapper.selectCount(wrapper).intValue();
+        caseServiceFeignClient.upgrade(count, sessionUtil.getUserId(), sessionUtil.getSessionId());
+        log.info(sessionUtil.getSessionId());
     }
 }
