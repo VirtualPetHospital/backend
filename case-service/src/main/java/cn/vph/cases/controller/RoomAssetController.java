@@ -33,9 +33,9 @@ public class RoomAssetController {
     }
 
     @Administrator
-    @DeleteMapping("{roomAssetId}")
+    @DeleteMapping("/{room_asset_id}")
     @ApiOperation(value = "删除科室设施")
-    public Result<?> delete(@RequestParam Integer roomAssetId) {
+    public Result<?> delete(@PathVariable(value = "room_asset_id") Integer roomAssetId) {
         return Result.success(roomAssetService.delete(roomAssetId));
     }
 

@@ -9,5 +9,7 @@ public interface AnswerSheetService extends IService<AnswerSheet> {
 
     AnswerSheet update(Integer answerSheetId, AnswerSheet answerSheet);
 
+    void delete(Integer answerSheetId);
+
     AnswerSheet getAnswerSheetByExamId(Integer examId);
 }
