@@ -120,7 +120,16 @@ public class ExamServiceImpl extends ServiceImpl<ExamMapper, Exam> implements Ex
          * 1. 暂时只有学生可以报名
          * 2. 一个学生只能报名一次
          */
+
+        // 获取学生类型
         AssertUtil.isTrue(sessionUtil.getUserType().equals(CommonConstant.USER_STUDENT), CommonErrorCode.UNAUTHORIZED_ACCESS);
+
+        // 获取考试
+        Exam exam = examMapper.selectById(examId);
+        // 考试存在
+        AssertUtil.isNotNull(exam, CommonErrorCode.EXAM_NOT_EXIST);
+        // 学生level大于等于考试level
+        AssertUtil.isTrue(sessionUtil.getUserLevel() >= exam.getLevel(), CommonErrorCode.LEVEL_NOT_MATCH);
 
         LambdaQueryWrapper<Participant> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(Participant::getExamId, examId)
@@ -128,8 +137,6 @@ public class ExamServiceImpl extends ServiceImpl<ExamMapper, Exam> implements Ex
         AssertUtil.isTrue(
                 participantMapper.selectCount(wrapper) < 1,
                 CommonErrorCode.EXAM_ALREADY_ENROLLED);
-
-
         participantMapper.insert(new Participant(examId, sessionUtil.getUserId(), false));
     }
 
