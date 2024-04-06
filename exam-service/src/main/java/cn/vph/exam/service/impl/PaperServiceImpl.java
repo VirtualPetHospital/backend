@@ -58,7 +58,10 @@ public class PaperServiceImpl extends ServiceImpl<PaperMapper, Paper> implements
     @Transactional
     public Paper add(Paper paper){
         questionNumIsValid(paper);
-        nameIsValid(paper.getName());
+        // 检查试卷名是否重复
+        Paper checkingPaper = paperMapper.selectOne(new LambdaQueryWrapper<Paper>().eq(Paper::getName, paper.getName()));
+        AssertUtil.isFalse(checkingPaper == null, CommonErrorCode.PAPER_NAME_ALREADY_EXIST);
+
         paperMapper.insert(paper);
 
         // 更新关系表
@@ -71,7 +74,10 @@ public class PaperServiceImpl extends ServiceImpl<PaperMapper, Paper> implements
     public Paper update(Paper paper){
         exists(paper.getPaperId());
         questionNumIsValid(paper);
-        nameIsValid(paper.getName());
+
+        // 检查试卷名是否重复
+        Paper checkingPaper = paperMapper.selectOne(new LambdaQueryWrapper<Paper>().eq(Paper::getName, paper.getName()));
+        AssertUtil.isFalse(checkingPaper == null || checkingPaper.getPaperId().equals(paper.getPaperId()), CommonErrorCode.PAPER_NAME_ALREADY_EXIST);
 
         paperMapper.updateById(paper);
 
@@ -125,12 +131,7 @@ public class PaperServiceImpl extends ServiceImpl<PaperMapper, Paper> implements
         AssertUtil.isNotNull(paper, CommonErrorCode.PAPER_NOT_EXIST);
     }
 
-    private void nameIsValid(String name){
-        LambdaQueryWrapper<Paper> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(Paper::getName, name);
 
-        AssertUtil.isFalse(paperMapper.selectCount(queryWrapper) > 0, CommonErrorCode.PAPER_NAME_ALREADY_EXIST);
-    }
 
     private void questionNumIsValid(Paper paper){
         AssertUtil.isTrue(paper.getQuestionNum() > 0, CommonErrorCode.QUESTION_NUM_INVALID);
