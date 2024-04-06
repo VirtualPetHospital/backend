@@ -45,7 +45,7 @@ public class RoomAssetServiceImpl extends ServiceImpl<RoomAssetMapper, RoomAsset
 
     @Override
     public Object delete(Integer roomAssetId) {
-        
+
         // 科室设施存在
         RoomAsset roomAsset = roomAssetMapper.selectById(roomAssetId);
         AssertUtil.isNotNull(roomAsset, CommonErrorCode.ROOM_ASSET_NOT_EXIST);
