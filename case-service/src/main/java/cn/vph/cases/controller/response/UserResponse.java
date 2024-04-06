@@ -21,6 +21,7 @@ public class UserResponse {
     private String avatarUrl;
     private String email;
     private Integer level;
+    private Integer upgradeProgress;
     public UserResponse(User u){
         this.userId = u.getUserId();
         this.nickname = u.getNickname();
@@ -28,5 +29,6 @@ public class UserResponse {
         this.avatarUrl = u.getAvatarUrl();
         this.level = u.getLevel();
         this.email = u.getEmail();
+        this.upgradeProgress = u.getUpgradeProgress();
     }
 }
