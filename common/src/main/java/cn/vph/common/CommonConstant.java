@@ -25,7 +25,7 @@ public class CommonConstant {
     /**
      * user upgrade
      */
-    public final static Integer EXAM_NUM_FOR_UPGRADE = 1;
+    public final static Integer EXAM_NUM_FOR_UPGRADE = 5;
     public final static Integer MIN_LEVEL = 1;
     public final static Integer MAX_LEVEL = 5;
 
