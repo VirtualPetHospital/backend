@@ -121,4 +121,11 @@ public class UserController extends BaseController {
         String email = jsonObject.getString("email");
         return Result.success(userService.sendCaptcha(email));
     }
+
+
+    @PostMapping("upgrade")
+    @ApiOperation(value = "升级用户")
+    public void upgrade(@RequestParam(value = "num_current_level") Integer numCurrentLevel, @RequestParam(value="user_id") Integer userId, @RequestParam(value="session_id") String sessionId) {
+        userService.upgrade(numCurrentLevel,userId, sessionId);
+    }
 }

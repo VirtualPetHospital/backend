@@ -45,6 +45,9 @@ public class User implements Serializable {
 
     private Integer level;
 
+    @TableField("upgrade_progress")
+    private Integer upgradeProgress;
+
     /**
      * 用户学习过的病例
      */

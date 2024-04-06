@@ -31,6 +31,8 @@ public class AnswerSheet implements Serializable {
     @TableField("exam_id")
     private Integer examId;
 
+    private Double score;
+
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     @TableField("update_time")

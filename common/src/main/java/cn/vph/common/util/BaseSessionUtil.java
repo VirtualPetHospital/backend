@@ -52,4 +52,8 @@ public class BaseSessionUtil {
         }
         return sessionData;
     }
+
+    public String getSessionId(){
+        return request.getHeader(CommonConstant.SESSION);
+    }
 }
