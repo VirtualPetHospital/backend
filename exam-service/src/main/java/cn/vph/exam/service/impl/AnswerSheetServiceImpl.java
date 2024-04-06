@@ -72,7 +72,7 @@ public class AnswerSheetServiceImpl extends ServiceImpl<AnswerSheetMapper, Answe
         // 查出对应的试卷
         Paper paper = paperService.getPaperById(examMapper.selectById(answerSheet.getExamId()).getPaperId());
         // 检查答题卡是否和试卷对应
-        checkAnswerSheetAndPaper(answerSheet, paper);
+        checkAnswerSheetMatchAndCalculateScore(answerSheet, paper);
 
         answerSheet.setUpdateTime(LocalDateTime.now());
         answerSheetMapper.insert(answerSheet);
@@ -90,7 +90,7 @@ public class AnswerSheetServiceImpl extends ServiceImpl<AnswerSheetMapper, Answe
     @Override
     @Transactional
     public AnswerSheet update(Integer answerSheetId, AnswerSheet answerSheet) {
-        AssertUtil.isTrue(answerSheetId != null && answerSheet != null, CommonErrorCode.EXAM_NOT_EXIST);
+        AssertUtil.isTrue(answerSheetId != null && answerSheet != null && answerSheetId.equals(answerSheet.getAnswerSheetId()), CommonErrorCode.EXAM_NOT_EXIST);
         answerSheet.setUserId(sessionUtil.getUserId());
         answerSheet.setAnswerSheetId(answerSheetId);
         answerSheet.setUpdateTime(LocalDateTime.now());
@@ -102,7 +102,7 @@ public class AnswerSheetServiceImpl extends ServiceImpl<AnswerSheetMapper, Answe
         // 查出对应的试卷
         Paper paper = paperService.getPaperById(examMapper.selectById(answerSheet.getExamId()).getPaperId());
         // 检查答题卡是否和试卷对应
-        checkAnswerSheetAndPaper(answerSheet, paper);
+        checkAnswerSheetMatchAndCalculateScore(answerSheet, paper);
 
         answerSheetMapper.updateById(answerSheet);
 
@@ -155,12 +155,22 @@ public class AnswerSheetServiceImpl extends ServiceImpl<AnswerSheetMapper, Answe
                 CommonErrorCode.QUESTION_ANSWER_NOT_VALID);
     }
 
-    private void checkAnswerSheetAndPaper(AnswerSheet answerSheet, Paper paper) {
-        AssertUtil.isTrue(answerSheet.getAnswers().size() == paper.getQuestions().size(), CommonErrorCode.ANSWER_SHEET_NOT_MATCH);
+    private void checkAnswerSheetMatchAndCalculateScore(AnswerSheet answerSheet, Paper paper) {
+
+        int size = paper.getQuestionNum();
+        int correctCnt = 0;
+        AssertUtil.isTrue(answerSheet.getAnswers().size() == size, CommonErrorCode.ANSWER_SHEET_NOT_MATCH);
         // 遍历答题卡中的题目
         for (int i = 0; i < answerSheet.getAnswers().size(); i++) {
+            AnswerSheetItem answerSheetItem = answerSheet.getAnswers().get(i);
+            String userAnswer = answerSheetItem.getAnswer();
             // 答题卡中的题目和paper中的对应
-            AssertUtil.isTrue(answerSheet.getAnswers().get(i).getQuestionId().equals(paper.getQuestions().get(i).getQuestionId()), CommonErrorCode.ANSWER_SHEET_NOT_MATCH);
+            AssertUtil.isTrue(answerSheetItem.getQuestionId().equals(paper.getQuestions().get(i).getQuestionId()), CommonErrorCode.ANSWER_SHEET_NOT_MATCH);
+            // 查询试题，比较answersheet的答案和正确答案
+            if(userAnswer != null && userAnswer.equals(paper.getQuestions().get(i).getAnswer())){
+                correctCnt++;
+            }
         }
+        answerSheet.setScore((double) correctCnt / size * 100);
     }
 }
