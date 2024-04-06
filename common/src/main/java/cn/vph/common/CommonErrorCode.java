@@ -112,6 +112,7 @@ public enum CommonErrorCode {
     EXAM_TIME_INVALID(2003, "考试时间设置不合法", "考试时间设置不合法"),
     EXAM_DURATION_INVALID(2003, "考试时长不合法", "考试时长不合法"),
     EXAM_ALREADY_ENROLLED(2003, "已报名该考试", "已报名该考试"),
+    LEVEL_NOT_MATCH(2003, "用户等级不符合要求", "您的等级较低！请先通过其他考试提升等级！"),
     /**
      * 答题卡相关
      */
