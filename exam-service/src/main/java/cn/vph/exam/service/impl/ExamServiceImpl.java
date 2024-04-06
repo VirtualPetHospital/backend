@@ -96,7 +96,9 @@ public class ExamServiceImpl extends ServiceImpl<ExamMapper, Exam> implements Ex
     @Override
     @Transactional
     public Exam add(Exam exam){
-        nameIsUnique(exam);
+        // 不与其他exam重名
+        Exam checkingExam = examMapper.selectOne(new LambdaQueryWrapper<Exam>().eq(Exam::getName, exam.getName()));
+        AssertUtil.isTrue(checkingExam == null, CommonErrorCode.EXAM_NAME_ALREADY_EXIST);
         examTimeIsValid(exam);
         AssertUtil.isNotNull(paperService.getPaperById(exam.getPaperId()), CommonErrorCode.PAPER_NOT_EXIST);
         examMapper.insert(exam);
@@ -106,7 +108,10 @@ public class ExamServiceImpl extends ServiceImpl<ExamMapper, Exam> implements Ex
     @Override
     @Transactional
     public Exam update(Exam exam){
-        nameIsUnique(exam);
+        // 不与其他exam重名
+        Exam checkingExam = examMapper.selectOne(new LambdaQueryWrapper<Exam>().eq(Exam::getName, exam.getName()));
+        AssertUtil.isTrue(checkingExam == null || checkingExam.getExamId().equals(exam.getExamId()), CommonErrorCode.EXAM_NAME_ALREADY_EXIST);
+
         exists(exam.getExamId());
         examTimeIsValid(exam);
         AssertUtil.isNotNull(paperService.getPaperById(exam.getPaperId()), CommonErrorCode.PAPER_NOT_EXIST);
@@ -175,12 +180,6 @@ public class ExamServiceImpl extends ServiceImpl<ExamMapper, Exam> implements Ex
         AssertUtil.isNotNull(exam, CommonErrorCode.EXAM_NOT_EXIST);
     }
 
-    // 检查exam.name重名
-    private void nameIsUnique(Exam exam){
-        LambdaQueryWrapper<Exam> checkWrapper = new LambdaQueryWrapper<>();
-        checkWrapper.eq(Exam::getName, exam.getName());
-        AssertUtil.isTrue(examMapper.selectCount(checkWrapper) == 0, CommonErrorCode.EXAM_NAME_ALREADY_EXIST);
-    }
 
     private void examTimeIsValid(Exam exam){
         AssertUtil.isTrue(exam.getStartTime().isBefore(exam.getEndTime()), CommonErrorCode.EXAM_TIME_INVALID);
