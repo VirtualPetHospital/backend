@@ -45,7 +45,7 @@ public class OperationController extends BaseController{
     @Administrator
     @PutMapping("{operationId}")
     @ApiOperation(value = "更新手术")
-    public Result<Operation> update(@Valid @PathVariable Integer operationId, @Valid @RequestBody Operation operation) {
+    public Result<Operation> update(@PathVariable Integer operationId, @Valid @RequestBody Operation operation) {
         operation.setOperationId(operationId);
         return Result.success(operationService.update(operation));
     }

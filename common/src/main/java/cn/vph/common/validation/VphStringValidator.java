@@ -56,8 +56,8 @@ public class VphStringValidator implements ConstraintValidator<VphValidation, St
             // 必须为A、B、C、D
             return !isNull(value) && !isEmpty(value) && value.matches("^[A-D]$");
         } else if("optionDescription".equals(rule)){
-            // 不为空，不为null，长度小于50，由汉字、大小写字母、数字、下划线（_）、连字符（-）构成
-            return !isNull(value) && !isEmpty(value) && value.matches("[\\u4E00-\\u9FA5a-zA-Z0-9_-]+") && value.length() < 50;
+            // 不为空，不为null，长度小于75
+            return !isNull(value) && !isEmpty(value) && value.length() < 75;
         }
         else {
             return false;

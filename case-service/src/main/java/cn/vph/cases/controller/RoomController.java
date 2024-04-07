@@ -62,7 +62,7 @@ public class RoomController extends BaseController {
     @Administrator
     @PutMapping("{roomId}")
     @ApiOperation(value = "更新科室")
-    public Result<Room> update(@Valid @PathVariable Integer roomId, @RequestBody Room room) {
+    public Result<Room> update(@PathVariable Integer roomId, @Valid @RequestBody Room room) {
         return Result.success(roomService.update(roomId, room));
     }
 }
