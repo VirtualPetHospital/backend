@@ -29,8 +29,11 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 /**
  * @program: vph-backend
@@ -258,11 +261,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     public void upgrade(Integer numCurrentLevel, Integer userId, String sessionId) {
         User user = userMapper.selectById(userId);
         AssertUtil.isNotNull(user, CommonErrorCode.USER_NOT_EXIST);
-        if(numCurrentLevel  < CommonConstant.EXAM_NUM_FOR_UPGRADE){
+        if (numCurrentLevel < CommonConstant.EXAM_NUM_FOR_UPGRADE) {
             user.setUpgradeProgress(CommonConstant.EXAM_NUM_FOR_UPGRADE - numCurrentLevel);
-        } else{
+        } else {
             // 满足升级条件
-            if(user.getLevel() >= CommonConstant.MAX_LEVEL){
+            if (user.getLevel() >= CommonConstant.MAX_LEVEL) {
                 return;
             }
             user.setUpgradeProgress(CommonConstant.EXAM_NUM_FOR_UPGRADE);
@@ -273,10 +276,25 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         userMapper.updateById(user);
     }
 
+    @Override
+    public List<String> getNicknames(List<Integer> userIds) {
+        // 根据userIds列表查出每个用户的nickname
+        LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
+        wrapper.in(User::getUserId, userIds);
+        // 先查出所有用户
+        List<User> users = userMapper.selectList(wrapper);
+        // 创建user id 到 nickname的映射
+        Map<Integer, String> nicknameMap = users.stream().collect(Collectors.toMap(User::getUserId, User::getNickname));
+
+        // 根据map找到user id 对应的Nickname
+        return userIds.stream().map(nicknameMap::get).collect(Collectors.toList());
+    }
+
     private boolean isEmailValid(String email) {
         String EMAIL_REGEX = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
         Pattern pattern = Pattern.compile(EMAIL_REGEX);
         Matcher emailMatcher = pattern.matcher(email);
         return emailMatcher.matches();
     }
+
 }

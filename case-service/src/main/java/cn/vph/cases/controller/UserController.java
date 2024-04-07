@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 /**
  * @program: vph-backend
@@ -127,5 +128,11 @@ public class UserController extends BaseController {
     @ApiOperation(value = "升级用户")
     public void upgrade(@RequestParam(value = "num_current_level") Integer numCurrentLevel, @RequestParam(value="user_id") Integer userId, @RequestParam(value="session_id") String sessionId) {
         userService.upgrade(numCurrentLevel,userId, sessionId);
+    }
+
+    @GetMapping("/nickname/list/{values}")
+    @ApiOperation(value = "根据user_id List 查出nickname List")
+    public List<String> getNicknamesByIds(@PathVariable List<Integer> values) {
+        return userService.getNicknames(values);
     }
 }
