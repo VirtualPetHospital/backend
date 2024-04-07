@@ -17,7 +17,7 @@ import java.util.List;
 public interface CaseServiceFeignClient {
 
     @GetMapping("/api/categories/keyword-ids")
-    List<Integer> getCategoryIds(@RequestParam(value = "category_keyword") String keyword);
+    List<Integer> getCategoryIds(@RequestParam(value = "category_keyword", required = false) String keyword);
     @PostMapping("/api/users/upgrade")
     void upgrade(@RequestParam(value = "num_current_level") Integer numCurrentLevel, @RequestParam(value="user_id") Integer userId, @RequestParam(value="session_id") String sessionId);
 }
