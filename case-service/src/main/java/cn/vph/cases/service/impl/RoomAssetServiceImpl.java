@@ -7,6 +7,7 @@ import cn.vph.cases.mapper.RoomMapper;
 import cn.vph.cases.service.RoomAssetService;
 import cn.vph.common.CommonErrorCode;
 import cn.vph.common.util.AssertUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.yulichang.wrapper.MPJLambdaWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -82,18 +83,13 @@ public class RoomAssetServiceImpl extends ServiceImpl<RoomAssetMapper, RoomAsset
         // 科室设施存在
         RoomAsset exist = roomAssetMapper.selectById(roomAsset.getRoomAssetId());
         AssertUtil.isNotNull(exist, CommonErrorCode.ROOM_ASSET_NOT_EXIST);
-        // 科室存在
-        Room room = roomMapper.selectById(roomAsset.getRoomId());
-        AssertUtil.isNotNull(room, CommonErrorCode.ROOM_NOT_EXIST);
         // 科室不变
         AssertUtil.isTrue(roomAsset.getRoomId().equals(exist.getRoomId()), CommonErrorCode.CANNOT_CHANGE_ROOM_OF_ROOM_ASSET);
-        // 查看科室内是否已经有同名设施
-        MPJLambdaWrapper<RoomAsset> wrapper = new MPJLambdaWrapper<>();
-        wrapper.eq(RoomAsset::getName, roomAsset.getName());
-        wrapper.eq(RoomAsset::getRoomId, roomAsset.getRoomId());
-        RoomAsset exist2 = roomAssetMapper.selectOne(wrapper);
-        AssertUtil.isNull(exist2, CommonErrorCode.ROOM_ASSET_ALREADY_EXIST);
-        roomAssetMapper.updateById(roomAsset);
+        // 没有重名的科室
+        RoomAsset checkingRoomAsset = roomAssetMapper.selectOne(new LambdaQueryWrapper<RoomAsset>().eq(RoomAsset::getName, roomAsset.getName()));
+        AssertUtil.isTrue(checkingRoomAsset == null || checkingRoomAsset.getRoomAssetId().equals(roomAsset.getRoomAssetId()), CommonErrorCode.ROOM_ASSET_ALREADY_EXIST);
+
+       roomAssetMapper.updateById(roomAsset);
         return roomAsset;
     }
 
