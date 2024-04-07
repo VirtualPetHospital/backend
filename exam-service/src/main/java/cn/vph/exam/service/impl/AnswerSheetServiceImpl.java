@@ -132,6 +132,57 @@ public class AnswerSheetServiceImpl extends ServiceImpl<AnswerSheetMapper, Answe
         AnswerSheet answerSheet = answerSheetMapper.selectOne(queryWrapper);
 
         AssertUtil.isTrue(answerSheet != null, CommonErrorCode.ANSWER_SHEET_NOT_EXIST);
+        setAnswerSheetAnswers(answerSheet);
+//        List<Integer> answerSheetItemIds = answerSheetItemMapper.selectList(
+//                        new LambdaQueryWrapper<AnswerSheetItem>()
+//                                .eq(AnswerSheetItem::getAnswerSheetId, answerSheet.getAnswerSheetId()))
+//                .stream()
+//                .map(AnswerSheetItem::getId)
+//                .collect(Collectors.toList());
+//        if (answerSheetItemIds.isEmpty()) {
+//            answerSheet.setAnswers(Collections.emptyList());
+//        } else {
+//            answerSheet.setAnswers(answerSheetItemMapper.selectBatchIds(answerSheetItemIds));
+//        }
+        return answerSheet;
+    }
+
+    @Override
+    public List<UserAnswerSheet> getAnswerSheets(Integer examId) {
+        // 查看考试是否存在
+        AssertUtil.isNotNull(examMapper.selectOne(new LambdaQueryWrapper<Exam>().eq(Exam::getExamId, examId)), CommonErrorCode.EXAM_NOT_EXIST);
+
+        // 查询 对应考试内 所有有效的答题卡id和用户id
+        List<UserAnswerSheet> userAnswerSheets = participantMapper.selectJoinList(UserAnswerSheet.class, new MPJLambdaWrapper<Participant>()
+                .leftJoin(AnswerSheet.class, AnswerSheet::getUserId, Participant::getUserId)
+                .selectAs(AnswerSheet::getAnswerSheetId, UserAnswerSheet::getAnswerSheetId)
+                .selectAs(Participant::getUserId, UserAnswerSheet::getUserId)
+                .eq(AnswerSheet::getExamId, Participant::getExamId)
+                .eq(Participant::getExamId, examId)
+                .eq(Participant::getParticipated, true)
+        );
+
+        // 从userAnswerSheets中抽离出userid List
+        List<Integer> userIds = userAnswerSheets.stream().map(UserAnswerSheet::getUserId).collect(Collectors.toList());
+        // 获取nickname List
+        List<String> nicknames = caseServiceFeignClient.getNicknamesByIds(userIds);
+
+        // 合并user_ids, nicknames, answer
+        for (int i = 0; i < userAnswerSheets.size(); i++) {
+            userAnswerSheets.get(i).setNickname(nicknames.get(i));
+        }
+        return userAnswerSheets;
+    }
+
+    @Override
+    public Object getAnswerSheetByAnswerSheetId(Integer answerSheetId) {
+        AnswerSheet answerSheet = answerSheetMapper.selectOne(new LambdaQueryWrapper<AnswerSheet>().eq(AnswerSheet::getAnswerSheetId, answerSheetId));
+        AssertUtil.isNotNull(answerSheet, CommonErrorCode.ANSWER_SHEET_NOT_EXIST);
+        setAnswerSheetAnswers(answerSheet);
+        return answerSheet;
+    }
+
+    public void setAnswerSheetAnswers(AnswerSheet answerSheet) {
         List<Integer> answerSheetItemIds = answerSheetItemMapper.selectList(
                         new LambdaQueryWrapper<AnswerSheetItem>()
                                 .eq(AnswerSheetItem::getAnswerSheetId, answerSheet.getAnswerSheetId()))
@@ -143,17 +194,16 @@ public class AnswerSheetServiceImpl extends ServiceImpl<AnswerSheetMapper, Answe
         } else {
             answerSheet.setAnswers(answerSheetItemMapper.selectBatchIds(answerSheetItemIds));
         }
-        return answerSheet;
     }
 
     @Override
     @Transactional
     public void delete(Integer answerSheetId) {
-        if(answerSheetId == null) {
+        if (answerSheetId == null) {
             return;
         }
         AnswerSheet answerSheet = answerSheetMapper.selectById(answerSheetId);
-        if(answerSheet != null) {
+        if (answerSheet != null) {
 
             answerSheetItemMapper.delete(new LambdaQueryWrapper<AnswerSheetItem>().eq(AnswerSheetItem::getAnswerSheetId, answerSheetId));
             answerSheetMapper.deleteById(answerSheetId);
@@ -187,7 +237,7 @@ public class AnswerSheetServiceImpl extends ServiceImpl<AnswerSheetMapper, Answe
             // 答题卡中的题目和paper中的对应
             AssertUtil.isTrue(answerSheetItem.getQuestionId().equals(paper.getQuestions().get(i).getQuestionId()), CommonErrorCode.ANSWER_SHEET_NOT_MATCH);
             // 查询试题，比较answersheet的答案和正确答案
-            if(userAnswer != null && userAnswer.equals(paper.getQuestions().get(i).getAnswer())){
+            if (userAnswer != null && userAnswer.equals(paper.getQuestions().get(i).getAnswer())) {
                 correctCnt++;
             }
         }
@@ -195,7 +245,7 @@ public class AnswerSheetServiceImpl extends ServiceImpl<AnswerSheetMapper, Answe
         calculateUpgrade();
     }
 
-    private void calculateUpgrade(){
+    private void calculateUpgrade() {
         // 连接participant表和exam表，查询用户已经参与的,level等于user_level的exam
         Integer userLevel = sessionUtil.getUserLevel();
         MPJLambdaWrapper<Participant> wrapper = new MPJLambdaWrapper<>();

@@ -6,6 +6,8 @@ import cn.vph.cases.entity.User;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 
+import java.util.List;
+
 /**
  * @program: vph-backend
  * @description:
@@ -36,4 +38,6 @@ public interface UserService extends IService<User> {
     IPage<?> medcases(Integer pageNum, Integer pageSize, String medcaseInfoKeyword, String medcaseNameKeyword, String disease, Integer sortByViewTime);
 
     void upgrade(Integer numCurrentLevel, Integer userId, String sessionId);
+
+    List<String> getNicknames(List<Integer> values);
 }
