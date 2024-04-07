@@ -26,7 +26,6 @@ public class RoomAssetServiceImpl extends ServiceImpl<RoomAssetMapper, RoomAsset
     @Autowired
     private RoomMapper roomMapper;
 
-
     @Override
     public Object add(RoomAsset roomAsset) {
         // 是否存在科室
@@ -92,6 +91,4 @@ public class RoomAssetServiceImpl extends ServiceImpl<RoomAssetMapper, RoomAsset
        roomAssetMapper.updateById(roomAsset);
         return roomAsset;
     }
-
-
 }
