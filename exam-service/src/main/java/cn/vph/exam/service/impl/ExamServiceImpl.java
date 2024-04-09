@@ -37,7 +37,7 @@ public class ExamServiceImpl extends ServiceImpl<ExamMapper, Exam> implements Ex
 
     @Autowired
     private PaperService paperService;
-    
+
     @Autowired
     private ParticipantMapper participantMapper;
 
@@ -50,7 +50,7 @@ public class ExamServiceImpl extends ServiceImpl<ExamMapper, Exam> implements Ex
 
 
     @Override
-    public Exam getExamById(Integer examId){
+    public Exam getExamById(Integer examId) {
         exists(examId);
         Exam exam = examMapper.selectById(examId);
         exam.setPaper(paperService.getPaperById(exam.getPaperId()));
@@ -59,10 +59,11 @@ public class ExamServiceImpl extends ServiceImpl<ExamMapper, Exam> implements Ex
 
 
     @Override
-    public IPage<Exam> getExamList(Integer pageSize, Integer pageNum, String nameKeyword, Integer level, Integer sortByStartTime, Boolean participated){
+    public IPage<Exam> getExamList(Integer pageSize, Integer pageNum, String nameKeyword, Integer level, Integer sortByStartTime, Boolean participated) {
         MPJLambdaWrapper<Exam> wrapper = new MPJLambdaWrapper<>();
         wrapper.selectAll(Exam.class)
-               .leftJoin(Participant.class, Participant::getExamId, Exam::getExamId);
+                .selectAs(Participant::getParticipated, Exam::getParticipated)
+                .leftJoin(Participant.class, Participant::getExamId, Exam::getExamId);
 
         // nameKeyword
         // level
@@ -71,19 +72,19 @@ public class ExamServiceImpl extends ServiceImpl<ExamMapper, Exam> implements Ex
 
         // participated
         // null=全列表；true=查该用户已报名已交卷；false=已报名未考试
-        if(participated != null){
+        if (participated != null) {
             wrapper.eq(Participant::getUserId, sessionUtil.getUserId())
-                   .eq(Participant::getParticipated, participated);
+                    .eq(Participant::getParticipated, participated);
         }
 
         // sortByStartTime
-        if(sortByStartTime != null){
+        if (sortByStartTime != null) {
             wrapper.orderBy(true, sortByStartTime == CommonConstant.SORT_ASC, "start_time");
         }
 
         // 包装 paper字段
         IPage<Exam> curPage = examMapper.selectPage(new Page<>(pageNum, pageSize), wrapper);
-        if(!curPage.getRecords().isEmpty()){
+        if (!curPage.getRecords().isEmpty()) {
             curPage.getRecords().forEach(exam -> {
                 exam.setPaper(paperService.getPaperById(exam.getPaperId()));
 //                exam.setParticipated(participated);
@@ -95,7 +96,7 @@ public class ExamServiceImpl extends ServiceImpl<ExamMapper, Exam> implements Ex
 
     @Override
     @Transactional
-    public Exam add(Exam exam){
+    public Exam add(Exam exam) {
         // 不与其他exam重名
         Exam checkingExam = examMapper.selectOne(new LambdaQueryWrapper<Exam>().eq(Exam::getName, exam.getName()));
         AssertUtil.isTrue(checkingExam == null, CommonErrorCode.EXAM_NAME_ALREADY_EXIST);
@@ -107,7 +108,7 @@ public class ExamServiceImpl extends ServiceImpl<ExamMapper, Exam> implements Ex
 
     @Override
     @Transactional
-    public Exam update(Exam exam){
+    public Exam update(Exam exam) {
         // 不与其他exam重名
         Exam checkingExam = examMapper.selectOne(new LambdaQueryWrapper<Exam>().eq(Exam::getName, exam.getName()));
         AssertUtil.isTrue(checkingExam == null || checkingExam.getExamId().equals(exam.getExamId()), CommonErrorCode.EXAM_NAME_ALREADY_EXIST);
@@ -121,7 +122,7 @@ public class ExamServiceImpl extends ServiceImpl<ExamMapper, Exam> implements Ex
 
     @Override
     @Transactional
-    public void delete(Integer examId){
+    public void delete(Integer examId) {
         exists(examId);
         LambdaQueryWrapper<Participant> participantWrapper = new LambdaQueryWrapper<>();
         participantWrapper.eq(Participant::getExamId, examId);
@@ -129,7 +130,7 @@ public class ExamServiceImpl extends ServiceImpl<ExamMapper, Exam> implements Ex
         LambdaQueryWrapper<AnswerSheet> answerSheetWrapper = new LambdaQueryWrapper<>();
         answerSheetWrapper.eq(AnswerSheet::getExamId, examId);
         List<AnswerSheet> answerSheets = answerSheetService.list(answerSheetWrapper);
-        if(!answerSheets.isEmpty()){
+        if (!answerSheets.isEmpty()) {
             for (AnswerSheet answerSheet : answerSheets) {
                 answerSheetService.delete(answerSheet.getAnswerSheetId());
             }
@@ -140,7 +141,7 @@ public class ExamServiceImpl extends ServiceImpl<ExamMapper, Exam> implements Ex
 
     @Override
     @Transactional
-    public void enroll(Integer examId){
+    public void enroll(Integer examId) {
         exists(examId);
         /**
          * 1. 暂时只有学生可以报名
@@ -159,7 +160,7 @@ public class ExamServiceImpl extends ServiceImpl<ExamMapper, Exam> implements Ex
 
         LambdaQueryWrapper<Participant> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(Participant::getExamId, examId)
-               .eq(Participant::getUserId, sessionUtil.getUserId());
+                .eq(Participant::getUserId, sessionUtil.getUserId());
         AssertUtil.isTrue(
                 participantMapper.selectCount(wrapper) < 1,
                 CommonErrorCode.EXAM_ALREADY_ENROLLED);
@@ -168,20 +169,20 @@ public class ExamServiceImpl extends ServiceImpl<ExamMapper, Exam> implements Ex
 
     @Override
     @Transactional
-    public void unEnroll(Integer examId){
+    public void unEnroll(Integer examId) {
         exists(examId);
         Participant participant = new Participant(examId, sessionUtil.getUserId(), false);
         participantMapper.delete(new LambdaQueryWrapper<>(participant));
     }
 
 
-    private void exists(Integer examId){
+    private void exists(Integer examId) {
         Exam exam = examMapper.selectById(examId);
         AssertUtil.isNotNull(exam, CommonErrorCode.EXAM_NOT_EXIST);
     }
 
 
-    private void examTimeIsValid(Exam exam){
+    private void examTimeIsValid(Exam exam) {
         AssertUtil.isTrue(exam.getStartTime().isBefore(exam.getEndTime()), CommonErrorCode.EXAM_TIME_INVALID);
         AssertUtil.isTrue(ChronoUnit.MINUTES.between(exam.getStartTime(), exam.getEndTime()) == exam.getDuration(), CommonErrorCode.EXAM_TIME_INVALID);
     }
