@@ -60,7 +60,7 @@ public class PaperServiceImpl extends ServiceImpl<PaperMapper, Paper> implements
         questionNumIsValid(paper);
         // 检查试卷名是否重复
         Paper checkingPaper = paperMapper.selectOne(new LambdaQueryWrapper<Paper>().eq(Paper::getName, paper.getName()));
-        AssertUtil.isFalse(checkingPaper == null, CommonErrorCode.PAPER_NAME_ALREADY_EXIST);
+        AssertUtil.isTrue(checkingPaper == null, CommonErrorCode.PAPER_NAME_ALREADY_EXIST);
 
         paperMapper.insert(paper);
 

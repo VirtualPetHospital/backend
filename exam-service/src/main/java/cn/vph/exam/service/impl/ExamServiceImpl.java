@@ -61,9 +61,11 @@ public class ExamServiceImpl extends ServiceImpl<ExamMapper, Exam> implements Ex
     @Override
     public IPage<Exam> getExamList(Integer pageSize, Integer pageNum, String nameKeyword, Integer level, Integer sortByStartTime, Boolean participated) {
         MPJLambdaWrapper<Exam> wrapper = new MPJLambdaWrapper<>();
+        MPJLambdaWrapper<Exam> notWrapper = new MPJLambdaWrapper<>();
         wrapper.selectAll(Exam.class)
                 .selectAs(Participant::getParticipated, Exam::getParticipated)
-                .leftJoin(Participant.class, Participant::getExamId, Exam::getExamId);
+                .leftJoin(Participant.class, Participant::getExamId, Exam::getExamId)
+                .eq(Participant::getUserId, sessionUtil.getUserId());
 
         // nameKeyword
         // level
@@ -73,8 +75,11 @@ public class ExamServiceImpl extends ServiceImpl<ExamMapper, Exam> implements Ex
         // participated
         // null=全列表；true=查该用户已报名已交卷；false=已报名未考试
         if (participated != null) {
-            wrapper.eq(Participant::getUserId, sessionUtil.getUserId())
-                    .eq(Participant::getParticipated, participated);
+            wrapper.eq(Participant::getParticipated, participated);
+        } else {
+            notWrapper.selectAll(Exam.class);
+            notWrapper.notIn(Exam::getExamId, participantMapper.selectList(new LambdaQueryWrapper<Participant>().eq(Participant::getUserId, sessionUtil.getUserId())).stream().map(Participant::getExamId).toArray());
+            wrapper.union(notWrapper);
         }
 
         // sortByStartTime
