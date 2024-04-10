@@ -78,7 +78,7 @@ public class ExamServiceImpl extends ServiceImpl<ExamMapper, Exam> implements Ex
             wrapper.eq(Participant::getParticipated, participated);
         } else {
             notWrapper.selectAll(Exam.class);
-            notWrapper.notIn(Exam::getExamId, participantMapper.selectList(new LambdaQueryWrapper<Participant>().eq(Participant::getUserId, sessionUtil.getUserId())).stream().map(Participant::getExamId).toArray());
+            notWrapper.notIn(Exam::getExamId, participantMapper.selectList(new MPJLambdaWrapper<Participant>().eq(Participant::getUserId, sessionUtil.getUserId())));
             wrapper.union(notWrapper);
         }
 
