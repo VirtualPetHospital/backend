@@ -46,7 +46,7 @@ public class PaperServiceImpl extends ServiceImpl<PaperMapper, Paper> implements
 
 
     @Override
-    public Paper getPaperById(Integer paperId){
+    public Paper getPaperById(Integer paperId) {
         exists(paperId);
         Paper paper = paperMapper.selectById(paperId);
         initPaper(paper);
@@ -56,12 +56,11 @@ public class PaperServiceImpl extends ServiceImpl<PaperMapper, Paper> implements
 
     @Override
     @Transactional
-    public Paper add(Paper paper){
+    public Paper add(Paper paper) {
         questionNumIsValid(paper);
         // 检查试卷名是否重复
         Paper checkingPaper = paperMapper.selectOne(new LambdaQueryWrapper<Paper>().eq(Paper::getName, paper.getName()));
-        AssertUtil.isFalse(checkingPaper == null, CommonErrorCode.PAPER_NAME_ALREADY_EXIST);
-
+        AssertUtil.isTrue(checkingPaper == null || checkingPaper.getPaperId().equals(paper.getPaperId()), CommonErrorCode.PAPER_NAME_ALREADY_EXIST);
         paperMapper.insert(paper);
 
         // 更新关系表
@@ -71,7 +70,7 @@ public class PaperServiceImpl extends ServiceImpl<PaperMapper, Paper> implements
 
     @Override
     @Transactional
-    public Paper update(Paper paper){
+    public Paper update(Paper paper) {
         exists(paper.getPaperId());
         questionNumIsValid(paper);
 
@@ -88,7 +87,7 @@ public class PaperServiceImpl extends ServiceImpl<PaperMapper, Paper> implements
 
     @Override
     @Transactional
-    public void delete(Integer paperId){
+    public void delete(Integer paperId) {
         exists(paperId);
         // 先删除关系表条目，再删除试卷
         paperQuestionService.deleteByPaperId(paperId);
@@ -97,21 +96,20 @@ public class PaperServiceImpl extends ServiceImpl<PaperMapper, Paper> implements
 
     // 封装试卷的题目列表
     @Override
-    public void initPaper(Paper paper){
+    public void initPaper(Paper paper) {
         List<Integer> questionIds = paperQuestionMapper.selectList(
                 new LambdaQueryWrapper<PaperQuestion>()
-                .eq(PaperQuestion::getPaperId, paper.getPaperId())
+                        .eq(PaperQuestion::getPaperId, paper.getPaperId())
         ).stream().map(PaperQuestion::getQuestionId).collect(Collectors.toList());
 
-        if(questionIds.isEmpty()){
+        if (questionIds.isEmpty()) {
             paper.setQuestions(Collections.emptyList());
-        }
-        else{
+        } else {
             paper.setQuestions(questionMapper.selectBatchIds(questionIds));
         }
     }
 
-    private void updatePaperQuestion(Paper paper){
+    private void updatePaperQuestion(Paper paper) {
         /**
          * 删除旧的PaperQuestion关系表条目
          */
@@ -126,14 +124,13 @@ public class PaperServiceImpl extends ServiceImpl<PaperMapper, Paper> implements
         });
     }
 
-    private void exists(Integer paperId){
+    private void exists(Integer paperId) {
         Paper paper = paperMapper.selectById(paperId);
         AssertUtil.isNotNull(paper, CommonErrorCode.PAPER_NOT_EXIST);
     }
 
 
-
-    private void questionNumIsValid(Paper paper){
+    private void questionNumIsValid(Paper paper) {
         AssertUtil.isTrue(paper.getQuestionNum() > 0, CommonErrorCode.QUESTION_NUM_INVALID);
         AssertUtil.isTrue(paper.getQuestions().size() == paper.getQuestionNum(), CommonErrorCode.QUESTION_NUM_INVALID);
     }
