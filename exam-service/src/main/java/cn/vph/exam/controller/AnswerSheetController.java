@@ -2,6 +2,7 @@ package cn.vph.exam.controller;
 
 import cn.vph.common.Result;
 import cn.vph.common.annotation.Student;
+import cn.vph.common.annotation.Teacher;
 import cn.vph.exam.entity.AnswerSheet;
 import cn.vph.exam.service.AnswerSheetService;
 import io.swagger.annotations.Api;
@@ -56,4 +57,18 @@ public class AnswerSheetController{
         return Result.success(answerSheetService.getAnswerSheetByExamId(examId));
     }
 
+
+    @Teacher
+    @GetMapping("/list/{exam_id}")
+    @ApiOperation(value = "查询单个考试内的所有学生答题卡")
+    public Result<?> getAnswerSheetsByExamId(@PathVariable(value="exam_id") Integer examId){
+        return Result.success(answerSheetService.getAnswerSheets(examId));
+    }
+
+    @Teacher
+    @GetMapping("/answer-sheets/{answer_sheet_id}")
+    @ApiOperation(value = "查询单个学生的答题卡")
+    public Result<?> getAnswerSheetByAnswerSheetId(@PathVariable(value = "answer_sheet_id") Integer answerSheetId) {
+        return Result.success(answerSheetService.getAnswerSheetByAnswerSheetId(answerSheetId));
+    }
 }

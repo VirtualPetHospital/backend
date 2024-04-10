@@ -3,6 +3,7 @@ package cn.vph.exam.service.impl;
 import cn.vph.common.CommonErrorCode;
 import cn.vph.common.CommonException;
 import cn.vph.common.util.AssertUtil;
+import cn.vph.exam.clients.CaseServiceFeignClient;
 import cn.vph.exam.entity.PaperQuestion;
 import cn.vph.exam.entity.Question;
 import cn.vph.exam.mapper.PaperQuestionMapper;
@@ -13,6 +14,8 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 
 /**
@@ -30,6 +33,8 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
     @Autowired
     private PaperQuestionMapper paperQuestionMapper;
 
+    @Autowired
+    private CaseServiceFeignClient caseServiceFeignClient;
 
     @Override
     public Question getQuestionById(Integer questionId){
@@ -41,6 +46,7 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
     @Transactional
     public Question add(Question question){
         answerIsValid(question.getAnswer());
+        categoryIsValid(question.getCategoryId());
         questionMapper.insert(question);
         return question;
     }
@@ -50,6 +56,7 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
     public Question update(Question question){
         exists(question.getQuestionId());
         answerIsValid(question.getAnswer());
+        categoryIsValid(question.getCategoryId());
         questionMapper.updateById(question);
         return question;
     }
@@ -86,5 +93,11 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
                 answer.equals("A") ||  answer.equals("B") ||
                 answer.equals("C") || answer.equals("D") ,
                 CommonErrorCode.QUESTION_ANSWER_NOT_VALID);
+    }
+
+    // 检查categoryId是否合理
+    private void categoryIsValid(Integer categoryId){
+        List<Integer> ids = caseServiceFeignClient.getCategoryIds("");
+        AssertUtil.isTrue(ids.contains(categoryId), CommonErrorCode.CATEGORY_NOT_EXIST);
     }
 }
