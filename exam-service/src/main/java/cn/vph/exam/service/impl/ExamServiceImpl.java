@@ -16,6 +16,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.github.yulichang.toolkit.JoinWrappers;
 import com.github.yulichang.wrapper.MPJLambdaWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -60,12 +61,12 @@ public class ExamServiceImpl extends ServiceImpl<ExamMapper, Exam> implements Ex
 
     @Override
     public IPage<Exam> getExamList(Integer pageSize, Integer pageNum, String nameKeyword, Integer level, Integer sortByStartTime, Boolean participated) {
-        MPJLambdaWrapper<Exam> wrapper = new MPJLambdaWrapper<>();
-        MPJLambdaWrapper<Exam> notWrapper = new MPJLambdaWrapper<>();
+        // 如果给了participated，直接join就行
+        // 如果每给participated，需要union
+        MPJLambdaWrapper<Exam> wrapper = JoinWrappers.lambda(Exam.class);
         wrapper.selectAll(Exam.class)
                 .selectAs(Participant::getParticipated, Exam::getParticipated)
-                .leftJoin(Participant.class, Participant::getExamId, Exam::getExamId)
-                .eq(Participant::getUserId, sessionUtil.getUserId());
+                .leftJoin(Participant.class, on -> on.eq(Exam::getExamId, Participant::getExamId).eq(Participant::getUserId, sessionUtil.getUserId()));
 
         // nameKeyword
         // level
@@ -76,23 +77,16 @@ public class ExamServiceImpl extends ServiceImpl<ExamMapper, Exam> implements Ex
         // null=全列表；true=查该用户已报名已交卷；false=已报名未考试
         if (participated != null) {
             wrapper.eq(Participant::getParticipated, participated);
-        } else {
-            notWrapper.selectAll(Exam.class);
-            notWrapper.notIn(Exam::getExamId, participantMapper.selectList(new MPJLambdaWrapper<Participant>().eq(Participant::getUserId, sessionUtil.getUserId())));
-            wrapper.union(notWrapper);
         }
-
         // sortByStartTime
         if (sortByStartTime != null) {
             wrapper.orderBy(true, sortByStartTime == CommonConstant.SORT_ASC, "start_time");
         }
-
         // 包装 paper字段
         IPage<Exam> curPage = examMapper.selectPage(new Page<>(pageNum, pageSize), wrapper);
         if (!curPage.getRecords().isEmpty()) {
             curPage.getRecords().forEach(exam -> {
                 exam.setPaper(paperService.getPaperById(exam.getPaperId()));
-//                exam.setParticipated(participated);
             });
         }
         return curPage;
