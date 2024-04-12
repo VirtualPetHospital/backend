@@ -20,12 +20,18 @@ spring:
     password: Re1d1sPssw0rd
   cloud:
     nacos: # nacos 配置
-      server-addr: 47.113.220.49:8848
+      server-addr: 123.60.7.212:8848
   servlet:
     multipart:
       max-file-size: 1GB
       max-request-size: 10GB
       enabled: false
+  sleuth:
+    sampler:
+      probability: 1
+  zipkin:
+    base-url: http://123.60.7.212:9999
+    discovery-client-enabled: false
 mybatis:
   type-aliases-package: cn.vph.file.entity
   configuration:

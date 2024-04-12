@@ -25,6 +25,12 @@ spring:
       max-file-size: 1GB
       max-request-size: 10GB
       enabled: false
+  sleuth:
+    sampler:
+      probability: 1
+  zipkin:
+    base-url: http://localhost:9999
+    discovery-client-enabled: false
 logging:
   level:
     cn.vph: debug
