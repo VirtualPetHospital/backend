@@ -20,6 +20,12 @@ spring:
     port: 6379
     timeout: 1000
     password: Re1d1sPssw0rd
+  sleuth:
+    sampler:
+      probability: 1
+  zipkin:
+    base-url: http://localhost:9999
+    discovery-client-enabled: false
 mybatis:
   type-aliases-package: cn.vph.exam.entity
   configuration:

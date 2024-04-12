@@ -13,7 +13,6 @@
         <module>exam-service</module>
         <module>file-service</module>
         <module>gpt-service</module>
-        <module>sleuth-service</module>
         <module>common</module>
         <module>gateway</module>
     </modules>

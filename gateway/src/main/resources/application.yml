@@ -28,6 +28,12 @@ spring:
         - PrefixPath=/api
   jackson:
     property-naming-strategy: CAMEL_CASE_TO_LOWER_CASE_WITH_UNDERSCORES
+  sleuth:
+    sampler:
+      probability: 1
+  zipkin:
+    base-url: http://localhost:9999
+    discovery-client-enabled: false
 
 logging:
   level:
