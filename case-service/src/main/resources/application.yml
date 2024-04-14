@@ -43,6 +43,13 @@ spring:
   cloud:
     nacos: # nacos 配置
       server-addr: localhost:8848
+  sleuth:
+    sampler:
+      probability: 1
+  zipkin:
+    base-url: http://localhost:9999
+    discovery-client-enabled: false
+
 mybatis:
   type-aliases-package: cn.vph.case.entity
   configuration:

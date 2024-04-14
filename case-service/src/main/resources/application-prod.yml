@@ -36,7 +36,13 @@ spring:
 
   cloud:
     nacos: # nacos 配置
-      server-addr: 47.113.220.49:8848
+      server-addr: 123.60.7.212:8848
+  sleuth:
+    sampler:
+      probability: 1
+  zipkin:
+    base-url: http://123.60.7.212:9999
+    discovery-client-enabled: false
 mybatis:
   type-aliases-package: cn.vph.case.entity
   configuration:
