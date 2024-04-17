@@ -52,7 +52,7 @@ public class FileUtil {
             br = new BufferedReader(inputStreamReader);
             while (br.readLine() != null) {
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
             throw new CommonException(CommonErrorCode.FILE_CONVERT_ERROR);
         } finally {
             if (br != null) {

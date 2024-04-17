@@ -39,6 +39,7 @@ public class FileServiceImpl implements FileService {
 
         // 检查文件后缀
         String fileName = file.getOriginalFilename();
+        assert fileName != null;
         String fileSuffix = fileName.substring(fileName.lastIndexOf(".") + 1);
         // type = photo or video
         String type;

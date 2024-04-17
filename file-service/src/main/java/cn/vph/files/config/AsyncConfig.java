@@ -1,7 +1,6 @@
 package cn.vph.files.config;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.AsyncConfigurer;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
@@ -14,7 +13,7 @@ import java.util.concurrent.Executor;
  * @create: 2024-04-17 20:07
  **/
 @Slf4j
-@Configuration
+//@Configuration
 public class AsyncConfig implements AsyncConfigurer {
 
     @Override
