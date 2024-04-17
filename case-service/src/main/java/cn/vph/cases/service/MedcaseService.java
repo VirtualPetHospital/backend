@@ -4,6 +4,8 @@ import cn.vph.cases.entity.Medcase;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 
+import java.util.List;
+
 public interface MedcaseService extends IService<Medcase> {
 
     IPage<?> getMedcaseList(Integer pageSize, Integer pageNum, String infoKeyword, String nameKeyword, String diseaseName);
@@ -16,4 +18,5 @@ public interface MedcaseService extends IService<Medcase> {
 
     void delete(Integer medcaseId);
 
+    List<?> getAllMedcaseList(String infoKeyword, String nameKeyword, String diseaseName);
 }

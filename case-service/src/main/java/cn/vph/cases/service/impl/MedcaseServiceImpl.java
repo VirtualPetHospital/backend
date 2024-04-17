@@ -89,6 +89,17 @@ public class MedcaseServiceImpl extends ServiceImpl<MedcaseMapper, Medcase> impl
         return medcaseMapper.selectPage(new Page<>(pageNum, pageSize), wrapper);
     }
 
+    @Override
+    public List<?> getAllMedcaseList(String infoKeyword, String nameKeyword, String diseaseName) {
+        MPJLambdaWrapper<Medcase> wrapper = new MPJLambdaWrapper<>();
+        wrapper.selectAll(Medcase.class)
+                .leftJoin(Disease.class, Disease::getDiseaseId, Medcase::getDiseaseId)
+                .like(diseaseName != null, Disease::getName, diseaseName)
+                .like(infoKeyword != null, Medcase::getInfoDescription, infoKeyword)
+                .like(nameKeyword != null, Medcase::getName, nameKeyword);
+
+        return medcaseMapper.selectList(wrapper);
+    }
 
     @Override
     @Transactional
@@ -159,6 +170,8 @@ public class MedcaseServiceImpl extends ServiceImpl<MedcaseMapper, Medcase> impl
         fileFeignClient.delete(medcase.getInfoVideo());
         medcaseMapper.deleteById(medcaseId);
     }
+
+
 
 
     private Medcase initMedcase(Medcase medcase) {
