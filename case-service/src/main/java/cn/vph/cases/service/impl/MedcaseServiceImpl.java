@@ -1,5 +1,6 @@
 package cn.vph.cases.service.impl;
 
+import cn.vph.cases.clients.FileFeignClient;
 import cn.vph.cases.entity.*;
 import cn.vph.cases.mapper.*;
 import cn.vph.cases.service.MedcaseInspectionService;
@@ -52,6 +53,8 @@ public class MedcaseServiceImpl extends ServiceImpl<MedcaseMapper, Medcase> impl
     private UserMedcaseMapper userMedcaseMapper;
     @Autowired
     private SessionUtil sessionUtil;
+    @Autowired
+    private FileFeignClient fileFeignClient;
 
 
     @Override
@@ -115,6 +118,9 @@ public class MedcaseServiceImpl extends ServiceImpl<MedcaseMapper, Medcase> impl
     @Override
     @Transactional
     public Medcase update(Medcase medcase) {
+        Medcase checkMedcase = medcaseMapper.selectById(medcase.getMedcaseId());
+        // 病例存在
+        AssertUtil.isNotNull(checkMedcase, CommonErrorCode.MEDCASE_NOT_EXIST);
         // 疾病存在
         AssertUtil.isNotNull(diseaseMapper.selectById(medcase.getDiseaseId()), CommonErrorCode.DISEASE_NOT_EXIST);
 
@@ -127,12 +133,16 @@ public class MedcaseServiceImpl extends ServiceImpl<MedcaseMapper, Medcase> impl
         Medcase oldMedcase = medcaseMapper.selectOne(wrapper);
         // 病例名不重复或者重复但是同一个病例
         AssertUtil.isTrue(oldMedcase == null || oldMedcase.getMedcaseId().equals(medcase.getMedcaseId()), CommonErrorCode.MEDCASE_NAME_EXIST);
-
-
         // 更新多对多关系
         updateInspectionsMedicines(medcase);
-
         medcaseMapper.updateById(medcase);
+        // 如果photo 或 video 有变化，则删除原来的文件
+        if (checkMedcase.getInfoPhoto() != null && !checkMedcase.getInfoPhoto().equals(medcase.getInfoPhoto())) {
+            fileFeignClient.delete(checkMedcase.getInfoPhoto());
+        }
+        if (checkMedcase.getInfoVideo() != null && !checkMedcase.getInfoVideo().equals(medcase.getInfoVideo())) {
+            fileFeignClient.delete(checkMedcase.getInfoVideo());
+        }
         return medcase;
     }
 
@@ -140,9 +150,13 @@ public class MedcaseServiceImpl extends ServiceImpl<MedcaseMapper, Medcase> impl
     @Transactional
     public void delete(Integer medcaseId) {
 
-        AssertUtil.isNotNull(medcaseMapper.selectById(medcaseId), CommonErrorCode.MEDCASE_NOT_EXIST);
+        Medcase medcase = medcaseMapper.selectById(medcaseId);
+        AssertUtil.isNotNull(medcase, CommonErrorCode.MEDCASE_NOT_EXIST);
         medcaseInspectionService.deleteByMedcaseId(medcaseId);
         medcaseMedicineService.deleteByMedcaseId(medcaseId);
+        // 删除图片 和 视频
+        fileFeignClient.delete(medcase.getInfoPhoto());
+        fileFeignClient.delete(medcase.getInfoVideo());
         medcaseMapper.deleteById(medcaseId);
     }
 

@@ -1,6 +1,7 @@
 package cn.vph.cases.service.impl;
 
 import cn.hutool.crypto.SecureUtil;
+import cn.vph.cases.clients.FileFeignClient;
 import cn.vph.cases.controller.request.RegisterRequest;
 import cn.vph.cases.controller.response.UserResponse;
 import cn.vph.cases.entity.Disease;
@@ -57,6 +58,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     private CaptchaUtil captchaUtil;
     @Autowired
     private JavaMailSender mailSender;
+    @Autowired
+    private FileFeignClient fileFeignClient;
 
     @Value("${spring.mail.username}")
     private String from;
@@ -125,6 +128,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         AssertUtil.isNotNull(user, CommonErrorCode.USER_NOT_EXIST);
         // 删除用户
         userMapper.deleteById(userId);
+        // 删除用户头像
+        fileFeignClient.delete(user.getAvatarUrl());
         return null;
     }
 
@@ -143,6 +148,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         // 更新用户
         user.setUserId(sessionUtil.getUserId());
         userMapper.updateById(user);
+        // 如果更新了头像，删除原头像
+        if (user.getAvatarUrl() != null && !user.getAvatarUrl().equals(user1.getAvatarUrl())) {
+            fileFeignClient.delete(user1.getAvatarUrl());
+        }
         return new UserResponse(user);
     }
 

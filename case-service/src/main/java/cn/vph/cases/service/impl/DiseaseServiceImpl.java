@@ -67,14 +67,22 @@ public class DiseaseServiceImpl extends ServiceImpl<DiseaseMapper, Disease> impl
     @Override
     public Object update(Disease disease) {
         // 根据id判断疾病是否存在
-        AssertUtil.isNotNull(diseaseMapper.selectById(disease.getDiseaseId()), CommonErrorCode.DISEASE_NOT_EXIST);
-        // 判断疾病是否存在
+        Disease disOld = diseaseMapper.selectById(disease.getDiseaseId());
+        AssertUtil.isNotNull(disOld, CommonErrorCode.DISEASE_NOT_EXIST);
+        // 判断疾病名是否存在
         Disease dis = selectByName(disease.getName());
         // 判断是否是当前疾病
         AssertUtil.isTrue(dis == null || dis.getDiseaseId().equals(disease.getDiseaseId()), CommonErrorCode.DISEASE_ALREADY_EXIST);
         // 判断病种是否存在
         AssertUtil.isNotNull(categoryMapper.selectById(disease.getCategoryId()), CommonErrorCode.CATEGORY_NOT_EXIST);
         diseaseMapper.updateById(disease);
+        // 如果photo 或 video 有变化，则删除原来的文件
+        if (disOld.getPhoto() != null && !disOld.getPhoto().equals(disease.getPhoto())){
+            fileFeignClient.delete(disOld.getPhoto());
+        }
+        if (disOld.getVideo() != null && !disOld.getVideo().equals(disease.getVideo())){
+            fileFeignClient.delete(disOld.getVideo());
+        }
         return disease;
     }
 
