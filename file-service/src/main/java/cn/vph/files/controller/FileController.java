@@ -47,4 +47,13 @@ public class FileController {
     ) throws UnsupportedEncodingException {
         return Result.success(fileService.download(fileName, response));
     }
+
+    @DeleteMapping
+    @ApiOperation(value = "删除文件")
+    public void delete(@RequestParam("file_name") String fileName){
+        if (fileName == null || fileName.isEmpty()) {
+            return;
+        }
+        fileService.delete(fileName);
+    }
 }

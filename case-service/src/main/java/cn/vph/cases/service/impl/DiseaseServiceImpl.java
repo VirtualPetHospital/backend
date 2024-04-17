@@ -1,5 +1,6 @@
 package cn.vph.cases.service.impl;
 
+import cn.vph.cases.clients.FileFeignClient;
 import cn.vph.cases.entity.Disease;
 import cn.vph.cases.mapper.CategoryMapper;
 import cn.vph.cases.mapper.DiseaseMapper;
@@ -24,6 +25,8 @@ public class DiseaseServiceImpl extends ServiceImpl<DiseaseMapper, Disease> impl
     private DiseaseMapper diseaseMapper;
     @Autowired
     private CategoryMapper categoryMapper;
+    @Autowired
+    private FileFeignClient fileFeignClient;
 
     public Disease selectByName(String name) {
         MPJLambdaWrapper<Disease> queryWrapper = new MPJLambdaWrapper<>();
@@ -47,10 +50,13 @@ public class DiseaseServiceImpl extends ServiceImpl<DiseaseMapper, Disease> impl
 
     @Override
     public Object delete(Integer diseaseId) {
+        Disease disease = diseaseMapper.selectById(diseaseId);
         // 不存在则抛出异常
-        AssertUtil.isNotNull(diseaseMapper.selectById(diseaseId), CommonErrorCode.DISEASE_NOT_EXIST);
+        AssertUtil.isNotNull(disease, CommonErrorCode.DISEASE_NOT_EXIST);
         // 如果不能删除（外键依赖），则抛出异常
         try{
+            fileFeignClient.delete(disease.getPhoto());
+            fileFeignClient.delete(disease.getVideo());
             diseaseMapper.deleteById(diseaseId);
         }catch (Exception e){
             throw new CommonException(CommonErrorCode.CANNOT_DELETE_DISEASE);

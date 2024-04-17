@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.ServletOutputStream;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
@@ -130,6 +129,15 @@ public class FileServiceImpl implements FileService {
             throw new CommonException(CommonErrorCode.FILE_DOWNLOAD_FAIL);
         }
         return null;
+    }
+
+    @Override
+    public void delete(String fileName) {
+        String downloadPath = fileConstants.FILE_DIR;
+        File file = new File(downloadPath + File.separator + fileName);
+        if (file.exists()) {
+            file.delete();
+        }
     }
 
     public boolean containsString(String[] array, String str) {

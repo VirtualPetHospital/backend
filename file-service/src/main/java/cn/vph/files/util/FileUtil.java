@@ -3,6 +3,7 @@ package cn.vph.files.util;
 import cn.vph.common.CommonErrorCode;
 import cn.vph.common.CommonException;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 import javax.imageio.ImageIO;
@@ -30,6 +31,7 @@ public class FileUtil {
      * @param videoPath
      * @throws IOException
      */
+    @Async
     public void convertVideoToMp4(String videoPath) throws IOException {
         String fileSuffix = videoPath.substring(videoPath.lastIndexOf(".") + 1);
         if ("mp4".equals(fileSuffix)) {
@@ -85,6 +87,7 @@ public class FileUtil {
         System.out.println(line);
     }
 
+    @Async
     public void convertPhotoToJpeg(String photoPath) throws IOException {
         String fileSuffix = photoPath.substring(photoPath.lastIndexOf(".") + 1);
         if ("jpeg".equals(fileSuffix)) {
@@ -96,6 +99,11 @@ public class FileUtil {
         BufferedImage newBufferedImage = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_INT_RGB);
         newBufferedImage.createGraphics().drawImage(image, 0, 0, Color.WHITE, null);
         ImageIO.write(newBufferedImage, "jpeg", new File(dest));
+        // 删除原来的文件
+        File file = new File(photoPath);
+        if (file.exists()) {
+            file.delete();
+        }
     }
 
     public String generateFileNameByTime() {
