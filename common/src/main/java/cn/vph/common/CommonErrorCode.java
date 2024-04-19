@@ -116,6 +116,7 @@ public enum CommonErrorCode {
     EXAM_HAS_PARTICIPANTS(2003, "已有用户报名当前考试", "已有用户报名当前考试！"),
     EXAM_HAS_PAST(2003, "考试时间已过，禁止删除", "考试时间已过，禁止删除！"),
     EXAM_TIME_EXPIRED(2003, "考试时间已过", "考试时间已过！"),
+    UNABLE_TO_ENROLL_AFTER_START_TIME(2003, "考试开始后禁止报名", "考试开始后禁止报名！"),
     /**
      * 答题卡相关
      */
