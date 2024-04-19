@@ -1,4 +1,4 @@
-package cn.vph.files;
+package cn.vph.files.common;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUpload;
