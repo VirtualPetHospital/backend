@@ -58,6 +58,9 @@ public class VphStringValidator implements ConstraintValidator<VphValidation, St
         } else if("optionDescription".equals(rule)){
             // 不为空，不为null，长度小于75
             return !isNull(value) && !isEmpty(value) && value.length() < 75;
+        } else if("inspectionName".equals(rule)){
+            // 不为空，长度小于100
+            return !isNull(value) && !isEmpty(value) && value.length() < 100;
         }
         else {
             return false;

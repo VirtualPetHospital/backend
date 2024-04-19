@@ -20,7 +20,7 @@ public class Inspection implements Serializable {
     @TableId(value = "inspection_id", type = IdType.AUTO)
     private Integer inspectionId;
 
-    @VphValidation("simpleName")
+    @VphValidation("inspectionName")
     private String name;
 
     @VphValidation("number")
