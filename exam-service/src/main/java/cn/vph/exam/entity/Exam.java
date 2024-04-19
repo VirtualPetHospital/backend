@@ -66,6 +66,4 @@ public class Exam implements Serializable {
 
     @TableField(exist = false)
     private Paper paper;
-
-
 }
