@@ -104,6 +104,7 @@ public enum CommonErrorCode {
     PAPER_NOT_EXIST(2002, "试卷不存在", "试卷不存在"),
     QUESTION_NUM_INVALID(2003, "题目数量不合法", "题目数量不合法"),
     PAPER_NAME_ALREADY_EXIST(2003, "试卷名称已存在", "试卷名称已存在"),
+    PAPER_DELETE_FAILED_REFERENCED_BY_EXAM(2003, "试卷已被选入考试中，无法删除", "试卷已被选入考试中，无法删除"),
     /**
      * 考试相关
      */
@@ -126,6 +127,7 @@ public enum CommonErrorCode {
     ANSWER_SHEET_ALREADY_EXIST(2003, "已提交过答题卡", "已提交过答题卡"),
     ANSWER_SHEET_NOT_MATCH(2003, "答题卡与考试不匹配", "答题卡与试卷不匹配"),
     ANSWER_SHEET_ITEM_VALUE_ERROR(2003, "答题卡单项未指定id", "答题卡单项未指定id"),
+    NO_ANSWER_SHEET(2003, "暂无学生提交答题卡", "暂无学生提交答题卡"),
     /**
      * 病例相关
      */

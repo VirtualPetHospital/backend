@@ -181,7 +181,8 @@ public class AnswerSheetServiceImpl extends ServiceImpl<AnswerSheetMapper, Answe
                 .eq(Participant::getExamId, examId)
                 .eq(Participant::getParticipated, true)
         );
-
+        // 无答题卡时
+        AssertUtil.isFalse(userAnswerSheets.isEmpty(), CommonErrorCode.NO_ANSWER_SHEET);
         // 从userAnswerSheets中抽离出userid List
         List<Integer> userIds = userAnswerSheets.stream().map(UserAnswerSheet::getUserId).collect(Collectors.toList());
         // 获取nickname List

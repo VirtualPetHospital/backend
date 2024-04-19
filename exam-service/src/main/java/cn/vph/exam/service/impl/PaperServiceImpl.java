@@ -1,6 +1,7 @@
 package cn.vph.exam.service.impl;
 
 import cn.vph.common.CommonErrorCode;
+import cn.vph.common.CommonException;
 import cn.vph.common.util.AssertUtil;
 import cn.vph.exam.entity.Paper;
 import cn.vph.exam.entity.PaperQuestion;
@@ -9,7 +10,6 @@ import cn.vph.exam.mapper.PaperQuestionMapper;
 import cn.vph.exam.mapper.QuestionMapper;
 import cn.vph.exam.service.PaperQuestionService;
 import cn.vph.exam.service.PaperService;
-import cn.vph.exam.service.QuestionService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -93,9 +93,11 @@ public class PaperServiceImpl extends ServiceImpl<PaperMapper, Paper> implements
     @Transactional
     public void delete(Integer paperId) {
         exists(paperId);
-        // 先删除关系表条目，再删除试卷
-        paperQuestionService.deleteByPaperId(paperId);
-        paperMapper.deleteById(paperId);
+        try{
+            paperMapper.deleteById(paperId);
+        }catch (Exception e){
+            throw new CommonException(CommonErrorCode.PAPER_DELETE_FAILED_REFERENCED_BY_EXAM);
+        }
     }
 
     // 封装试卷的题目列表

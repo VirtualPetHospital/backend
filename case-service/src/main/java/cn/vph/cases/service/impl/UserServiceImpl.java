@@ -136,13 +136,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Override
     @Transactional
     public UserResponse update(User user) {
-        // 先查是否存在
-        LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(User::getNickname, user.getNickname());
-        User user1 = userMapper.selectOne(wrapper);
+        // 根据userId 查用户是否存在
+        User user1 = userMapper.selectOne(new LambdaQueryWrapper<User>().eq(User::getUserId, sessionUtil.getUserId()));
         AssertUtil.isNotNull(user1, CommonErrorCode.USER_NOT_EXIST);
-        // 是否是当前用户
-        AssertUtil.isEqual(sessionUtil.getUserId(), user1.getUserId(), CommonErrorCode.NOT_CURRENT_USER);
+        // 查询用户名是否重复
+        User nicknameUser = userMapper.selectOne(new LambdaQueryWrapper<User>().eq(User::getNickname, user.getNickname()));
+        AssertUtil.isTrue(nicknameUser == null || nicknameUser.getUserId().equals(user1.getUserId()), CommonErrorCode.NICKNAME_ALREADY_EXIST);
         // 不能改Type
         AssertUtil.isEqual(user1.getType(), user.getType(), CommonErrorCode.ILLEGAL_USER_INFO);
         // 更新用户
