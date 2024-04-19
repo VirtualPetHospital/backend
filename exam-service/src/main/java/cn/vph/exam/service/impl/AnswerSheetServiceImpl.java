@@ -57,6 +57,13 @@ public class AnswerSheetServiceImpl extends ServiceImpl<AnswerSheetMapper, Answe
     @Autowired
     private ParticipantMapper participantMapper;
 
+
+    /**
+     * 条件：
+     *     已报名，且在合法时间内
+     * @param answerSheet
+     * @return
+     */
     @Override
     @Transactional
     public AnswerSheet add(AnswerSheet answerSheet) {
@@ -66,12 +73,18 @@ public class AnswerSheetServiceImpl extends ServiceImpl<AnswerSheetMapper, Answe
         // 检查答题卡是否不存在
         AssertUtil.isFalse(answerSheetAlreadyExist(answerSheet.getExamId(), answerSheet.getUserId()), CommonErrorCode.ANSWER_SHEET_ALREADY_EXIST);
 
-        // 检查是否报名 未报名自动报名
-        // participated 设置为true
+        // 检查是否报名 未报名无法提交答题卡
         boolean enrolled = participantService.isEnrolled(answerSheet.getExamId(), sessionUtil.getUserId());
+        AssertUtil.isTrue(enrolled, CommonErrorCode.NOT_ENROLLED);
+
+        // 检查是否在考试时间内
+        AssertUtil.isTrue(examMapper.selectById(answerSheet.getExamId()).getEndTime().isAfter(LocalDateTime.now()), CommonErrorCode.EXAM_TIME_EXPIRED);
+        /*
+
         if (!enrolled) {
             participantService.add(answerSheet.getExamId(), sessionUtil.getUserId());
-        }
+        }*/
+        // participated 设置为true
         Participant participant = participantService.getParticipant(answerSheet.getExamId(), sessionUtil.getUserId());
         participantService.updateToParticipated(participant.getId());
 
@@ -93,6 +106,13 @@ public class AnswerSheetServiceImpl extends ServiceImpl<AnswerSheetMapper, Answe
         return answerSheet;
     }
 
+    /**
+     * 条件：
+     *     已有答题卡，且在合法时间内
+     * @param answerSheetId
+     * @param answerSheet
+     * @return
+     */
     @Override
     @Transactional
     public AnswerSheet update(Integer answerSheetId, AnswerSheet answerSheet) {
