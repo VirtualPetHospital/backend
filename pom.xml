@@ -12,7 +12,7 @@
         <module>case-service</module>
         <module>exam-service</module>
         <module>file-service</module>
-        <module>gpt-service</module>
+        <!--<module>gpt-service</module>-->
         <module>common</module>
         <module>gateway</module>
     </modules>
