@@ -36,9 +36,6 @@ public class PaperServiceImpl extends ServiceImpl<PaperMapper, Paper> implements
     private QuestionMapper questionMapper;
 
     @Autowired
-    private QuestionService questionService;
-
-    @Autowired
     private PaperQuestionMapper paperQuestionMapper;
 
     @Autowired
@@ -60,7 +57,9 @@ public class PaperServiceImpl extends ServiceImpl<PaperMapper, Paper> implements
         questionNumIsValid(paper);
         // 检查试卷名是否重复
         Paper checkingPaper = paperMapper.selectOne(new LambdaQueryWrapper<Paper>().eq(Paper::getName, paper.getName()));
+
         AssertUtil.isTrue(checkingPaper == null || checkingPaper.getPaperId().equals(paper.getPaperId()), CommonErrorCode.PAPER_NAME_ALREADY_EXIST);
+
 
         paperMapper.insert(paper);
 
