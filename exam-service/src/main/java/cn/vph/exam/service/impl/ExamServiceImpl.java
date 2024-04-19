@@ -3,7 +3,7 @@ package cn.vph.exam.service.impl;
 import cn.vph.common.CommonConstant;
 import cn.vph.common.CommonErrorCode;
 import cn.vph.common.util.AssertUtil;
-import cn.vph.exam.entity.AnswerSheet;
+import cn.vph.common.util.TimeUtil;
 import cn.vph.exam.entity.Exam;
 import cn.vph.exam.entity.Participant;
 import cn.vph.exam.mapper.ExamMapper;
@@ -24,7 +24,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.List;
 
 /**
  * @author Caroline
@@ -147,7 +146,6 @@ public class ExamServiceImpl extends ServiceImpl<ExamMapper, Exam> implements Ex
          * 1. 暂时只有学生可以报名
          * 2. 一个学生只能报名一次
          */
-
         // 获取学生类型
         AssertUtil.isTrue(sessionUtil.getUserType().equals(CommonConstant.USER_STUDENT), CommonErrorCode.UNAUTHORIZED_ACCESS);
 
@@ -161,6 +159,8 @@ public class ExamServiceImpl extends ServiceImpl<ExamMapper, Exam> implements Ex
         LambdaQueryWrapper<Participant> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(Participant::getExamId, examId)
                 .eq(Participant::getUserId, sessionUtil.getUserId());
+        // 考试开始后无法报名
+        AssertUtil.isTrue(TimeUtil.getCurrentTime().compareTo(exam.getStartTime().toString()) < 0 , CommonErrorCode.UNABLE_TO_ENROLL_AFTER_START_TIME);
         AssertUtil.isTrue(
                 participantMapper.selectCount(wrapper) < 1,
                 CommonErrorCode.EXAM_ALREADY_ENROLLED);
@@ -172,6 +172,7 @@ public class ExamServiceImpl extends ServiceImpl<ExamMapper, Exam> implements Ex
     public void unEnroll(Integer examId) {
         exists(examId);
         Participant participant = new Participant(examId, sessionUtil.getUserId(), false);
+        //考试开始后无法取消报名
         participantMapper.delete(new LambdaQueryWrapper<>(participant));
     }
 
