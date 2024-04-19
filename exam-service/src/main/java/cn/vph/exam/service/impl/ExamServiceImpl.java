@@ -22,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 
@@ -119,21 +120,21 @@ public class ExamServiceImpl extends ServiceImpl<ExamMapper, Exam> implements Ex
         return exam;
     }
 
+    /**
+     * 满足条件：
+     *    时间：当前时间之后的考试
+     *    报名情况：无学生报名
+     * @param examId
+     */
     @Override
     @Transactional
     public void delete(Integer examId) {
         exists(examId);
+        Exam curExam = examMapper.selectById(examId);
+        AssertUtil.isTrue(curExam.getStartTime().isAfter(LocalDateTime.now()), CommonErrorCode.EXAM_HAS_PAST);
         LambdaQueryWrapper<Participant> participantWrapper = new LambdaQueryWrapper<>();
         participantWrapper.eq(Participant::getExamId, examId);
-        participantMapper.delete(participantWrapper);
-        LambdaQueryWrapper<AnswerSheet> answerSheetWrapper = new LambdaQueryWrapper<>();
-        answerSheetWrapper.eq(AnswerSheet::getExamId, examId);
-        List<AnswerSheet> answerSheets = answerSheetService.list(answerSheetWrapper);
-        if (!answerSheets.isEmpty()) {
-            for (AnswerSheet answerSheet : answerSheets) {
-                answerSheetService.delete(answerSheet.getAnswerSheetId());
-            }
-        }
+        AssertUtil.isTrue(participantMapper.selectCount(participantWrapper) == 0, CommonErrorCode.EXAM_HAS_PARTICIPANTS);
 
         examMapper.deleteById(examId);
     }
