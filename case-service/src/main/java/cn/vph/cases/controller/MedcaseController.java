@@ -29,8 +29,8 @@ public class MedcaseController extends BaseController {
     }
 
     @Student
-    @GetMapping
-    @ApiOperation(value = "查询病例列表")
+    @GetMapping("list")
+    @ApiOperation(value = "查询病例列表-分页")
     public Result<?> getMedcaseList(
             @RequestParam(value = "page_size", defaultValue = "10", required = false) Integer pageSize,
             @RequestParam(value = "page_num", defaultValue = "1", required = false) Integer pageNum,
@@ -39,6 +39,17 @@ public class MedcaseController extends BaseController {
             @RequestParam(value = "disease_name", required = false) String diseaseName
     ) {
         return Result.success(super.getData(medcaseService.getMedcaseList(pageSize, pageNum, infoKeyword, nameKeyword, diseaseName)));
+    }
+
+    @Student
+    @GetMapping
+    @ApiOperation(value = "查询病例列表")
+    public Result<?> getAllMedcaseList(
+            @RequestParam(value = "info_keyword", required = false) String infoKeyword,
+            @RequestParam(value = "name_keyword", required = false) String nameKeyword,
+            @RequestParam(value = "disease_name", required = false) String diseaseName
+    ) {
+        return Result.success(super.getData(medcaseService.getAllMedcaseList(infoKeyword, nameKeyword, diseaseName)));
     }
 
     @Administrator
@@ -51,7 +62,7 @@ public class MedcaseController extends BaseController {
     @Administrator
     @PutMapping("/{medcase_id}")
     @ApiOperation(value = "更新病例")
-    public Result<?> updateMedcase(@PathVariable(value = "medcase_id") Integer medcaseId,@Valid @RequestBody Medcase medcase) {
+    public Result<?> updateMedcase(@PathVariable(value = "medcase_id") Integer medcaseId, @Valid @RequestBody Medcase medcase) {
         medcase.setMedcaseId(medcaseId);
         return Result.success(medcaseService.update(medcase));
     }

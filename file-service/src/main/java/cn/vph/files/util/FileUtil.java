@@ -52,7 +52,7 @@ public class FileUtil {
             br = new BufferedReader(inputStreamReader);
             while (br.readLine() != null) {
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
             throw new CommonException(CommonErrorCode.FILE_CONVERT_ERROR);
         } finally {
             if (br != null) {
@@ -96,6 +96,11 @@ public class FileUtil {
         BufferedImage newBufferedImage = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_INT_RGB);
         newBufferedImage.createGraphics().drawImage(image, 0, 0, Color.WHITE, null);
         ImageIO.write(newBufferedImage, "jpeg", new File(dest));
+        // 删除原来的文件
+        File file = new File(photoPath);
+        if (file.exists()) {
+            file.delete();
+        }
     }
 
     public String generateFileNameByTime() {

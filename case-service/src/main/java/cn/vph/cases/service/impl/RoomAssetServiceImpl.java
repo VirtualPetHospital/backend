@@ -1,5 +1,6 @@
 package cn.vph.cases.service.impl;
 
+import cn.vph.cases.clients.FileFeignClient;
 import cn.vph.cases.entity.Room;
 import cn.vph.cases.entity.RoomAsset;
 import cn.vph.cases.mapper.RoomAssetMapper;
@@ -25,6 +26,8 @@ public class RoomAssetServiceImpl extends ServiceImpl<RoomAssetMapper, RoomAsset
     private RoomAssetMapper roomAssetMapper;
     @Autowired
     private RoomMapper roomMapper;
+    @Autowired
+    private FileFeignClient fileFeignClient;
 
     @Override
     public Object add(RoomAsset roomAsset) {
@@ -50,6 +53,8 @@ public class RoomAssetServiceImpl extends ServiceImpl<RoomAssetMapper, RoomAsset
         RoomAsset roomAsset = roomAssetMapper.selectById(roomAssetId);
         AssertUtil.isNotNull(roomAsset, CommonErrorCode.ROOM_ASSET_NOT_EXIST);
         roomAssetMapper.deleteById(roomAssetId);
+        fileFeignClient.delete(roomAsset.getPhoto());
+        fileFeignClient.delete(roomAsset.getVideo());
         return null;
     }
 
@@ -87,8 +92,15 @@ public class RoomAssetServiceImpl extends ServiceImpl<RoomAssetMapper, RoomAsset
         // 没有重名的科室
         RoomAsset checkingRoomAsset = roomAssetMapper.selectOne(new LambdaQueryWrapper<RoomAsset>().eq(RoomAsset::getName, roomAsset.getName()));
         AssertUtil.isTrue(checkingRoomAsset == null || checkingRoomAsset.getRoomAssetId().equals(roomAsset.getRoomAssetId()), CommonErrorCode.ROOM_ASSET_ALREADY_EXIST);
+        roomAssetMapper.updateById(roomAsset);
+        // 如果photo 或 video 有变化，则删除原来的文件
+        if (exist.getPhoto() != null && !exist.getPhoto().equals(roomAsset.getPhoto())) {
+            fileFeignClient.delete(exist.getPhoto());
+        }
+        if (exist.getVideo() != null && !exist.getVideo().equals(roomAsset.getVideo())) {
+            fileFeignClient.delete(exist.getVideo());
+        }
 
-       roomAssetMapper.updateById(roomAsset);
         return roomAsset;
     }
 }
