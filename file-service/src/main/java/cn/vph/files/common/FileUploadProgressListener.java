@@ -1,4 +1,4 @@
-package cn.vph.files;
+package cn.vph.files.common;
 
 import cn.vph.files.pojo.Progress;
 import org.apache.commons.fileupload.ProgressListener;

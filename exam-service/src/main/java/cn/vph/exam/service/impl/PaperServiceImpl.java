@@ -42,6 +42,10 @@ public class PaperServiceImpl extends ServiceImpl<PaperMapper, Paper> implements
     private PaperQuestionService paperQuestionService;
 
 
+    public Paper getPaperByIdWithoutQuestions(Integer paperId){
+        exists(paperId);
+        return paperMapper.selectById(paperId);
+    }
     @Override
     public Paper getPaperById(Integer paperId) {
         exists(paperId);
