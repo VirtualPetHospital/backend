@@ -3,6 +3,7 @@ package cn.vph.common.controller;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -12,10 +13,17 @@ import java.util.Map;
  * @create: 2024-03-18 15:34
  **/
 public class BaseController {
-        public Map<String, Object> getData(IPage<?> page){
+    public Map<String, Object> getData(IPage<?> page) {
         Map<String, Object> data = new HashMap<>();
         data.put("records", page.getRecords());
         data.put("total", page.getTotal());
+        return data;
+    }
+
+    public Map<String, Object> getData(List<?> list) {
+        Map<String, Object> data = new HashMap<>();
+        data.put("records", list);
+        data.put("total", list.size());
         return data;
     }
 }

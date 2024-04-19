@@ -1,5 +1,6 @@
 package cn.vph.cases.service.impl;
 
+import cn.vph.cases.clients.FileFeignClient;
 import cn.vph.cases.entity.Operation;
 import cn.vph.cases.mapper.OperationMapper;
 import cn.vph.cases.service.OperationService;
@@ -25,7 +26,8 @@ public class OperationServiceImpl extends ServiceImpl<OperationMapper, Operation
 
     @Autowired
     private OperationMapper operationMapper;
-
+    @Autowired
+    private FileFeignClient fileFeignClient;
     
     public Operation selectByName(String name) {
         MPJLambdaWrapper<Operation> queryWrapper = new MPJLambdaWrapper<>();
@@ -46,9 +48,13 @@ public class OperationServiceImpl extends ServiceImpl<OperationMapper, Operation
     @Override
     @Transactional
     public Object delete(Integer operationId) {
+        Operation operation = operationMapper.selectById(operationId);
         // 不存在则抛出异常
-        AssertUtil.isNotNull(operationMapper.selectById(operationId), CommonErrorCode.OPERATION_NOT_EXIST);
+        AssertUtil.isNotNull(operation, CommonErrorCode.OPERATION_NOT_EXIST);
+        // 有外键依赖，如果不能删会直接报错
         operationMapper.deleteById(operationId);
+        fileFeignClient.delete(operation.getPhoto());
+        fileFeignClient.delete(operation.getVideo());
         return null;
     }
 
@@ -63,13 +69,21 @@ public class OperationServiceImpl extends ServiceImpl<OperationMapper, Operation
     @Override
     @Transactional
     public Operation update(Operation operation) {
+        Operation oldOperation = operationMapper.selectById(operation.getOperationId());
         // 根据id查询是否存在
-        AssertUtil.isNotNull(operationMapper.selectById(operation.getOperationId()), CommonErrorCode.OPERATION_NOT_EXIST);
+        AssertUtil.isNotNull(oldOperation, CommonErrorCode.OPERATION_NOT_EXIST);
         // 是否存在相同名字的operation
         Operation ope = selectByName(operation.getName());
         // 是否是当前operation
         AssertUtil.isTrue(ope == null || ope.getOperationId().equals(operation.getOperationId()), CommonErrorCode.OPERATION_ALREADY_EXIST);
         operationMapper.updateById(operation);
+        // 如果photo 或 video 有变化，则删除原来的文件
+        if (oldOperation.getPhoto() != null && !oldOperation.getPhoto().equals(operation.getPhoto())) {
+            fileFeignClient.delete(oldOperation.getPhoto());
+        }
+        if (oldOperation.getVideo() != null && !oldOperation.getVideo().equals(operation.getVideo())) {
+            fileFeignClient.delete(oldOperation.getVideo());
+        }
         return operation;
     }
 

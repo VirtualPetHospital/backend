@@ -17,4 +17,5 @@ public interface FileService {
 
     Object download(String fileName, HttpServletResponse response) throws UnsupportedEncodingException;
 
+    void delete(String fileName);
 }
