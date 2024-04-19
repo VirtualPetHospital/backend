@@ -19,4 +19,5 @@ public interface PaperService extends IService<Paper> {
     void delete(Integer paperId);
 
     void initPaper(Paper paper);
+    Paper getPaperByIdWithoutQuestions(Integer paperId);
 }
