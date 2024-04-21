@@ -1,8 +1,11 @@
 package cn.vph.files.service;
 
+import cn.vph.files.pojo.ConvertRequest;
+import cn.vph.files.pojo.FileChunkParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 
@@ -18,4 +21,10 @@ public interface FileService {
     Object download(String fileName, HttpServletResponse response) throws UnsupportedEncodingException;
 
     void delete(String fileName);
+
+    Object uploadByChunk(FileChunkParam param) throws FileNotFoundException;
+
+    Object checkUpload(String identifier);
+
+    Object convert(ConvertRequest c) throws IOException;
 }
