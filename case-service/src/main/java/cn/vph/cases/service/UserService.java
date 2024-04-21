@@ -1,6 +1,7 @@
 package cn.vph.cases.service;
 
-import cn.vph.cases.controller.request.RegisterRequest;
+import cn.vph.cases.controller.request.UserRegisterRequest;
+import cn.vph.cases.controller.request.UserUpdateRequest;
 import cn.vph.cases.controller.response.UserResponse;
 import cn.vph.cases.entity.User;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -19,11 +20,11 @@ public interface UserService extends IService<User> {
 
     UserResponse me();
 
-    UserResponse register(RegisterRequest registerRequests);
+    UserResponse register(UserRegisterRequest userRegisterRequests);
 
     Object delete(Integer userId);
 
-    UserResponse update(User user);
+    UserResponse update(UserUpdateRequest user);
 
     Object sendCaptcha(String email);
 
