@@ -24,7 +24,7 @@ public interface FileService {
 
     Object uploadByChunk(FileChunkParam param) throws FileNotFoundException;
 
-    Object checkUpload(String identifier);
+//    Object checkUpload(String identifier);
 
     Object convert(ConvertRequest c) throws IOException;
 }
