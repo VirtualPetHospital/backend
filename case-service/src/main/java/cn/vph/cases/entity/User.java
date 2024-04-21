@@ -1,6 +1,7 @@
 package cn.vph.cases.entity;
 
-import cn.vph.cases.controller.request.RegisterRequest;
+import cn.vph.cases.controller.request.UserRegisterRequest;
+import cn.vph.cases.controller.request.UserUpdateRequest;
 import cn.vph.common.validation.VphValidation;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
@@ -54,10 +55,18 @@ public class User implements Serializable {
     @TableField(exist = false)
     private List<Medcase> medcases;
 
-    public User(RegisterRequest registerRequest){
-        this.nickname = registerRequest.getNickname();
-        this.type = registerRequest.getType();
-        this.password = registerRequest.getPassword();
-        this.email = registerRequest.getEmail();
+    public User(UserRegisterRequest userRegisterRequest){
+        this.nickname = userRegisterRequest.getNickname();
+        this.type = userRegisterRequest.getType();
+        this.password = userRegisterRequest.getPassword();
+        this.email = userRegisterRequest.getEmail();
+    }
+    public User(UserUpdateRequest user){
+        this.userId = user.getUserId();
+        this.nickname = user.getNickname();
+        this.type = user.getType();
+        this.password = user.getPassword();
+        this.avatarUrl = user.getAvatarUrl();
+        this.email = user.getEmail();
     }
 }

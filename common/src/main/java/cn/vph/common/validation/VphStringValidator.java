@@ -37,32 +37,35 @@ public class VphStringValidator implements ConstraintValidator<VphValidation, St
         } else if ("time".equals(rule)) {
             //  不为空，不为null，时间，格式：yyyy-MM-dd HH:mm:ss
             return !isNull(value) && !isEmpty(value) && value.matches("^\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}$");
-        } else if("posInt".equals(rule)){
+        } else if ("posInt".equals(rule)) {
             // 不为空，不为null，正整数
             return !isNull(value) && !isEmpty(value) && value.matches("^[1-9]\\d*$");
-        } else if("nickname".equals(rule)){
+        } else if ("nickname".equals(rule)) {
             // 用户名，不为空，不可重复，长度1-30，由汉字、大小写字母、数字、下划线（_）、连字符（-）构成，不包含特殊字符和空格；
             return !isNull(value) && !isEmpty(value) && value.matches("[\\u4E00-\\u9FA5a-zA-Z0-9_-]+") && value.length() < 30;
-        } else if("userType".equals(rule)){
+        } else if ("userType".equals(rule)) {
             // 不为空，为student,teacher,administrator之一
             return !isNull(value) && !isEmpty(value) && value.matches("^(student|teacher|administrator)$");
-        } else if("password".equals(rule)){
+        } else if ("password".equals(rule)) {
             // 长度6-18
             return !isNull(value) && !isEmpty(value) && value.length() >= 6 && value.length() <= 18;
-        } else if("email".equals(rule)){
+        } else if ("passwordNullable".equals(rule)){
+            // 长度6-18
+            return isNull(value) || isEmpty(value) || (value.length() >= 6 && value.length() <= 18);
+        }
+        else if ("email".equals(rule)) {
             // 邮箱
             return !isNull(value) && !isEmpty(value) && value.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+.[a-zA-Z]{2,}$");
-        }  else if("answer".equals(rule)){
+        } else if ("answer".equals(rule)) {
             // 必须为A、B、C、D
             return !isNull(value) && !isEmpty(value) && value.matches("^[A-D]$");
-        } else if("optionDescription".equals(rule)){
+        } else if ("optionDescription".equals(rule)) {
             // 不为空，不为null，长度小于75
             return !isNull(value) && !isEmpty(value) && value.length() < 75;
-        } else if("inspectionName".equals(rule)){
+        } else if ("inspectionName".equals(rule)) {
             // 不为空，长度小于100
             return !isNull(value) && !isEmpty(value) && value.length() < 100;
-        }
-        else {
+        } else {
             return false;
         }
     }

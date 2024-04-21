@@ -2,7 +2,8 @@ package cn.vph.cases.service.impl;
 
 import cn.hutool.crypto.SecureUtil;
 import cn.vph.cases.clients.FileFeignClient;
-import cn.vph.cases.controller.request.RegisterRequest;
+import cn.vph.cases.controller.request.UserRegisterRequest;
+import cn.vph.cases.controller.request.UserUpdateRequest;
 import cn.vph.cases.controller.response.UserResponse;
 import cn.vph.cases.entity.Disease;
 import cn.vph.cases.entity.Medcase;
@@ -90,27 +91,27 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Override
     @Transactional
-    public UserResponse register(RegisterRequest registerRequest) {
+    public UserResponse register(UserRegisterRequest userRegisterRequest) {
 
         // 邮箱是否合法
-        AssertUtil.isTrue(isEmailValid(registerRequest.getEmail()), CommonErrorCode.ILLEGAL_EMAIL);
+        AssertUtil.isTrue(isEmailValid(userRegisterRequest.getEmail()), CommonErrorCode.ILLEGAL_EMAIL);
 
         // 从redis中获取验证码
-        String captcha = captchaUtil.getCaptcha(registerRequest.getEmail());
+        String captcha = captchaUtil.getCaptcha(userRegisterRequest.getEmail());
         // 判断验证码是否正确
-        AssertUtil.isEqual(captcha, registerRequest.getCaptcha(), CommonErrorCode.WRONG_CAPTCHA);
+        AssertUtil.isEqual(captcha, userRegisterRequest.getCaptcha(), CommonErrorCode.WRONG_CAPTCHA);
         // 判断邮箱是否重复
         LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(User::getEmail, registerRequest.getEmail());
+        wrapper.eq(User::getEmail, userRegisterRequest.getEmail());
         User user1 = userMapper.selectOne(wrapper);
         AssertUtil.isNull(user1, CommonErrorCode.EMAIL_ALREADY_EXIST);
         // 判断用户名是否存在
         LambdaQueryWrapper<User> wrapper1 = new LambdaQueryWrapper<>();
-        wrapper1.eq(User::getNickname, registerRequest.getNickname());
+        wrapper1.eq(User::getNickname, userRegisterRequest.getNickname());
         User user2 = userMapper.selectOne(wrapper1);
         AssertUtil.isNull(user2, CommonErrorCode.NICKNAME_ALREADY_EXIST);
 
-        User user = new User(registerRequest);
+        User user = new User(userRegisterRequest);
         user.setPassword(convert(user.getPassword()));
         user.setUpgradeProgress(CommonConstant.EXAM_NUM_FOR_UPGRADE);
         user.setLevel(CommonConstant.MIN_LEVEL);
@@ -135,7 +136,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Override
     @Transactional
-    public UserResponse update(User user) {
+    public UserResponse update(UserUpdateRequest user) {
         // 根据userId 查用户是否存在
         User user1 = userMapper.selectOne(new LambdaQueryWrapper<User>().eq(User::getUserId, sessionUtil.getUserId()));
         AssertUtil.isNotNull(user1, CommonErrorCode.USER_NOT_EXIST);
@@ -146,12 +147,17 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         AssertUtil.isEqual(user1.getType(), user.getType(), CommonErrorCode.ILLEGAL_USER_INFO);
         // 更新用户
         user.setUserId(sessionUtil.getUserId());
-        userMapper.updateById(user);
+        // 更新密码
+        if (user.getPassword() != null && !user.getPassword().isEmpty()) {
+            user.setPassword(convert(user.getPassword()));
+        }
+        User temp = new User(user);
+        userMapper.updateById(temp);
         // 如果更新了头像，删除原头像
         if (user.getAvatarUrl() != null && !user.getAvatarUrl().equals(user1.getAvatarUrl())) {
             fileFeignClient.delete(user1.getAvatarUrl());
         }
-        return new UserResponse(user);
+        return new UserResponse(temp);
     }
 
     @Override

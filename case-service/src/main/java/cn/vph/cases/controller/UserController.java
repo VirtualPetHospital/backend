@@ -1,6 +1,7 @@
 package cn.vph.cases.controller;
 
-import cn.vph.cases.controller.request.RegisterRequest;
+import cn.vph.cases.controller.request.UserRegisterRequest;
+import cn.vph.cases.controller.request.UserUpdateRequest;
 import cn.vph.cases.controller.response.UserResponse;
 import cn.vph.cases.entity.User;
 import cn.vph.cases.service.UserService;
@@ -40,8 +41,8 @@ public class UserController extends BaseController {
 
     @PostMapping
     @ApiOperation(value = "新增用户")
-    public Result<UserResponse> register(@Valid @RequestBody RegisterRequest registerRequest) {
-        return Result.success(userService.register(registerRequest));
+    public Result<UserResponse> register(@Valid @RequestBody UserRegisterRequest userRegisterRequest) {
+        return Result.success(userService.register(userRegisterRequest));
     }
 
 
@@ -55,7 +56,7 @@ public class UserController extends BaseController {
     @Student
     @PutMapping
     @ApiOperation(value = "更新用户信息")
-    public Result<UserResponse> update(@Valid @RequestBody User user) {
+    public Result<UserResponse> update(@Valid @RequestBody UserUpdateRequest user) {
         return Result.success(userService.update(user));
     }
 
