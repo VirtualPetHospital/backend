@@ -167,16 +167,16 @@ public class FileServiceImpl implements FileService {
         return fileName;
     }
 
-    @Override
-    public Object checkUpload(String identifier) {
-        LambdaQueryWrapper<FileDTO> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(FileDTO::getFileIdentifier, identifier);
-        FileDTO fileDTO = fileDTOMapper.selectOne(queryWrapper);
-        if (null == fileDTO) {
-            return null;
-        }
-        return fileDTO.getFileName();
-    }
+//    @Override
+//    public Object checkUpload(String identifier) {
+//        LambdaQueryWrapper<FileDTO> queryWrapper = new LambdaQueryWrapper<>();
+//        queryWrapper.eq(FileDTO::getFileIdentifier, identifier);
+//        FileDTO fileDTO = fileDTOMapper.selectOne(queryWrapper);
+//        if (null == fileDTO) {
+//            return null;
+//        }
+//        return fileDTO.getFileName();
+//    }
 
     @Override
     public Object convert(ConvertRequest cov) throws IOException {
