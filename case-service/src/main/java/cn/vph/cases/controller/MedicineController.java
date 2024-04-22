@@ -52,7 +52,7 @@ public class MedicineController extends BaseController {
         return Result.success(super.getData(medicineService.list(pageNum, pageSize, nameKeyword)));
     }
 
-    @Administrator
+    @Student
     @GetMapping("{medicineId}")
     @ApiOperation(value = "查询单个药品")
     public Result<?> get(@PathVariable Integer medicineId) {

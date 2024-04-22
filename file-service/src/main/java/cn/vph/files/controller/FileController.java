@@ -6,6 +6,7 @@ import cn.vph.common.annotation.Student;
 import cn.vph.files.pojo.ConvertRequest;
 import cn.vph.files.pojo.FileChunkParam;
 import cn.vph.files.service.FileService;
+import cn.vph.files.util.TimeUtil;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +45,7 @@ public class FileController {
     @PostMapping("uploadChunk")
     @ApiOperation(value = "分片上传文件")
     public Result<?> uploadChunk(FileChunkParam param) throws IOException{
+        log.error("开始上传时间：" + TimeUtil.currentTime());
         log.info("上传文件：{}",param);
         return Result.success(fileService.uploadByChunk(param));
     }

@@ -111,6 +111,7 @@ public class ExamServiceImpl extends ServiceImpl<ExamMapper, Exam> implements Ex
         // 查询是否存在
         Exam existExam = exists(exam.getExamId());
         // 考试开始后无法修改
+        // 获取当前时间，并格式化为：yyyy-MM-dd HH:mm:ss
         AssertUtil.isTrue(existExam.getStartTime().isAfter(LocalDateTime.now()), CommonErrorCode.EXAM_HAS_PAST);
         // 不与其他exam重名
         Exam checkingExam = examMapper.selectOne(new LambdaQueryWrapper<Exam>().eq(Exam::getName, exam.getName()));

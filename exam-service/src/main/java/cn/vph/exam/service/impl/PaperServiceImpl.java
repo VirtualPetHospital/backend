@@ -3,8 +3,10 @@ package cn.vph.exam.service.impl;
 import cn.vph.common.CommonErrorCode;
 import cn.vph.common.CommonException;
 import cn.vph.common.util.AssertUtil;
+import cn.vph.exam.entity.Exam;
 import cn.vph.exam.entity.Paper;
 import cn.vph.exam.entity.PaperQuestion;
+import cn.vph.exam.mapper.ExamMapper;
 import cn.vph.exam.mapper.PaperMapper;
 import cn.vph.exam.mapper.PaperQuestionMapper;
 import cn.vph.exam.mapper.QuestionMapper;
@@ -31,6 +33,8 @@ public class PaperServiceImpl extends ServiceImpl<PaperMapper, Paper> implements
 
     @Autowired
     private PaperMapper paperMapper;
+    @Autowired
+    private ExamMapper examMapper;
 
     @Autowired
     private QuestionMapper questionMapper;
@@ -77,6 +81,10 @@ public class PaperServiceImpl extends ServiceImpl<PaperMapper, Paper> implements
     public Paper update(Paper paper) {
         exists(paper.getPaperId());
         questionNumIsValid(paper);
+        // 检查是否被考试引用
+        if(examMapper.selectCount(new LambdaQueryWrapper<Exam>().eq(Exam::getPaperId,paper.getPaperId()))>0){
+            throw new CommonException(CommonErrorCode.PAPER_UPDATE_FAILED_REFERENCED_BY_EXAM);
+        }
 
         // 检查试卷名是否重复
         Paper checkingPaper = paperMapper.selectOne(new LambdaQueryWrapper<Paper>().eq(Paper::getName, paper.getName()));

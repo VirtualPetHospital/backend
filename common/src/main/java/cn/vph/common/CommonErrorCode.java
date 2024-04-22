@@ -106,6 +106,7 @@ public enum CommonErrorCode {
     QUESTION_NUM_INVALID(2003, "题目数量不合法", "题目数量不合法"),
     PAPER_NAME_ALREADY_EXIST(2003, "试卷名称已存在", "试卷名称已存在"),
     PAPER_DELETE_FAILED_REFERENCED_BY_EXAM(2003, "试卷已被选入考试中，无法删除", "试卷已被选入考试中，无法删除"),
+    PAPER_UPDATE_FAILED_REFERENCED_BY_EXAM(2003, "试卷已被选入考试中，无法修改", "试卷已被选入考试中，无法修改"),
     /**
      * 考试相关
      */
