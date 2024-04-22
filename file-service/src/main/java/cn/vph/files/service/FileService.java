@@ -5,7 +5,6 @@ import cn.vph.files.pojo.FileChunkParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 
@@ -24,7 +23,7 @@ public interface FileService {
 
     Object uploadByChunk(FileChunkParam param) throws IOException;
 
-//    Object checkUpload(String identifier);
+    Object checkUpload(String identifier);
 
     Object convert(ConvertRequest c) throws IOException;
 }

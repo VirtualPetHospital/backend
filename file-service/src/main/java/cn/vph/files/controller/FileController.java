@@ -48,13 +48,13 @@ public class FileController {
         return Result.success(fileService.uploadByChunk(param));
     }
 
-//    @Administrator
-//    @GetMapping("checkUpload")
-//    @ApiOperation(value = "检查文件上传")
-//    public Result<?> checkUpload(@RequestParam(value = "identifier") String identifier){
-//        log.info("文件MD5:{}",identifier);
-//        return Result.success(fileService.checkUpload(identifier));
-//    }
+    @Administrator
+    @GetMapping("checkUpload")
+    @ApiOperation(value = "检查文件上传")
+    public Result<?> checkUpload(@PathVariable(value = "identifier") String identifier){
+        log.info("文件MD5:{}",identifier);
+        return Result.success(fileService.checkUpload(identifier));
+    }
 
     @Administrator
     @PostMapping("convert")

@@ -4,12 +4,14 @@ import cn.vph.common.CommonErrorCode;
 import cn.vph.common.CommonException;
 import cn.vph.common.util.AssertUtil;
 import cn.vph.files.common.FileConstants;
+import cn.vph.files.entity.FileDTO;
 import cn.vph.files.mapper.FileDTOMapper;
 import cn.vph.files.pojo.ConvertRequest;
 import cn.vph.files.pojo.FileChunkParam;
 import cn.vph.files.pojo.VphFile;
 import cn.vph.files.service.FileService;
 import cn.vph.files.util.FileUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -82,13 +84,13 @@ public class FileServiceImpl implements FileService {
         File destFile = new File(filePath);
         file.transferTo(destFile);
         // 再对存储的文件进行统一文件格式转化
-        if ("photo".equals(type)) {
-            // 转换图片格式
-            fileUtil.convertPhotoToJpeg(uploadPath, newFileName);
-        } else {
-            // 转换视频格式
-            fileUtil.convertVideoToMp4(uploadPath, newFileName);
-        }
+//        if ("photo".equals(type)) {
+//            // 转换图片格式
+//            fileUtil.convertPhotoToJpeg(uploadPath, newFileName);
+//        } else {
+//            // 转换视频格式
+//            fileUtil.convertVideoToMp4(uploadPath, newFileName);
+//        }
         return new VphFile(newFileName, location, type);
     }
 
@@ -168,16 +170,16 @@ public class FileServiceImpl implements FileService {
         return fileName;
     }
 
-//    @Override
-//    public Object checkUpload(String identifier) {
-//        LambdaQueryWrapper<FileDTO> queryWrapper = new LambdaQueryWrapper<>();
-//        queryWrapper.eq(FileDTO::getFileIdentifier, identifier);
-//        FileDTO fileDTO = fileDTOMapper.selectOne(queryWrapper);
-//        if (null == fileDTO) {
-//            return null;
-//        }
-//        return fileDTO.getFileName();
-//    }
+    @Override
+    public Object checkUpload(String identifier) {
+        LambdaQueryWrapper<FileDTO> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(FileDTO::getFileIdentifier, identifier);
+        FileDTO fileDTO = fileDTOMapper.selectOne(queryWrapper);
+        if (null == fileDTO) {
+            return null;
+        }
+        return fileDTO.getFileName();
+    }
 
     @Override
     public Object convert(ConvertRequest cov) throws IOException {
@@ -218,6 +220,11 @@ public class FileServiceImpl implements FileService {
                 }
             }
             dir.delete();
+            // 存储数据到数据库
+            FileDTO fileDTO = new FileDTO();
+            fileDTO.setFileName(fileName);
+            fileDTO.setFileIdentifier(cov.getIdentifier());
+            fileDTOMapper.insert(fileDTO);
             return fileName;
         }
     }

@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * @program: vph-backend
@@ -15,6 +16,7 @@ import lombok.Data;
  **/
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 @TableName("file")
 public class FileDTO {
     @TableId(value = "id", type = IdType.AUTO)
