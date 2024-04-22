@@ -96,7 +96,6 @@ public class UserController extends BaseController {
     }
 
     @Administrator
-
     @GetMapping("list")
     @ApiOperation(value = "查询用户列表")
     public Result<?> list(

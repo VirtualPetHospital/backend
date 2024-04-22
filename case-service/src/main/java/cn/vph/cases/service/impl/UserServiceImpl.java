@@ -209,7 +209,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Override
     public IPage<?> list(Integer pageNum, Integer pageSize, String type, String nicknameKeyword, Integer sortByNickname) {
         LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
-        wrapper.select(User::getUserId, User::getNickname, User::getType, User::getAvatarUrl, User::getLevel);
+        wrapper.select(User::getUserId, User::getNickname, User::getType, User::getAvatarUrl, User::getLevel, User::getEmail);
         if (type != null && !type.isEmpty()) {
             wrapper.eq(User::getType, type);
         }
