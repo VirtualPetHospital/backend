@@ -11,7 +11,9 @@ import cn.vph.files.pojo.FileChunkParam;
 import cn.vph.files.pojo.VphFile;
 import cn.vph.files.service.FileService;
 import cn.vph.files.util.FileUtil;
+import cn.vph.files.util.TimeUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,6 +34,7 @@ import java.nio.channels.FileChannel;
  * @create: 2024-03-20 14:31
  **/
 @Service
+@Slf4j
 public class FileServiceImpl implements FileService {
     @Autowired
     private FileConstants fileConstants;
@@ -149,6 +152,8 @@ public class FileServiceImpl implements FileService {
 
     @Override
     public Object uploadByChunk(FileChunkParam param) throws IOException {
+        log.error("in uploadByChunk");
+        log.error(String.valueOf(TimeUtil.currentTime()));
         if (null == param.getFile()) {
             throw new CommonException(CommonErrorCode.UPLOAD_FILE_NOT_NULL);
         }
@@ -165,7 +170,11 @@ public class FileServiceImpl implements FileService {
         fileName = fileUtil.generateFileNameByTime() + fileSuffix;
         String fullFileName = fileConstants.FILE_DIR + File.separator + fileName;
 
+        log.error("start saving");
+        log.error(String.valueOf(TimeUtil.currentTime()));
         saveFileChunk(fullFileName, param);
+        log.error("after saving");
+        log.error(String.valueOf(TimeUtil.currentTime()));
         // 返回文件名
         return fileName;
     }

@@ -108,6 +108,10 @@ public class ExamServiceImpl extends ServiceImpl<ExamMapper, Exam> implements Ex
     @Override
     @Transactional
     public Exam update(Exam exam) {
+        // 查询是否存在
+        Exam existExam = exists(exam.getExamId());
+        // 考试开始后无法修改
+        AssertUtil.isTrue(existExam.getStartTime().isAfter(LocalDateTime.now()), CommonErrorCode.EXAM_HAS_PAST);
         // 不与其他exam重名
         Exam checkingExam = examMapper.selectOne(new LambdaQueryWrapper<Exam>().eq(Exam::getName, exam.getName()));
         AssertUtil.isTrue(checkingExam == null || checkingExam.getExamId().equals(exam.getExamId()), CommonErrorCode.EXAM_NAME_ALREADY_EXIST);
@@ -177,9 +181,10 @@ public class ExamServiceImpl extends ServiceImpl<ExamMapper, Exam> implements Ex
     }
 
 
-    private void exists(Integer examId) {
+    private Exam exists(Integer examId) {
         Exam exam = examMapper.selectById(examId);
         AssertUtil.isNotNull(exam, CommonErrorCode.EXAM_NOT_EXIST);
+        return exam;
     }
 
 
