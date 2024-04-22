@@ -50,6 +50,6 @@ vph:
   aspect:
     enable: false
   file:
-    path: E:/vph/files/
+    path: E:/vph/files
 ffmpeg:
   path: E:\Software\ffmpeg\ffmpeg-2024-03-28-git-5d71f97e0e-full_build\bin\ffmpeg.exe

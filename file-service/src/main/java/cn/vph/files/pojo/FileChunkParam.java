@@ -1,5 +1,6 @@
 package cn.vph.files.pojo;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.web.multipart.MultipartFile;
 import lombok.Data;
 
@@ -16,26 +17,32 @@ public class FileChunkParam implements Serializable {
     /**
      * 当前分片的编号，从1开始
      */
+    @JsonProperty("chunk_number")
     private Integer chunkNumber;
 
     /**
      * 预设的每个分片的大小
      */
+    @JsonProperty("chunk_size")
     private Float chunkSize;
 
     /**
      * 当前分片的大小
      */
+    @JsonProperty("current_chunk_size")
     private Float currentChunkSize;
+
 
     /**
      * 一共多少个分片
      */
+    @JsonProperty("total_chunk")
     private Integer totalChunk;
 
     /**
      * 文件总大小
      */
+    @JsonProperty("total_size")
     private Double totalSize;
 
     /**
@@ -51,7 +58,8 @@ public class FileChunkParam implements Serializable {
     /**
      * 文件名
      */
-    private String filename;
+    @JsonProperty("file_name")
+    private String fileName;
 
     /**
      * 文件类型

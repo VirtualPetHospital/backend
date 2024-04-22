@@ -43,7 +43,7 @@ public class FileController {
     @Administrator
     @PostMapping("uploadChunk")
     @ApiOperation(value = "分片上传文件")
-    public Result<?> uploadChunk(@RequestBody FileChunkParam param) throws IOException{
+    public Result<?> uploadChunk(FileChunkParam param) throws IOException{
         log.info("上传文件：{}",param);
         return Result.success(fileService.uploadByChunk(param));
     }

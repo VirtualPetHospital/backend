@@ -22,7 +22,7 @@ public interface FileService {
 
     void delete(String fileName);
 
-    Object uploadByChunk(FileChunkParam param) throws FileNotFoundException;
+    Object uploadByChunk(FileChunkParam param) throws IOException;
 
 //    Object checkUpload(String identifier);
 

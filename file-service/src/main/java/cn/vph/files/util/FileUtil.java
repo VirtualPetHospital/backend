@@ -75,7 +75,7 @@ public class FileUtil {
                 file.delete();
             }
         }
-        return videoName.substring(0, videoPath.lastIndexOf(".")) + ".mp4";
+        return videoName.substring(0, videoName.lastIndexOf(".")) + ".mp4";
     }
 
     private static void blockFfmpeg(BufferedReader br) throws IOException {
