@@ -1,7 +1,6 @@
 package cn.vph.files.controller;
 
 import cn.vph.common.Result;
-import cn.vph.common.annotation.Administrator;
 import cn.vph.common.annotation.Student;
 import cn.vph.files.pojo.ConvertRequest;
 import cn.vph.files.pojo.FileChunkParam;
@@ -31,7 +30,7 @@ public class FileController {
     @Autowired
     private FileService fileService;
 
-    @Administrator
+    @Student
     @PostMapping("upload")
     @ApiOperation(value = "上传文件")
     public Result<?> upload(
@@ -41,7 +40,7 @@ public class FileController {
         return Result.success(fileService.upload(file, location));
     }
 
-    @Administrator
+    @Student
     @PostMapping("uploadChunk")
     @ApiOperation(value = "分片上传文件")
     public Result<?> uploadChunk(FileChunkParam param) throws IOException{
@@ -50,7 +49,7 @@ public class FileController {
         return Result.success(fileService.uploadByChunk(param));
     }
 
-    @Administrator
+    @Student
     @GetMapping("checkUpload")
     @ApiOperation(value = "检查文件上传")
     public Result<?> checkUpload(@PathVariable(value = "identifier") String identifier){
@@ -58,7 +57,7 @@ public class FileController {
         return Result.success(fileService.checkUpload(identifier));
     }
 
-    @Administrator
+    @Student
     @PostMapping("convert")
     @ApiOperation(value = "转换文件")
     public Result<?> convert(@RequestBody ConvertRequest convertRequest) throws IOException {
@@ -78,9 +77,10 @@ public class FileController {
     @DeleteMapping
     @ApiOperation(value = "删除文件")
     public void delete(@RequestParam("file_name") String fileName){
-        if (fileName == null || fileName.isEmpty()) {
-            return;
-        }
-        fileService.delete(fileName);
+        return;
+//        if (fileName == null || fileName.isEmpty()) {
+//            return;
+//        }
+//        fileService.delete(fileName);
     }
 }

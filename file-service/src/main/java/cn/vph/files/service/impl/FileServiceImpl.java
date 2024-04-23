@@ -87,13 +87,13 @@ public class FileServiceImpl implements FileService {
         File destFile = new File(filePath);
         file.transferTo(destFile);
         // 再对存储的文件进行统一文件格式转化
-//        if ("photo".equals(type)) {
-//            // 转换图片格式
-//            fileUtil.convertPhotoToJpeg(uploadPath, newFileName);
-//        } else {
-//            // 转换视频格式
-//            fileUtil.convertVideoToMp4(uploadPath, newFileName);
-//        }
+        if ("photo".equals(type)) {
+            // 转换图片格式
+            newFileName =  fileUtil.convertPhotoToJpeg(uploadPath, newFileName);
+        } else {
+            // 转换视频格式
+            newFileName = fileUtil.convertVideoToMp4(uploadPath, newFileName);
+        }
         return new VphFile(newFileName, location, type);
     }
 
