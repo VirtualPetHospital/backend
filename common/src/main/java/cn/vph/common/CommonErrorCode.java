@@ -83,6 +83,7 @@ public enum CommonErrorCode {
     FILE_LOCATION_ERROR(18006, "文件存储位置非法", "文件存储位置非法"),
     FILE_TYPE_ERROR(18007, "文件类型非法", "文件类型非法"),
     FILE_CONVERT_ERROR(18008, "文件转换失败", "文件转换失败"),
+    UPLOAD_FILE_NOT_NULL(18009, "上传文件不能为空", "上传文件不能为空"),
 
     /**
      * 以2开头的和业务相关
@@ -105,6 +106,7 @@ public enum CommonErrorCode {
     QUESTION_NUM_INVALID(2003, "题目数量不合法", "题目数量不合法"),
     PAPER_NAME_ALREADY_EXIST(2003, "试卷名称已存在", "试卷名称已存在"),
     PAPER_DELETE_FAILED_REFERENCED_BY_EXAM(2003, "试卷已被选入考试中，无法删除", "试卷已被选入考试中，无法删除"),
+    PAPER_UPDATE_FAILED_REFERENCED_BY_EXAM(2003, "试卷已被选入考试中，无法修改", "试卷已被选入考试中，无法修改"),
     /**
      * 考试相关
      */

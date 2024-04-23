@@ -1,5 +1,6 @@
 package cn.vph.cases.controller;
 
+import cn.vph.common.CommonConstant;
 import cn.vph.common.controller.BaseController;
 import cn.vph.cases.entity.Operation;
 import cn.vph.cases.service.OperationService;
@@ -28,10 +29,16 @@ public class OperationController extends BaseController{
     @Autowired
     private OperationService operationService;
 
+    private void setDefaultPhoto(Operation operation) {
+        if (operation.getPhoto() == null) {
+            operation.setPhoto(CommonConstant.DEFAULT_IMAGE);
+        }
+    }
     @Administrator
     @PostMapping
     @ApiOperation(value = "新增手术")
     public Result<Operation> add(@Valid @RequestBody Operation operation) {
+        setDefaultPhoto(operation);
         return Result.success(operationService.add(operation));
     }
 
@@ -46,6 +53,7 @@ public class OperationController extends BaseController{
     @PutMapping("{operationId}")
     @ApiOperation(value = "更新手术")
     public Result<Operation> update(@PathVariable Integer operationId, @Valid @RequestBody Operation operation) {
+        setDefaultPhoto(operation);
         operation.setOperationId(operationId);
         return Result.success(operationService.update(operation));
     }

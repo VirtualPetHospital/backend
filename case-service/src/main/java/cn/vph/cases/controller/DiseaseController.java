@@ -2,6 +2,7 @@ package cn.vph.cases.controller;
 
 import cn.vph.cases.entity.Disease;
 import cn.vph.cases.service.DiseaseService;
+import cn.vph.common.CommonConstant;
 import cn.vph.common.Result;
 import cn.vph.common.annotation.Administrator;
 import cn.vph.common.annotation.Student;
@@ -24,12 +25,17 @@ import javax.validation.Valid;
 public class DiseaseController {
     @Autowired
     private DiseaseService diseaseService;
-
+    private void setDefaultPhoto(Disease disease){
+        if(disease.getPhoto() == null){
+            disease.setPhoto(CommonConstant.DEFAULT_IMAGE);
+        }
+    }
 
     @PostMapping
     @Administrator
     @ApiOperation(value = "新增疾病")
     public Result<?> add(@Valid @RequestBody Disease disease) {
+        setDefaultPhoto(disease);
         return Result.success(diseaseService.add(disease));
     }
 
@@ -44,6 +50,7 @@ public class DiseaseController {
     @PutMapping("{diseaseId}")
     @ApiOperation(value = "更新疾病")
     public Result<?> update(@PathVariable Integer diseaseId,@Valid @RequestBody Disease disease) {
+        setDefaultPhoto(disease);
         disease.setDiseaseId(diseaseId);
         return Result.success(diseaseService.update(disease));
     }

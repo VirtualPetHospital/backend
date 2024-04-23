@@ -2,6 +2,7 @@ package cn.vph.files.util;
 
 import cn.vph.common.CommonErrorCode;
 import cn.vph.common.CommonException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -21,25 +22,29 @@ import java.util.List;
  * @create: 2024-03-31 20:30
  **/
 @Component
+@Slf4j
 public class FileUtil {
     @Value("${ffmpeg.path}")
     private String ffmpegPath;
 
     /**
      * 能够转换avi,mov,mpg
-     * @param videoPath
      * @throws IOException
      */
-    public void convertVideoToMp4(String videoPath) throws IOException {
-        String fileSuffix = videoPath.substring(videoPath.lastIndexOf(".") + 1);
+    public String  convertVideoToMp4(String videoDir, String videoName) throws IOException {
+        log.error(videoDir);
+        log.error(videoName);
+        String videoPath = videoDir + File.separator +  videoName;
+        String fileSuffix = videoName.substring(videoName.lastIndexOf(".") + 1);
         if ("mp4".equals(fileSuffix)) {
-            return;
+            return videoName;
         }
+        String dest = videoPath.substring(0, videoPath.lastIndexOf(".")) + ".mp4";
         List<String> command = new ArrayList<String>();
         command.add(ffmpegPath);
         command.add("-i");
         command.add(videoPath);
-        command.add(videoPath.substring(0, videoPath.lastIndexOf(".")) + ".mp4");
+        command.add(dest);
 
         InputStream errorStream = null;
         InputStreamReader inputStreamReader = null;
@@ -70,7 +75,7 @@ public class FileUtil {
                 file.delete();
             }
         }
-
+        return videoName.substring(0, videoName.lastIndexOf(".")) + ".mp4";
     }
 
     private static void blockFfmpeg(BufferedReader br) throws IOException {
@@ -85,14 +90,17 @@ public class FileUtil {
         System.out.println(line);
     }
 
-    public void convertPhotoToJpeg(String photoPath) throws IOException {
+    public String convertPhotoToJpeg(String photoDir , String photoName) throws IOException {
+        String photoPath = photoDir + File.separator + photoName;
         String fileSuffix = photoPath.substring(photoPath.lastIndexOf(".") + 1);
         if ("jpeg".equals(fileSuffix)) {
-            return;
+            return  photoName;
         }
-        // 读取文件
+        // 最终生成的文件路径
         String dest = photoPath.substring(0, photoPath.lastIndexOf(".")) + ".jpeg";
+        // 读取原来的图片
         BufferedImage image = ImageIO.read(new File(photoPath));
+        // 格式转换
         BufferedImage newBufferedImage = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_INT_RGB);
         newBufferedImage.createGraphics().drawImage(image, 0, 0, Color.WHITE, null);
         ImageIO.write(newBufferedImage, "jpeg", new File(dest));
@@ -101,6 +109,7 @@ public class FileUtil {
         if (file.exists()) {
             file.delete();
         }
+        return photoName.substring(0, photoName.lastIndexOf(".")) + ".jpeg";
     }
 
     public String generateFileNameByTime() {

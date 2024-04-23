@@ -4,9 +4,16 @@ import cn.vph.common.CommonErrorCode;
 import cn.vph.common.CommonException;
 import cn.vph.common.util.AssertUtil;
 import cn.vph.files.common.FileConstants;
+import cn.vph.files.entity.FileDTO;
+import cn.vph.files.mapper.FileDTOMapper;
+import cn.vph.files.pojo.ConvertRequest;
+import cn.vph.files.pojo.FileChunkParam;
 import cn.vph.files.pojo.VphFile;
 import cn.vph.files.service.FileService;
 import cn.vph.files.util.FileUtil;
+import cn.vph.files.util.TimeUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,7 +23,9 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
+import java.io.RandomAccessFile;
 import java.io.UnsupportedEncodingException;
+import java.nio.channels.FileChannel;
 
 /**
  * @program: vph-backend
@@ -25,12 +34,15 @@ import java.io.UnsupportedEncodingException;
  * @create: 2024-03-20 14:31
  **/
 @Service
+@Slf4j
 public class FileServiceImpl implements FileService {
     @Autowired
     private FileConstants fileConstants;
 
     @Autowired
-    FileUtil fileUtil;
+    private FileDTOMapper fileDTOMapper;
+    @Autowired
+    private FileUtil fileUtil;
 
     @Override
     public Object upload(MultipartFile file, String location) throws IOException {
@@ -41,7 +53,7 @@ public class FileServiceImpl implements FileService {
         String fileName = file.getOriginalFilename();
         assert fileName != null;
         String fileSuffix = fileName.substring(fileName.lastIndexOf(".") + 1);
-        // type = photo or video
+        // 文件是图片还是视频
         String type;
         if ("user-avatar".equals(location) || "room".equals(location)) {
             // 只能存储图片的类型
@@ -68,22 +80,19 @@ public class FileServiceImpl implements FileService {
             uploadDir.mkdirs();
         }
 
-        String newFileName = location + fileConstants.SEPARATOR + type + fileConstants.SEPARATOR + fileUtil.generateFileNameByTime();
+        String newFileName = location + fileConstants.SEPARATOR + type + fileConstants.SEPARATOR + fileUtil.generateFileNameByTime() + "." + fileSuffix;
         String filePath = uploadPath + File.separator + newFileName;
 
         // 先对文件进行存储
-        String dest = filePath + "." + fileSuffix;
-        File destFile = new File(dest);
+        File destFile = new File(filePath);
         file.transferTo(destFile);
         // 再对存储的文件进行统一文件格式转化
         if ("photo".equals(type)) {
             // 转换图片格式
-            fileUtil.convertPhotoToJpeg(dest);
-            newFileName += ".jpeg";
+            newFileName =  fileUtil.convertPhotoToJpeg(uploadPath, newFileName);
         } else {
             // 转换视频格式
-            fileUtil.convertVideoToMp4(dest);
-            newFileName += ".mp4";
+            newFileName = fileUtil.convertVideoToMp4(uploadPath, newFileName);
         }
         return new VphFile(newFileName, location, type);
     }
@@ -139,6 +148,115 @@ public class FileServiceImpl implements FileService {
         if (file.exists()) {
             file.delete();
         }
+    }
+
+    @Override
+    public Object uploadByChunk(FileChunkParam param) throws IOException {
+        log.error("in uploadByChunk");
+        log.error(String.valueOf(TimeUtil.currentTime()));
+        if (null == param.getFile()) {
+            throw new CommonException(CommonErrorCode.UPLOAD_FILE_NOT_NULL);
+        }
+        // 创建文件夹
+        File fileTempDir = new File(fileConstants.FILE_DIR);
+        if (!fileTempDir.exists()) {
+            if (!fileTempDir.mkdirs()) {
+                throw new CommonException(CommonErrorCode.FILE_UPLOAD_FAIL);
+            }
+        }
+        // 获取原文件后缀
+        String fileName = param.getFileName();
+        String fileSuffix = fileName.substring(fileName.lastIndexOf("."));
+        fileName = fileUtil.generateFileNameByTime() + fileSuffix;
+        String fullFileName = fileConstants.FILE_DIR + File.separator + fileName;
+
+        log.error("start saving");
+        log.error(String.valueOf(TimeUtil.currentTime()));
+        saveFileChunk(fullFileName, param);
+        log.error("after saving");
+        log.error(String.valueOf(TimeUtil.currentTime()));
+        // 返回文件名
+        return fileName;
+    }
+
+    @Override
+    public Object checkUpload(String identifier) {
+        LambdaQueryWrapper<FileDTO> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(FileDTO::getFileIdentifier, identifier);
+        FileDTO fileDTO = fileDTOMapper.selectOne(queryWrapper);
+        if (null == fileDTO) {
+            return null;
+        }
+        return fileDTO.getFileName();
+    }
+
+    @Override
+    public Object convert(ConvertRequest cov) throws IOException {
+        // 合并所有分片
+        File dir = new File(fileConstants.FILE_DIR + File.separator + cov.getIdentifier());
+        if (!dir.exists()) {
+            throw new CommonException(CommonErrorCode.FILE_UPLOAD_FAIL);
+        }
+        FileChannel out = null;
+        try (FileChannel in = new RandomAccessFile(new File(fileConstants.FILE_DIR, cov.getFileName()), "rw").getChannel()) {
+            int index = 1;
+            long start = 0;
+            while (true) {
+                File file = new File(dir, index + cov.getFileName().substring(cov.getFileName().lastIndexOf(".")));
+                if (!file.exists()) {
+                    break;
+                }
+                out = new RandomAccessFile(file, "rw").getChannel();
+                in.transferFrom(out, start, start + out.size());
+                start += out.size();
+                if (out != null)
+                    out.close();
+                index++;
+            }
+            if (in != null)
+                in.close();
+            String type = cov.getType(), fileName = cov.getFileName();
+            if ("photo".equals(type)) {
+                fileName = fileUtil.convertPhotoToJpeg(fileConstants.FILE_DIR, fileName);
+            } else if ("video".equals(type)) {
+                fileName = fileUtil.convertVideoToMp4(fileConstants.FILE_DIR, fileName);
+            }
+            // 删除文件夹内所有文件
+            File[] files = dir.listFiles();
+            if (files != null) {
+                for (File file : files) {
+                    file.delete();
+                }
+            }
+            dir.delete();
+            // 存储数据到数据库
+            FileDTO fileDTO = new FileDTO();
+            fileDTO.setFileName(fileName);
+            fileDTO.setFileIdentifier(cov.getIdentifier());
+            fileDTOMapper.insert(fileDTO);
+            return fileName;
+        }
+    }
+
+    private void saveFileChunk(String fullFileName, FileChunkParam param) throws IOException {
+        RandomAccessFile raf = null;
+        String fileSuffix = fullFileName.substring(fullFileName.lastIndexOf("."));
+        try {
+            // 创建当前文件对应的文件夹
+            File dir = new File(fileConstants.FILE_DIR + File.separator + param.getIdentifier());
+            if (!dir.exists()) {
+                dir.mkdirs();
+            }
+            raf = new RandomAccessFile(new File(dir, param.getChunkNumber() + fileSuffix), "rw");
+            raf.write(param.getFile().getBytes());
+        } catch (Exception e) {
+            throw new CommonException(CommonErrorCode.FILE_UPLOAD_FAIL);
+        } finally {
+            if (null != raf) {
+                raf.close();
+            }
+        }
+
     }
 
     public boolean containsString(String[] array, String str) {

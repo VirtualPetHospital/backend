@@ -14,7 +14,9 @@ public class CommonConstant {
     public final static String[] AT_LEAST_STUDENT = {"student", "teacher", "administrator"};
     public final static String[] AT_LEAST_TEACHER = {"teacher", "administrator"};
     public final static String[] AT_LEAST_ADMINISTRATOR = {"administrator"};
+    public final static String DEFAULT_IMAGE = "https://img2.imgtp.com/2024/04/22/YHFFLtQf.png";
 
+    public final static String DEFAULT_AVATAR = "https://cube.elemecdn.com/e/fd/0fc7d20532fdaf769a25683617711png.png";
     /**
      * user type
      */

@@ -4,7 +4,7 @@ server:
     context-path: /api
 spring:
   datasource:
-    url: jdbc:mysql://47.103.131.161:3306/vph_medcase?useSSL=false&allowPublicKeyRetrieval=true&useUnicode=true&characterEncoding=UTF-8
+    url: jdbc:mysql://47.103.131.161:3306/vph_file?useSSL=false&allowPublicKeyRetrieval=true&useUnicode=true&characterEncoding=UTF-8
     username: root
     password: MySQLPaSsWord89h
     driver-class-name: com.mysql.jdbc.Driver
@@ -50,6 +50,6 @@ vph:
   aspect:
     enable: false
   file:
-    path: E:/vph/files/
+    path: E:/vph/files
 ffmpeg:
   path: E:\Software\ffmpeg\ffmpeg-2024-03-28-git-5d71f97e0e-full_build\bin\ffmpeg.exe

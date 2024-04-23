@@ -55,9 +55,9 @@ public class DiseaseServiceImpl extends ServiceImpl<DiseaseMapper, Disease> impl
         AssertUtil.isNotNull(disease, CommonErrorCode.DISEASE_NOT_EXIST);
         // 如果不能删除（外键依赖），则抛出异常
         try{
+            diseaseMapper.deleteById(diseaseId);
             fileFeignClient.delete(disease.getPhoto());
             fileFeignClient.delete(disease.getVideo());
-            diseaseMapper.deleteById(diseaseId);
         }catch (Exception e){
             throw new CommonException(CommonErrorCode.CANNOT_DELETE_DISEASE);
         }

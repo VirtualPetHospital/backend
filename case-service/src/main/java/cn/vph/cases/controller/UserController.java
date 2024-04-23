@@ -5,6 +5,7 @@ import cn.vph.cases.controller.request.UserUpdateRequest;
 import cn.vph.cases.controller.response.UserResponse;
 import cn.vph.cases.entity.User;
 import cn.vph.cases.service.UserService;
+import cn.vph.common.CommonConstant;
 import cn.vph.common.Result;
 import cn.vph.common.annotation.Administrator;
 import cn.vph.common.annotation.Student;
@@ -42,6 +43,9 @@ public class UserController extends BaseController {
     @PostMapping
     @ApiOperation(value = "新增用户")
     public Result<UserResponse> register(@Valid @RequestBody UserRegisterRequest userRegisterRequest) {
+        if (userRegisterRequest.getAvatarUrl() == null) {
+            userRegisterRequest.setAvatarUrl(CommonConstant.DEFAULT_AVATAR);
+        }
         return Result.success(userService.register(userRegisterRequest));
     }
 
@@ -57,6 +61,9 @@ public class UserController extends BaseController {
     @PutMapping
     @ApiOperation(value = "更新用户信息")
     public Result<UserResponse> update(@Valid @RequestBody UserUpdateRequest user) {
+        if (user.getAvatarUrl() == null) {
+            user.setAvatarUrl(CommonConstant.DEFAULT_AVATAR);
+        }
         return Result.success(userService.update(user));
     }
 
@@ -89,7 +96,6 @@ public class UserController extends BaseController {
     }
 
     @Administrator
-
     @GetMapping("list")
     @ApiOperation(value = "查询用户列表")
     public Result<?> list(
@@ -127,8 +133,8 @@ public class UserController extends BaseController {
 
     @PostMapping("upgrade")
     @ApiOperation(value = "升级用户")
-    public void upgrade(@RequestParam(value = "num_current_level") Integer numCurrentLevel, @RequestParam(value="user_id") Integer userId, @RequestParam(value="session_id") String sessionId) {
-        userService.upgrade(numCurrentLevel,userId, sessionId);
+    public void upgrade(@RequestParam(value = "num_current_level") Integer numCurrentLevel, @RequestParam(value = "user_id") Integer userId, @RequestParam(value = "session_id") String sessionId) {
+        userService.upgrade(numCurrentLevel, userId, sessionId);
     }
 
     @GetMapping("/nickname/list/{values}")

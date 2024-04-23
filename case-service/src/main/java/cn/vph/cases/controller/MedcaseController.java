@@ -2,6 +2,7 @@ package cn.vph.cases.controller;
 
 import cn.vph.cases.entity.Medcase;
 import cn.vph.cases.service.MedcaseService;
+import cn.vph.common.CommonConstant;
 import cn.vph.common.Result;
 import cn.vph.common.annotation.Administrator;
 import cn.vph.common.annotation.Student;
@@ -21,6 +22,11 @@ public class MedcaseController extends BaseController {
     @Autowired
     private MedcaseService medcaseService;
 
+    private void setDefaultPhoto(Medcase medcase) {
+        if (medcase.getInfoPhoto() == null) {
+            medcase.setInfoPhoto(CommonConstant.DEFAULT_IMAGE);
+        }
+    }
     @Student
     @GetMapping("/{medcase_id}")
     @ApiOperation(value = "查询单个病例")
@@ -56,6 +62,7 @@ public class MedcaseController extends BaseController {
     @PostMapping
     @ApiOperation(value = "新增病例")
     public Result<?> addMedcase(@Valid @RequestBody Medcase medcase) {
+        setDefaultPhoto(medcase);
         return Result.success(medcaseService.add(medcase));
     }
 
@@ -63,6 +70,7 @@ public class MedcaseController extends BaseController {
     @PutMapping("/{medcase_id}")
     @ApiOperation(value = "更新病例")
     public Result<?> updateMedcase(@PathVariable(value = "medcase_id") Integer medcaseId, @Valid @RequestBody Medcase medcase) {
+        setDefaultPhoto(medcase);
         medcase.setMedcaseId(medcaseId);
         return Result.success(medcaseService.update(medcase));
     }

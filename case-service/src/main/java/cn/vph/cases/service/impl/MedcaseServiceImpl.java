@@ -20,7 +20,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * @program: vph-backend
@@ -210,7 +209,7 @@ public class MedcaseServiceImpl extends ServiceImpl<MedcaseMapper, Medcase> impl
         Operation operation = operationMapper.selectById(medcase.getOperationId());
         AssertUtil.isNotNull(operation, CommonErrorCode.OPERATION_NOT_EXIST);
         medcase.setOperation(operation);
-        AtomicReference<Double> price = new AtomicReference<>((double) medcase.getOperation().getPrice());
+        Double price = operation.getPrice();
 
         // 添加新的检查项目和药品
         if(medcase.getInspections() != null){
@@ -222,7 +221,8 @@ public class MedcaseServiceImpl extends ServiceImpl<MedcaseMapper, Medcase> impl
             });
         }
         if(medcase.getMedicines() != null){
-            medcase.getMedicines().forEach(medcaseMedicine -> {
+            List<MedcaseMedicine> medcaseMedicines = medcase.getMedicines();
+            for(MedcaseMedicine medcaseMedicine: medcaseMedicines){
                 // 药品存在
                 Medicine medicine = medicineMapper.selectById(medcaseMedicine.getMedicineId());
                 AssertUtil.isNotNull(medicine, CommonErrorCode.MEDICINE_NOT_EXIST);
@@ -230,10 +230,11 @@ public class MedcaseServiceImpl extends ServiceImpl<MedcaseMapper, Medcase> impl
                 medcaseMedicine.setMedcaseId(medcase.getMedcaseId());
                 // 药品数量大于0
                 AssertUtil.isTrue(medcaseMedicine.getNum() > 0, CommonErrorCode.MEDICINE_NUM_ERROR);
-                price.accumulateAndGet(medicine.getPrice(), Double::sum);
+                // 更新price
+                price += medicine.getPrice() * medcaseMedicine.getNum();
                 medcaseMedicineService.add(medcaseMedicine);
-            });
+            }
         }
-        medcase.setPrice(price.get());
+        medcase.setPrice(price);
     }
 }
