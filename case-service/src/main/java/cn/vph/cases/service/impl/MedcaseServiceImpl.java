@@ -93,13 +93,16 @@ public class MedcaseServiceImpl extends ServiceImpl<MedcaseMapper, Medcase> impl
         MPJLambdaWrapper<Medcase> wrapper = new MPJLambdaWrapper<>();
         wrapper.selectAll(Medcase.class)
                 .leftJoin(Disease.class, Disease::getDiseaseId, Medcase::getDiseaseId)
-                .like(diseaseName != null, Disease::getName, diseaseName)
-                .like(infoKeyword != null, Medcase::getInfoDescription, infoKeyword)
-                .like(nameKeyword != null, Medcase::getName, nameKeyword);
+                .or(validString(infoKeyword), disease -> disease.like(Disease::getName, infoKeyword))
+                .or(validString(infoKeyword), name -> name.like(Medcase::getName, infoKeyword))
+                .or(validString(infoKeyword), info -> info.like(Medcase::getInfoDescription, infoKeyword));
 
         return medcaseMapper.selectList(wrapper);
     }
 
+    private boolean validString(String str) {
+        return str != null && !str.isEmpty();
+    }
     @Override
     @Transactional
     public Medcase add(Medcase medcase) {
@@ -171,8 +174,6 @@ public class MedcaseServiceImpl extends ServiceImpl<MedcaseMapper, Medcase> impl
     }
 
 
-
-
     private Medcase initMedcase(Medcase medcase) {
         /**
          * disease
@@ -212,7 +213,7 @@ public class MedcaseServiceImpl extends ServiceImpl<MedcaseMapper, Medcase> impl
         Double price = operation.getPrice();
 
         // 添加新的检查项目和药品
-        if(medcase.getInspections() != null){
+        if (medcase.getInspections() != null) {
             medcase.getInspections().forEach(medcaseInspection -> {
                 // 检查项目存在
                 AssertUtil.isNotNull(inspectionMapper.selectById(medcaseInspection.getInspectionId()), CommonErrorCode.INSPECTION_NOT_EXIST);
@@ -220,9 +221,9 @@ public class MedcaseServiceImpl extends ServiceImpl<MedcaseMapper, Medcase> impl
                 medcaseInspectionService.add(medcaseInspection);
             });
         }
-        if(medcase.getMedicines() != null){
+        if (medcase.getMedicines() != null) {
             List<MedcaseMedicine> medcaseMedicines = medcase.getMedicines();
-            for(MedcaseMedicine medcaseMedicine: medcaseMedicines){
+            for (MedcaseMedicine medcaseMedicine : medcaseMedicines) {
                 // 药品存在
                 Medicine medicine = medicineMapper.selectById(medcaseMedicine.getMedicineId());
                 AssertUtil.isNotNull(medicine, CommonErrorCode.MEDICINE_NOT_EXIST);
