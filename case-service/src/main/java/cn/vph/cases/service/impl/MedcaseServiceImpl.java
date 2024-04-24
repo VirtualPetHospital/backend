@@ -237,5 +237,6 @@ public class MedcaseServiceImpl extends ServiceImpl<MedcaseMapper, Medcase> impl
             }
         }
         medcase.setPrice(price);
+        medcaseMapper.updateById(medcase);
     }
 }
