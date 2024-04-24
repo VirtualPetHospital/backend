@@ -9,6 +9,7 @@ import cn.vph.common.CommonConstant;
 import cn.vph.common.Result;
 import cn.vph.common.annotation.Administrator;
 import cn.vph.common.annotation.Student;
+import cn.vph.common.annotation.Teacher;
 import cn.vph.common.controller.BaseController;
 import com.alibaba.fastjson.JSONObject;
 import io.swagger.annotations.Api;
@@ -95,7 +96,7 @@ public class UserController extends BaseController {
         return Result.success("邮箱可用", null);
     }
 
-    @Administrator
+    @Teacher
     @GetMapping("list")
     @ApiOperation(value = "查询用户列表")
     public Result<?> list(
